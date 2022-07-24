@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../../firebase.init";
+import { signOut } from "firebase/auth";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [user] = useAuthState(auth);
   // NAV OPACITY CHANGER
   // const navbar = document.querySelector(".navbarContainer");
   // window.onscroll = () => {
@@ -29,7 +34,11 @@ const Navbar = () => {
     navigate("/login");
   };
   const handleNavigateSignUp = () => {
-    console.log("hello");
+    navigate("/signUp");
+  };
+  const handleSignOut = () => {
+    signOut(auth);
+    toast.success("Sign Out Successfully");
   };
   return (
     <div className="fixed top-0 w-[100%] z-50">
@@ -62,26 +71,48 @@ const Navbar = () => {
                 ))}
                 {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                 <div className=" flex items-center justify-center lg:hidden">
-                  <button className="btn bg-transparent border-2 text-secondary hover:border-secondary hover:bg-secondary border-secondary hover:text-white btn-sm mr-3">
-                    Login
-                  </button>
-                  <button className=" btn bg-[#3F4AD9] hover:bg-primary border-0 btn-sm">
-                    Sign Up
-                  </button>
+                  {user ? (
+                    <button
+                      onClick={handleSignOut}
+                      className="btn hover:bg-transparent border-2 hover:text-secondary border-secondary hover:border-secondary bg-secondary  text-white btn-sm lg:mx-4 "
+                    >
+                      Sign Out
+                    </button>
+                  ) : (
+                    <>
+                      <button className="btn bg-transparent border-2 text-secondary hover:border-secondary hover:bg-secondary border-secondary hover:text-white btn-sm mr-3">
+                        Login
+                      </button>
+                      <button className=" btn bg-[#3F4AD9] hover:bg-primary border-0 btn-sm">
+                        Sign Up
+                      </button>
+                    </>
+                  )}
                 </div>
                 {/* LARGE DEVICE LOGIN OR SIGN UP BUTTON */}
-                <button
-                  onClick={handleNavigateLogin}
-                  className="btn bg-transparent border-2 text-secondary hover:border-secondary hover:bg-secondary border-secondary hover:text-white btn-sm lg:mx-4 hidden lg:block"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={handleNavigateSignUp}
-                  className="btn bg-primary hover:bg-[#1d27af] text-white border-0 btn-sm hidden lg:block"
-                >
-                  Sign Up
-                </button>
+                {user ? (
+                  <button
+                    onClick={handleSignOut}
+                    className="btn hover:bg-transparent border-2 hover:text-secondary border-secondary hover:border-secondary bg-secondary  text-white btn-sm lg:mx-4 hidden lg:block"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleNavigateLogin}
+                      className="btn bg-transparent border-2 text-secondary hover:border-secondary hover:bg-secondary border-secondary hover:text-white btn-sm lg:mx-4 hidden lg:block"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={handleNavigateSignUp}
+                      className="btn bg-primary hover:bg-[#1d27af] text-white border-0 btn-sm hidden lg:block"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                )}
               </ul>
             </div>
             {/* NAVBAR TOGGLER ICON */}

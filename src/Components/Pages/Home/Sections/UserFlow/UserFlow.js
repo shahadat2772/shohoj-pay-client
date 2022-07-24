@@ -9,7 +9,7 @@ const UserFlow = () => {
         <div className="lg:translate-x-10 md:px-0 lg:px-0 px-5">
           <div className="flex items-center mb-8">
             <a href="" className="ac-create-icon m-auto">
-              <i class="fa-solid fa-user-plus text-3xl"></i>
+              <i className="fa-solid fa-user-plus text-3xl"></i>
             </a>
           </div>
           <h1 className="text-center text-xl">Creat an account</h1>
@@ -25,7 +25,7 @@ const UserFlow = () => {
             style={{ marginTop: "108px" }}
             className="flex items-center justify-center lg:translate-x-6"
           >
-            <i class="fa-solid fa-arrow-right-long rotted-up"></i>
+            <i className="fa-solid fa-arrow-right-long rotted-up"></i>
           </div>
         </div>
         {/* MEDIUM DEVICE ARROW ICON */}
@@ -34,20 +34,20 @@ const UserFlow = () => {
             style={{ marginTop: "108px" }}
             className="flex items-center justify-center "
           >
-            <i class="fa-solid fa-arrow-right-long rotted-solid"></i>
+            <i className="fa-solid fa-arrow-right-long rotted-solid"></i>
           </div>
         </div>
         {/* SMALL DEVICE ARROW ICON */}
         <div className="lg:hidden md:hidden ">
           <div className="flex items-center justify-center my-10">
-            <i class="fa-solid fa-arrow-down rotted-solid"></i>
+            <i className="fa-solid fa-arrow-down rotted-solid"></i>
           </div>
         </div>
         {/* USERFLOW CARD */}
         <div className="lg:-translate-y-16 md:px-0 lg:px-0 px-5">
           <div className="flex items-center mb-8">
             <a href="" className="ac-create-icon m-auto">
-              <i class="fa-solid fa-credit-card text-3xl"></i>
+              <i className="fa-solid fa-credit-card text-3xl"></i>
             </a>
           </div>
           <h1 className="text-center text-xl">Add Money</h1>
@@ -60,7 +60,7 @@ const UserFlow = () => {
         {/* SMALL DEVICE ARROW ICON */}
         <div className="lg:hidden md:hidden ">
           <div className="flex items-center justify-center my-10">
-            <i class="fa-solid fa-arrow-down rotted-solid"></i>
+            <i className="fa-solid fa-arrow-down rotted-solid"></i>
           </div>
         </div>
         {/* LARGE DEVICE ARROW ICON */}
@@ -69,14 +69,14 @@ const UserFlow = () => {
             style={{ marginTop: "108px" }}
             className="flex items-center justify-center lg:-translate-x-"
           >
-            <i class="fa-solid fa-arrow-right-long rotted-down"></i>
+            <i className="fa-solid fa-arrow-right-long rotted-down"></i>
           </div>
         </div>
         {/* USERFLOW CARD */}
         <div className="lg:-translate-x-10 md:px-0 lg:px-0 px-5">
           <div className="flex items-center mb-8">
             <a href="" className="ac-create-icon m-auto">
-              <i class="fa-solid fa-earth-americas text-3xl"></i>
+              <i className="fa-solid fa-earth-americas text-3xl"></i>
             </a>
           </div>
           <h1 className="text-center text-xl">Start Transaction</h1>
@@ -92,7 +92,7 @@ const UserFlow = () => {
             style={{ marginTop: "108px" }}
             className="flex items-center justify-center lg:-translate-x-"
           >
-            <i class="fa-solid fa-arrow-left-long rotted-up"></i>
+            <i className="fa-solid fa-arrow-left-long rotted-up"></i>
           </div>
         </div>
       </div>
