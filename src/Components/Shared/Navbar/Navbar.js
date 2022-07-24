@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import logo from "../../../logos/logo-horizontal.png";
 
 const Navbar = () => {
   // NAV OPACITY CHANGER
@@ -31,7 +30,11 @@ const Navbar = () => {
             {/* PROJECT LOGO */}
             <div>
               <a href="#">
-                <img src={logo} className="w-40" alt="" />
+                <img
+                  src="/assets/logos/logo-horizontal.png"
+                  className="w-40"
+                  alt=""
+                />
                 {/* {logo} */}
               </a>
             </div>

@@ -21,7 +21,7 @@ const Header = () => {
       </div>
       {/* img part */}
       <figure className="w-10/12 lg:w-7/12 absolute bottom-20 lg:bottom-10 left-5 lg:left-64 ">
-        <img className="" src="/images/banner-img.svg" alt="banner" />
+        <img className="" src="/assets/images/banner-image.svg" alt="banner" />
       </figure>
       <div className="bg-secondary h-32 lg:h-96 w-full"></div>
     </section>
