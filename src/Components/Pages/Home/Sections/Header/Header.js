@@ -4,14 +4,14 @@ const Header = () => {
   return (
     <section className="relative pt-0">
       {/* text part */}
-      <div class="hero  min-h-screen">
-        <div class="hero-overlay z-0 bg-primary bg-opacity-30"></div>
-        <div class="hero-content text-center text-white ">
-          <div class="max-w-lg">
-            <h1 class="mb-5 text-4xl lg:text-5xl leading-10 font-bold">
+      <div className="hero  min-h-screen">
+        <div className="hero-overlay z-0 bg-primary bg-opacity-30"></div>
+        <div className="hero-content text-center text-white ">
+          <div className="max-w-lg">
+            <h1 className="mb-5 text-4xl lg:text-5xl leading-10 font-bold">
               Empty Life Without <span className="block">Shohoj Pay</span>
             </h1>
-            <p class="">
+            <p className="">
               We make your life easy by probiding you one of the most important
               services that is Finance. Use Shohoj Pay and kick out your
               problems.
