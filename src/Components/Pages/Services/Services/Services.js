@@ -10,6 +10,7 @@ import {
   faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 
+// All services
 const services = [
   { id: 1, serviceName: "Add Money", serviceIcon: faCreditCard },
   { id: 2, serviceName: "Send Money", serviceIcon: faPaperPlane },
@@ -26,9 +27,11 @@ const Services = () => {
         <h1 className="servicesHeader md:text-4xl text-3xl font-medium mb-12 text-center">
           A lot to <span className="text-primary">do!</span>
         </h1>
+        {/* Services */}
         <div className="services grid lg:grid-cols-3 md:lg:grid-cols-3 grid-cols-2 gap-6 lg:gap-14 md:gap-14 w-fit mx-auto justify-items-center">
+          {/* Each service */}
           {services.map((service) => (
-            <div className="eachService h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 shadow rounded-xl flex items-center justify-center flex-col">
+            <div className="eachService cursor-pointer h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 shadow rounded-xl flex items-center justify-center flex-col">
               <div className="icon bg-blue-200 rounded p-3">
                 <FontAwesomeIcon
                   className="lg:text-5xl md:text-5xl text-3xl text-secondary"
