@@ -27,6 +27,9 @@ const Navbar = () => {
     { id: 4, name: "Contact", link: "/contact" },
     { id: 5, name: "Other", link: "/other" },
   ];
+
+  const restrictedLinks = [{ id: 6, name: "Services", link: "/services" }];
+
   // RESPONSIVE TOGGLER BTN STATE
   const [open, setOpen] = useState(false);
   // ONCLICK NAVIGATE
@@ -42,7 +45,7 @@ const Navbar = () => {
   };
   return (
     <div className="fixed top-0 w-[100%] z-50">
-      <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4">
+      <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
         <div className="p-1 lg:px-8 md:px-4">
           <nav className="flex items-center justify-between">
             {/* PROJECT LOGO */}
@@ -69,6 +72,13 @@ const Navbar = () => {
                     <Link to={item.link}>{item.name}</Link>
                   </li>
                 ))}
+                {/* Routes for authenticated users   */}
+                {user &&
+                  restrictedLinks.map((item) => (
+                    <li className="block text-center " key={item.id}>
+                      <Link to={item.link}>{item.name}</Link>
+                    </li>
+                  ))}
                 {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                 <div className=" flex items-center justify-center lg:hidden">
                   {user ? (

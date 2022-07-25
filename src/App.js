@@ -8,6 +8,7 @@ import NotFound from "./Components/Shared/NotFound/NotFound";
 import SignUp from "./Components/Pages/Authentication/SignUp/SignUp";
 import { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
+import Services from "./Components/Pages/Services/Services/Services";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/services" element={<Services />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
