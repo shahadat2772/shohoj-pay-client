@@ -60,7 +60,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="mt-10 text-left md:mx-10 mx-5 lg:mx-0">
-            <h3 className="font-bold text-xl border-b border-black">
+            <h3 className="font-bold text-xl border-b border-black pb-1">
               Recent Transaction
             </h3>
             <div className="mt-8">
@@ -96,10 +96,7 @@ const Dashboard = () => {
         </div>
         <div class="divider divider-horizontal divide-black px-9 divider-hidden"></div>
         <div className="w-full">
-          {/* <div>
-            
-          </div> */}
-          <div class="card  shadow-xl rounded bg-image py-10 text-white">
+          <div class="card  shadow-xl rounded bg-image py-8 text-white">
             <div class="card-body">
               <h3 className="text-xl">Hi User!</h3>
               <div className="mt-2">
@@ -111,10 +108,40 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div>
-              <h3>Setting</h3>
-              <div></div>
+          <div className="mt-10 flex">
+            <div className="w-3/6">
+              <h3 className="font-bold text-xl border-b border-black pb-2">
+                Savings
+              </h3>
+              <div>
+                <ul>
+                  {fakeUserData.slice(0, 3).map((transAction) => (
+                    <li
+                      className="flex items-center my-4 p-3 rounded-lg shadow-lg"
+                      key={transAction._id}
+                    >
+                      <div class="avatar">
+                        <div class="w-16 rounded-full ">
+                          <img src={transAction.img} />
+                        </div>
+                      </div>
+                      <div className="ml-5 flex items-center justify-between w-full">
+                        <div>
+                          <h3 className="font-bold text-lg">
+                            {transAction.name}
+                          </h3>
+                          <h5>{transAction.location}</h5>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold">
+                            ${transAction.money}
+                          </h3>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <div>
               <h3>Setting</h3>
