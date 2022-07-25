@@ -23,19 +23,19 @@ const Services = () => {
   return (
     <section className="min-h-screen">
       <div className="servicesContainer pt-28 pb-32">
-        <h1 className="servicesHeader text-4xl font-medium mb-12 text-center">
+        <h1 className="servicesHeader md:text-4xl text-3xl font-medium mb-12 text-center">
           A lot to <span className="text-primary">do!</span>
         </h1>
-        <div className="services grid grid-cols-3 gap-14 w-fit mx-auto justify-items-center">
+        <div className="services grid lg:grid-cols-3 md:lg:grid-cols-3 grid-cols-2 gap-6 lg:gap-14 md:gap-14 w-fit mx-auto justify-items-center">
           {services.map((service) => (
-            <div className="eachService h-56 w-56 shadow rounded-xl flex items-center justify-center flex-col">
+            <div className="eachService h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 shadow rounded-xl flex items-center justify-center flex-col">
               <div className="icon bg-blue-200 rounded p-3">
                 <FontAwesomeIcon
-                  className="text-5xl text-secondary"
+                  className="lg:text-5xl md:text-5xl text-3xl text-secondary"
                   icon={service.serviceIcon}
                 />
               </div>
-              <h3 className="serviceName text-2xl mt-4 text-secondary">
+              <h3 className="serviceName lg:text-2xl md:text-2xl text-xl mt-4 text-secondary">
                 {service.serviceName}
               </h3>
             </div>
