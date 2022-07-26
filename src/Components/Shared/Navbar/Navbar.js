@@ -26,6 +26,7 @@ const Navbar = () => {
     { id: 3, name: "Blogs", link: "/blogs" },
     { id: 4, name: "Contact", link: "/contact" },
     { id: 5, name: "Other", link: "/other" },
+    { id: 6, name: "Dashboard", link: "/dashboard" },
   ];
   // RESPONSIVE TOGGLER BTN STATE
   const [open, setOpen] = useState(false);
