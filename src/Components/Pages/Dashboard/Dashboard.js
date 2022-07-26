@@ -145,7 +145,7 @@ const Dashboard = () => {
         </div>
         {/* CARD DIVIDER HORIZONTAL */}
         <div class="divider divider-horizontal divide-black px-9 divider-hidden"></div>
-        <div className="w-full">
+        <div className="w-full mt-10 lg:mt-0">
           <div class="card  shadow-xl rounded bg-image py-8 text-white">
             <div class="card-body">
               <h3 className="text-xl">Hi User!</h3>
@@ -160,8 +160,8 @@ const Dashboard = () => {
             </div>
           </div>
           {/* START SAVINGS MONTH */}
-          <div className="mt-10 flex">
-            <div className="w-3/6">
+          <div className="mt-10 md:flex lg:flex block">
+            <div className="lg:w-3/6 md:w-3/6 px-2">
               <h3 className="font-bold text-xl border-b border-black pb-2">
                 Recent Month Savings
               </h3>
@@ -194,7 +194,7 @@ const Dashboard = () => {
               </div>
             </div>
             {/* START STATISTIC */}
-            <div className="w-3/6 md:ml-8">
+            <div className="lg:w-3/6 md:w-3/6 px-2 md:ml-8 lg:mt-0 md:mt-0 mt-10">
               <div className="px-2">
                 <h3 class="font-bold text-xl pb-2 border-b border-black">
                   Statistic
