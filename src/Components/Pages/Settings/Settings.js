@@ -16,7 +16,7 @@ const Settings = () => {
                 </div>
 
                 {/* general options section */}
-                <div className='rounded-xl p-3 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
 
                     {/* title div */}
                     <div className='w-1/2 '>
@@ -52,7 +52,7 @@ const Settings = () => {
             {/* left part  */}
             <div className=' w-full lg:w-1/2 grid grid-cols-1 gap-5 p-5'>
                 {/* address section */}
-                <div className='rounded-xl p-3 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
 
                     {/* title div */}
                     <div className='w-1/2 '>
@@ -69,19 +69,17 @@ const Settings = () => {
                             <label className="flex items-center ">Address:</label>
                             <input className='input input-text border-none col-span-5' type="text" placeholder='City, Country' />
                         </form>
-                        {/* postal code */}
+                        {/* zip code */}
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center ">Zip Code:</label>
                             <input className='input input-text border-none col-span-5' type="number" placeholder='postal code' />
                         </form>
-
-
                     </div>
 
                 </div>
 
                 {/* contact div */}
-                <div className='rounded-xl p-3 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
                     {/* title div */}
                     <div className='w-1/2 '>
                         <h3 className='text-2xl text-left mb-3'>Contact informations</h3>
@@ -108,7 +106,7 @@ const Settings = () => {
                 </div>
 
                 {/* security div */}
-                <div className='rounded-xl p-3 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
                     {/* title div */}
                     <div className='w-1/2 '>
                         <h3 className='text-2xl text-left mb-3'>Security</h3>
@@ -127,9 +125,9 @@ const Settings = () => {
                 </div>
 
                 {/* delete div */}
-                <div className='w-1/2 p-3 lg:p-10 bg-red-200 rounded-xl'>
-                    <button type="submit" className='btn btn-outline btn-error ml-0 mb-3'>Delete Account</button>
-                    <hr></hr>
+                <div className='w-full flex justify-center items-center p-5 lg:p-10 bg-red-200 rounded-xl'>
+                    <button type="submit" className='btn btn-outline btn-error '>Delete Account</button>
+
                 </div>
             </div>
         </section>
