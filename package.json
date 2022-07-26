@@ -19,6 +19,7 @@
     "fortawesome": "^0.0.1-security",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
+    "react-countdown-circle-timer": "^3.0.9",
     "react-day-picker": "^8.0.7",
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.0.3",
