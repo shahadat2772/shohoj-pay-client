@@ -8,16 +8,18 @@ import NotFound from "./Components/Shared/NotFound/NotFound";
 import SignUp from "./Components/Pages/Authentication/SignUp/SignUp";
 import { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
+import Settings from "./Components/Pages/Settings/Settings";
 
 function App() {
   return (
-    <div className="App">
+    <div >
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
