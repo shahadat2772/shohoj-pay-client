@@ -100,6 +100,25 @@ const Settings = () => {
                     </div>
                 </div>
 
+                {/* security div */}
+                <div className='rounded-xl p-3 lg:p-10 bg-slate-100'>
+                    {/* title div */}
+                    <div className='w-1/2 '>
+                        <h3 className='text-2xl text-left'>Security</h3>
+                        <hr />
+                    </div>
+
+                    {/* options container */}
+
+                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5'>
+                        {/* Current Password */}
+                        <input className='input input-password input-secondary' type="password" placeholder='Current Password' />
+
+                        <input className='input input-password input-secondary' type="password" placeholder='New Password' />
+                        <button className='btn max-w-min btn-primary'>change</button>
+                    </div>
+                </div>
+
                 {/* delete div */}
                 <div className='w-1/2 p-3 lg:p-10 '>
                     <button className='btn btn-outline btn-error ml-0 mb-3'>Delete Account</button>
