@@ -91,7 +91,7 @@ const keyPoints = [
 
 const WhyUs = () => {
   return (
-    <section className="p-10  lg:p-20 text-center px-5">
+    <section className="p-10  lg:pt-20 text-center px-5">
       {/* section header */}
       <div>
         <h3 className="text-3xl font-bold mb-10 text-primary">
