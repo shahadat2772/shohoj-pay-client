@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./Sections/Header/Header";
 import UserFlow from "./Sections/UserFlow/UserFlow";
 import YouHavePower from "./Sections/YouHavePower/YouHavePower";
 import WhyUs from "./Sections/WhyUs/WhyUs";
 import Countdown from "./Sections/Countdown/Countdown";
 import SignUp from "./Sections/BottomSignUp/SignUp";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const user = useSelector((state) => state?.user?.user)
+  useEffect(() => {
+    console.log(user)
+  }, [])
   return (
     <div>
       <Header></Header>

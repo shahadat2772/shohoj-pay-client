@@ -1,18 +1,18 @@
 import { ActionTypes } from "../constants/actionTypes";
 
 const initialState = {
-    user: [{ name: "mahfuz swaron" }]
+    user: { name: "mahfuz swaron" }
 }
-const registerUser = (user) => {
-    return
+const setUser = (user, state) => {
+    const newState = { ...state };
+    newState.user = user;
+    return newState;
 }
 
 export const userReducer = (state = initialState, type, payload) => {
     switch (type) {
-        case ActionTypes.REGISTER_USER:
-
-
-            return state
+        case ActionTypes.SET_USER:
+            return setUser(payload, state)
 
         default:
             return state;
