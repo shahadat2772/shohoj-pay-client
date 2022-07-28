@@ -4,23 +4,23 @@ const Settings = () => {
     return (
         <section className='px-5 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
             {/* right part */}
-            <div className='w-full lg:w-1/2 order-2 p-5'>
+            <div className='w-full lg:w-1/2 order-2 p-10'>
                 {/* user div */}
                 <div className='py-10'>
                     <div className=' '>
                         <figure className='flex justify-start mb-3'>
-                            <div className='h-32 w-32 bg-secondary bg-opacity-25 rounded-full' ></div>
+                            <div className='h-52 w-52 bg-secondary bg-opacity-25 rounded-full' ></div>
                         </figure>
                         <h3 className='text-3xl text-left font-semibold'>User Name</h3>
                     </div>
                 </div>
 
                 {/* general options section */}
-                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-25'>
 
                     {/* title div */}
                     <div className='w-1/2 '>
-                        <h3 className='text-2xl text-left mb-3'>General</h3>
+                        <h3 className='text-xl text-left mb-3'>General</h3>
                         <hr></hr>
                     </div>
 
@@ -52,11 +52,11 @@ const Settings = () => {
             {/* left part  */}
             <div className=' w-full lg:w-1/2 grid grid-cols-1 gap-5 p-5'>
                 {/* address section */}
-                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  bg-secondary bg-opacity-25'>
 
                     {/* title div */}
                     <div className='w-1/2 '>
-                        <h3 className='text-2xl text-left mb-3'>Address</h3>
+                        <h3 className='text-xl text-left mb-3'>Address</h3>
                         <hr></hr>
                     </div>
 
@@ -71,7 +71,7 @@ const Settings = () => {
                         </form>
                         {/* zip code */}
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
-                            <label className="flex items-center ">Zip Code:</label>
+                            <label className="flex items-center ">Zip:</label>
                             <input className='input input-text border-none col-span-5' type="number" placeholder='postal code' />
                         </form>
                     </div>
@@ -79,10 +79,10 @@ const Settings = () => {
                 </div>
 
                 {/* contact div */}
-                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-25'>
                     {/* title div */}
                     <div className='w-1/2 '>
-                        <h3 className='text-2xl text-left mb-3'>Contact informations</h3>
+                        <h3 className='text-xl text-left mb-3'>Contact informations</h3>
                         <hr></hr>
                     </div>
 
@@ -106,10 +106,10 @@ const Settings = () => {
                 </div>
 
                 {/* security div */}
-                <div className='rounded-xl p-5 lg:p-10 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-25'>
                     {/* title div */}
                     <div className='w-1/2 '>
-                        <h3 className='text-2xl text-left mb-3'>Security</h3>
+                        <h3 className='text-xl text-left mb-3'>Security</h3>
                         <hr />
                     </div>
 
@@ -125,7 +125,7 @@ const Settings = () => {
                 </div>
 
                 {/* delete div */}
-                <div className='w-full flex justify-center items-center p-5 lg:p-10 bg-red-200 rounded-xl'>
+                <div className='w-full flex justify-center items-center p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-red-200 rounded-xl'>
                     <button type="submit" className='btn btn-outline btn-error '>Delete Account</button>
 
                 </div>
