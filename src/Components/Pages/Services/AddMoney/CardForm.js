@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../../../firebase.init";
 import {
   CardElement,
   Elements,
@@ -14,10 +17,28 @@ const CardForm = ({ addAmount }) => {
   const [clientSecret, setClientSecret] = useState("");
   // Storing card error
   const [cardError, setCardError] = useState("");
+  const [user, loading, error] = useAuthState(auth);
 
   const stripe = useStripe();
   const elements = useElements();
 
+  const addMoneyToBackend = (id) => {
+    const addMoneyInfo = {
+      email: user.email,
+      type: "addMoney",
+      amount: addAmount,
+      transactionId: id,
+    };
+    fetch("http://localhost:5000/addMoney", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ addMoneyInfo }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
   useEffect(() => {
     if (addAmount) {
       console.log({ addAmount });
@@ -80,10 +101,13 @@ const CardForm = ({ addAmount }) => {
       setCardError(intentErr?.message);
       setConfirmed("");
     } else {
+      const id = paymentIntent?.id;
+
       toast.dismiss("waitingToast");
       card.clear();
       setCardError("");
-      setTransactionId(paymentIntent.id);
+      setTransactionId(id);
+      addMoneyToBackend(id);
       setConfirmed("Money Added Successfully.");
     }
   };

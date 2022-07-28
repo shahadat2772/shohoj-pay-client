@@ -10,7 +10,8 @@ import auth from "../../../../firebase.init";
 import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import { async } from "@firebase/util";
-
+import { setUser } from "../../../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
 const SignUp = () => {
   const date = new Date().toLocaleDateString();
 
@@ -29,6 +30,7 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  // const dispatch = useDispatch()
 
   useEffect(() => {
     if (userCreateError) {
@@ -57,6 +59,7 @@ const SignUp = () => {
           .then((result) => console.log(result));
       };
 
+      // dispatch(setUser(userInfo))
       createAccount();
 
       setTimeout(() => {
