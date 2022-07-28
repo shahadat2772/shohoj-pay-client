@@ -11,10 +11,11 @@ import ResetPassword from "./Components/Pages/Authentication/ResetPassword/Reset
 import Services from "./Components/Pages/Services/Services/Services";
 import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
 import Settings from "./Components/Pages/Settings/Settings";
+import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
 
 function App() {
   return (
-    <div >
+    <div>
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -22,6 +23,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         {/* Pages for each services */}
         <Route path="/services/addMoney" element={<AddMoney />} />
+        <Route path="/services/sendMoney" element={<SendMoney />} />
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />

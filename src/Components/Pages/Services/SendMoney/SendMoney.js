@@ -1,7 +1,62 @@
+import { Result } from "postcss";
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../../../firebase.init";
 
 const SendMoney = () => {
-  return <div></div>;
+  const date = new Date().toLocaleDateString();
+
+  const [user] = useAuthState(auth);
+
+  const handleSendMoney = (e) => {
+    e.preventDefault();
+    const sendersEmail = user?.email;
+    const receiversEmail = e.target.receiversEmail.value;
+    const sendMoneyAmount = e.target.sendMoneyAmount.value;
+
+    const sandMoneyInfo = {
+      from: sendersEmail,
+      to: receiversEmail,
+      amount: sendMoneyAmount,
+      date: date,
+    };
+
+    fetch("http://localhost:5000/sendMoney", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ sandMoneyInfo }),
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result));
+  };
+
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      <div className="addMoneyContainer w-96">
+        <h2 className="servicesHeader md:text-3xl text-2xl font-medium mb-12 text-center">
+          Send Money
+        </h2>
+        <form onSubmit={(e) => handleSendMoney(e)} action="">
+          <input
+            type="number"
+            className="h-12 p-2 w-full"
+            name="sendMoneyAmount"
+            placeholder="How much to send"
+          />
+          <br />
+          <input
+            type="email"
+            className="h-12 p-2 w-full my-1"
+            name="receiversEmail"
+            placeholder="Receivers email"
+          />
+          <input type="submit" className="btn mt-3" value="Send" />
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default SendMoney;
