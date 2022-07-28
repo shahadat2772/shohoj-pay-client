@@ -10,14 +10,16 @@ import { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
 import Services from "./Components/Pages/Services/Services/Services";
 import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
+import Settings from "./Components/Pages/Settings/Settings";
 
 function App() {
   return (
-    <div className="App">
+    <div >
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/settings" element={<Settings />} />
         {/* Pages for each services */}
         <Route path="/services/addMoney" element={<AddMoney />} />
         {/* Authentication Routes */}
