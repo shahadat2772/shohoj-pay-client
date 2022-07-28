@@ -125,8 +125,8 @@ const Settings = () => {
                 </div>
 
                 {/* delete div */}
-                <div className='w-full flex justify-center items-center p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-red-200 rounded-xl'>
-                    <button type="submit" className='btn btn-outline btn-error '>Delete Account</button>
+                <div className='p-5 lg:px-20 lg:py-10 '>
+                    <button className='btn pl-0 text-error btn-ghost border-b-2 border-b-error rounded-none'>Delete Account</button>
 
                 </div>
             </div>
