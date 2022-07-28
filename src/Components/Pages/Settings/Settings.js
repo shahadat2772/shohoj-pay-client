@@ -7,16 +7,16 @@ const Settings = () => {
             <div className='w-full lg:w-1/2 order-2 p-10'>
                 {/* user div */}
                 <div className='py-10'>
-                    <div className=' '>
-                        <figure className='flex justify-start mb-3'>
-                            <div className='h-52 w-52 bg-secondary bg-opacity-25 rounded-full' ></div>
+                    <div className='w-full lg:w-10/12 '>
+                        <figure className='flex justify-end mb-3'>
+                            <div className='h-48 w-48 bg-secondary bg-opacity-50 rounded-full' ></div>
                         </figure>
-                        <h3 className='text-3xl text-left font-semibold'>User Name</h3>
+                        <h3 className='text-4xl text-right font-semibold'>User Name</h3>
                     </div>
                 </div>
 
                 {/* general options section */}
-                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-50'>
 
                     {/* title div */}
                     <div className='w-1/2 '>
@@ -62,7 +62,7 @@ const Settings = () => {
             {/* left part  */}
             <div className=' w-full lg:w-1/2 grid grid-cols-1 gap-5 p-5'>
                 {/* address section */}
-                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  bg-secondary bg-opacity-50'>
 
                     {/* title div */}
                     <div className='w-1/2 '>
@@ -89,7 +89,7 @@ const Settings = () => {
                 </div>
 
                 {/* contact div */}
-                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-50'>
                     {/* title div */}
                     <div className='w-1/2 '>
                         <h3 className='text-xl text-left mb-3'>Contact informations</h3>
@@ -116,7 +116,7 @@ const Settings = () => {
                 </div>
 
                 {/* security div */}
-                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-25'>
+                <div className='rounded-xl p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-secondary bg-opacity-50'>
                     {/* title div */}
                     <div className='w-1/2 '>
                         <h3 className='text-xl text-left mb-3'>Security</h3>
@@ -135,8 +135,8 @@ const Settings = () => {
                 </div>
 
                 {/* delete div */}
-                <div className='p-5 lg:px-20 lg:py-10 '>
-                    <button className='btn pl-0 text-error btn-ghost border-b-2 border-b-error rounded-none'>Delete Account</button>
+                <div className='p-5 lg:px-20 lg:pt-20 lg:pb-0 '>
+                    <button className='btn pl-0  text-error btn-ghost border-b-2 border-b-error rounded-none'>Delete Account</button>
 
                 </div>
             </div>
