@@ -9,8 +9,11 @@ import {
 import auth from "../../../../firebase.init";
 import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
+import { async } from "@firebase/util";
 
 const SignUp = () => {
+  const date = new Date().toLocaleDateString();
+
   const passwordShowRef = useRef("");
   const [show, setShow] = useState(false);
   const [
@@ -24,7 +27,6 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
 
@@ -35,13 +37,34 @@ const SignUp = () => {
     }
   }, [userCreateError]);
   useEffect(() => {
-    if (user) {
+    if (user?.user?.displayName) {
+      const userInfo = {
+        type: "personal",
+        name: user.user.displayName,
+        email: user.user.email,
+        date,
+      };
+
+      const saveUser = async () => {
+        fetch("http://localhost:5000/saveUser", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ userInfo }),
+        })
+          .then((res) => res.json())
+          .then((result) => console.log(result));
+      };
+
+      saveUser();
+
       setTimeout(() => {
         toast.success("Create Account SuccessFully");
       }, 1000);
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, user?.user?.displayName]);
   if (userCreatLoading) {
     return <Spinner />;
   }
@@ -51,8 +74,6 @@ const SignUp = () => {
     }
     await createUserWithEmailAndPassword(data?.email, data?.password);
     await updateProfile({ displayName: data.name });
-    if (user) {
-    }
   };
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
