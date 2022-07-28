@@ -20,7 +20,7 @@ const Settings = () => {
 
                     {/* title div */}
                     <div className='w-1/2 '>
-                        <h3 className='text-xl text-left mb-3'>General</h3>
+                        <h3 className='text-xl text-left mb-3'>Addintional </h3>
                         <hr></hr>
                     </div>
 
@@ -30,18 +30,28 @@ const Settings = () => {
 
                         {/* Name */}
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
-                            <label className="flex items-center ">Name:</label>
-                            <input className='input input-text border-none col-span-5' type="text" placeholder='Name' />
+                            <label className="flex items-center ">Option:</label>
+                            <input className='input input-text border-none col-span-5' type="text" placeholder='option' />
                         </form>
 
                         {/* email subscription  */}
                         <div className='flex space-x-4'>
-                            <input type={"checkbox"} className="checkbox-primary" /><p> Recieve Monthly Report</p>
+                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
                         </div>
-                        {/* currency */}
-                        <div>
+                        {/* email subscription  */}
+                        <div className='flex space-x-4'>
+                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
+                        </div>
+                        {/* email subscription  */}
+                        <div className='flex space-x-4'>
+                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
+                        </div>
+                        {/* email subscription  */}
+                        <div className='flex space-x-4'>
+                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
+                        </div>
 
-                        </div>
+
 
                     </div>
 
