@@ -15,6 +15,6 @@ export const userReducer = (state = initialState, type, payload) => {
             return setUser(payload, state)
 
         default:
-            return state;
+            return setUser(payload, state);
     }
 }

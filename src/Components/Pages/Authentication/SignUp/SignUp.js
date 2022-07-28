@@ -47,8 +47,8 @@ const SignUp = () => {
         date,
       };
 
-      const saveUser = async () => {
-        fetch("http://localhost:5000/saveUser", {
+      const createAccount = async () => {
+        fetch("http://localhost:5000/createAccount", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -59,8 +59,9 @@ const SignUp = () => {
           .then((result) => console.log(result));
       };
 
-      saveUser();
+
       dispatch(setUser(userInfo))
+      createAccount();
 
       setTimeout(() => {
         toast.success("Create Account SuccessFully");

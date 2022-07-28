@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   CardElement,
   Elements,
@@ -14,10 +15,16 @@ const CardForm = ({ addAmount }) => {
   const [clientSecret, setClientSecret] = useState("");
   // Storing card error
   const [cardError, setCardError] = useState("");
+  const user = useSelector((state) => state.user.user)
 
   const stripe = useStripe();
   const elements = useElements();
-
+  const addMoneyInfo = {
+    email: user.email,
+    type: "addmoney",
+    amount: addAmount,
+    tranxId: transactionId
+  }
   useEffect(() => {
     if (addAmount) {
       console.log({ addAmount });
