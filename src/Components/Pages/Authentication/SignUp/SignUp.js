@@ -30,7 +30,7 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   useEffect(() => {
     if (userCreateError) {
@@ -60,7 +60,7 @@ const SignUp = () => {
       };
 
 
-      dispatch(setUser(userInfo))
+      // dispatch(setUser(userInfo))
       createAccount();
 
       setTimeout(() => {

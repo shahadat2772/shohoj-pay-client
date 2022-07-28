@@ -8,10 +8,6 @@ import SignUp from "./Sections/BottomSignUp/SignUp";
 import { useSelector } from "react-redux";
 
 const Home = () => {
-  const user = useSelector((state) => state?.user?.user)
-  useEffect(() => {
-    console.log(user)
-  }, [])
   return (
     <div>
       <Header></Header>
