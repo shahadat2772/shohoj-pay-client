@@ -21,7 +21,7 @@ const SendMoney = () => {
       amount: sendMoneyAmount,
       date: date,
     };
-    fetch("http://localhost:5000/sendMoney", {
+    fetch("https://radiant-reaches-08038.herokuapp.com/sendMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",

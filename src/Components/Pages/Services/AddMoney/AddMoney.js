@@ -25,7 +25,7 @@ const AddMoney = () => {
             setAddAmount(e.target.value);
           }}
         />
-        <br />
+
         <div className="w-full mt-7 text-left">
           <Elements stripe={stripePromise}>
             <CardForm addAmount={addAmount} />

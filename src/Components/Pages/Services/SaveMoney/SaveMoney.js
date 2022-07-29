@@ -18,7 +18,7 @@ const SaveMoney = () => {
       amount: saveMoneyAmount,
       date: date,
     };
-    fetch("http://localhost:5000/saveMoney", {
+    fetch("https://radiant-reaches-08038.herokuapp.com/saveMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
