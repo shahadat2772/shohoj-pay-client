@@ -22,10 +22,10 @@ const Navbar = () => {
   // ALL ROUTE
   const link = [
     { id: 1, name: "Home", link: "/" },
-    { id: 2, name: "About", link: "/about" },
-    { id: 3, name: "Blogs", link: "/blogs" },
-    { id: 4, name: "Contact", link: "/contact" },
-    { id: 5, name: "Other", link: "/other" },
+    // { id: 2, name: "About", link: "/about" },
+    // { id: 3, name: "Blogs", link: "/blogs" },
+    // { id: 4, name: "Contact", link: "/contact" },
+    // { id: 5, name: "Other", link: "/other" },
   ];
 
   const restrictedLinks = [
@@ -100,7 +100,10 @@ const Navbar = () => {
                       >
                         Login
                       </button>
-                      <button onClick={handleNavigateSignUp} className=" btn bg-[#3F4AD9] hover:bg-primary border-0 btn-sm">
+                      <button
+                        onClick={handleNavigateSignUp}
+                        className=" btn bg-[#3F4AD9] hover:bg-primary border-0 btn-sm"
+                      >
                         Sign Up
                       </button>
                     </>
