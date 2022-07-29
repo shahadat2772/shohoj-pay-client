@@ -27,7 +27,7 @@ const CardForm = ({ addAmount }) => {
   const addMoneyToBackend = (id) => {
     const addMoneyInfo = {
       type: "addMoney",
-      emails: [user.email],
+      email: user.email,
       amount: addAmount,
       transactionId: id,
       date: date,

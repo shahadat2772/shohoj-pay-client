@@ -10,23 +10,23 @@ const SendMoney = () => {
 
   const handleSendMoney = (e) => {
     e.preventDefault();
-    const sendersEmail = user?.email;
+
     const receiversEmail = e.target.receiversEmail.value;
     const sendMoneyAmount = e.target.sendMoneyAmount.value;
-
-    const sandMoneyInfo = {
-      from: sendersEmail,
+    const sendMoneyInfo = {
+      type: "sendMoney",
+      email: user?.email,
+      from: user?.email,
       to: receiversEmail,
       amount: sendMoneyAmount,
       date: date,
     };
-
     fetch("http://localhost:5000/sendMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ sandMoneyInfo }),
+      body: JSON.stringify({ sendMoneyInfo }),
     })
       .then((res) => res.json())
       .then((result) => console.log(result));
