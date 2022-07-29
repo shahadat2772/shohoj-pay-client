@@ -9,8 +9,12 @@ import {
 import auth from "../../../../firebase.init";
 import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
-
+import { async } from "@firebase/util";
+import { setUser } from "../../../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
 const SignUp = () => {
+  const date = new Date().toLocaleDateString();
+
   const passwordShowRef = useRef("");
   const [show, setShow] = useState(false);
   const [
@@ -24,9 +28,9 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
+  // const dispatch = useDispatch()
 
   useEffect(() => {
     if (userCreateError) {
@@ -35,13 +39,34 @@ const SignUp = () => {
     }
   }, [userCreateError]);
   useEffect(() => {
-    if (user) {
+    if (user?.user?.displayName) {
+      const userInfo = {
+        type: "personal",
+        name: user.user.displayName,
+        email: user?.user?.email,
+        date,
+      };
+      const createAccount = async () => {
+        fetch("http://localhost:5000/createAccount", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ userInfo }),
+        })
+          .then((res) => res.json())
+          .then((result) => console.log(result));
+      };
+
+      // dispatch(setUser(userInfo))
+      createAccount();
+
       setTimeout(() => {
         toast.success("Create Account SuccessFully");
       }, 1000);
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, user?.user?.displayName]);
   if (userCreatLoading) {
     return <Spinner />;
   }
@@ -51,8 +76,6 @@ const SignUp = () => {
     }
     await createUserWithEmailAndPassword(data?.email, data?.password);
     await updateProfile({ displayName: data.name });
-    if (user) {
-    }
   };
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
