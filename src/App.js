@@ -8,6 +8,7 @@ import NotFound from "./Components/Shared/NotFound/NotFound";
 import SignUp from "./Components/Pages/Authentication/SignUp/SignUp";
 import { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
+import {ChatEngine} from 'react-chat-engine';
 
 function App() {
   return (

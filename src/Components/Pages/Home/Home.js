@@ -3,6 +3,7 @@ import Header from "./Sections/Header/Header";
 import UserFlow from "./Sections/UserFlow/UserFlow";
 import YouHavePower from "./Sections/YouHavePower/YouHavePower";
 import WhyUs from "./Sections/WhyUs/WhyUs";
+import SupportEngine from "../SupportEngine";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <UserFlow></UserFlow>
       <YouHavePower></YouHavePower>
       <WhyUs></WhyUs>
+      <SupportEngine />
     </div>
   );
 };
