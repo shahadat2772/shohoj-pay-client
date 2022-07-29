@@ -43,10 +43,9 @@ const SignUp = () => {
       const userInfo = {
         type: "personal",
         name: user.user.displayName,
-        email: user.user.email,
+        email: user?.user?.email,
         date,
       };
-
       const createAccount = async () => {
         fetch("http://localhost:5000/createAccount", {
           method: "POST",

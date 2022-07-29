@@ -11,6 +11,8 @@ import {
 import toast from "react-hot-toast";
 
 const CardForm = ({ addAmount }) => {
+  const date = new Date().toLocaleDateString();
+
   const [confirmed, setConfirmed] = useState("");
   const [transactionId, setTransactionId] = useState("");
   // Storing the client secret
@@ -24,10 +26,11 @@ const CardForm = ({ addAmount }) => {
 
   const addMoneyToBackend = (id) => {
     const addMoneyInfo = {
-      email: user.email,
       type: "addMoney",
+      emails: [user.email],
       amount: addAmount,
       transactionId: id,
+      date: date,
     };
     fetch("http://localhost:5000/addMoney", {
       method: "POST",
