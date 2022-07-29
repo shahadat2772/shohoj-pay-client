@@ -29,8 +29,9 @@ const Navbar = () => {
   ];
 
   const restrictedLinks = [
-    { id: 6, name: "Dashboard", link: "/dashboard" },
+    { id: 6, name: "Shohoj", link: "/dashboard" },
     { id: 6, name: "Services", link: "/services" },
+    { id: 6, name: "Settings", link: "/settings" },
   ];
 
   // RESPONSIVE TOGGLER BTN STATE
