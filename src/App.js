@@ -12,6 +12,7 @@ import Services from "./Components/Pages/Services/Services/Services";
 import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
 import Settings from "./Components/Pages/Settings/Settings";
 import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
+import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         {/* Pages for each services */}
         <Route path="/services/addMoney" element={<AddMoney />} />
         <Route path="/services/sendMoney" element={<SendMoney />} />
+        <Route path="/services/saveMoney" element={<SaveMoney />} />
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
