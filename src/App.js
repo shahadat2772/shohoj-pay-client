@@ -13,6 +13,8 @@ import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
 import Settings from "./Components/Pages/Settings/Settings";
 import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
 import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
+import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
+import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -30,6 +32,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+          }
+        />
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
