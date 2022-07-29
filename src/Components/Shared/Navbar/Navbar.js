@@ -22,10 +22,10 @@ const Navbar = () => {
   // ALL ROUTE
   const link = [
     { id: 1, name: "Home", link: "/" },
-    { id: 2, name: "About", link: "/about" },
-    { id: 3, name: "Blogs", link: "/blogs" },
-    { id: 4, name: "Contact", link: "/contact" },
-    { id: 5, name: "Other", link: "/other" },
+    // { id: 2, name: "About", link: "/about" },
+    // { id: 3, name: "Blogs", link: "/blogs" },
+    // { id: 4, name: "Contact", link: "/contact" },
+    // { id: 5, name: "Other", link: "/other" },
   ];
 
   const restrictedLinks = [{ id: 6, name: "Services", link: "/services" }];
