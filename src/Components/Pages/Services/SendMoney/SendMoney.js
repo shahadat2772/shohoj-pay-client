@@ -21,7 +21,7 @@ const SendMoney = () => {
       amount: sendMoneyAmount,
       date: date,
     };
-    fetch("http://localhost:5000/sendMoney", {
+    fetch("https://radiant-reaches-08038.herokuapp.com/sendMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -34,25 +34,25 @@ const SendMoney = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <div className="addMoneyContainer w-96">
-        <h2 className="servicesHeader md:text-3xl text-2xl font-medium mb-12 text-center">
+      <div className="addMoneyContainer w-11/12 lg:w-1/2 bg-secondary bg-opacity-75 rounded-xl px-10 py-8">
+        <h2 className="servicesHeader md:text-3xl text-2xl font-medium mb-12 text-center text-white">
           Send Money
         </h2>
         <form onSubmit={(e) => handleSendMoney(e)} action="">
           <input
             type="number"
-            className="h-12 p-2 w-full"
+            className="h-12 p-2 w-full rounded-lg mb-3"
             name="sendMoneyAmount"
             placeholder="How much to send"
           />
-          <br />
+
           <input
             type="email"
-            className="h-12 p-2 w-full my-1"
+            className="h-12 p-2 w-full  rounded-lg "
             name="receiversEmail"
             placeholder="Receivers email"
           />
-          <input type="submit" className="btn mt-3" value="Send" />
+          <input type="submit" className="btn btn-primary w-full mt-3" value="Send" />
         </form>
       </div>
     </div>
