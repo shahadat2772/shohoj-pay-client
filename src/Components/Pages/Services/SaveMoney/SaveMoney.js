@@ -18,7 +18,7 @@ const SaveMoney = () => {
       amount: saveMoneyAmount,
       date: date,
     };
-    fetch("https://radiant-reaches-08038.herokuapp.com/saveMoney", {
+    fetch("http://localhost:5000/saveMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -42,7 +42,11 @@ const SaveMoney = () => {
             name="saveMoneyAmount"
             placeholder="How much to save"
           />
-          <input type="submit" className="btn btn-primary w-full mt-3" value="Save" />
+          <input
+            type="submit"
+            className="btn btn-primary w-full mt-3"
+            value="Save"
+          />
         </form>
       </div>
     </div>

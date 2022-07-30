@@ -47,7 +47,7 @@ const SignUp = () => {
         date,
       };
       const createAccount = async () => {
-        fetch("https://radiant-reaches-08038.herokuapp.com/createAccount", {
+        fetch("http://localhost:5000/createAccount", {
           method: "POST",
           headers: {
             "content-type": "application/json",

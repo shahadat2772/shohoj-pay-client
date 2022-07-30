@@ -32,7 +32,7 @@ const CardForm = ({ addAmount }) => {
       transactionId: id,
       date: date,
     };
-    fetch("https://radiant-reaches-08038.herokuapp.com/addMoney", {
+    fetch("http://localhost:5000/addMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -46,7 +46,7 @@ const CardForm = ({ addAmount }) => {
     if (addAmount) {
       console.log({ addAmount });
 
-      fetch("https://radiant-reaches-08038.herokuapp.com/create-payment-intent", {
+      fetch("http://localhost:5000/create-payment-intent", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -119,7 +119,6 @@ const CardForm = ({ addAmount }) => {
     <div className="">
       <form onSubmit={handleSubmit}>
         <CardElement
-
           options={{
             style: {
               base: {
