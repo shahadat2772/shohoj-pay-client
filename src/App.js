@@ -22,12 +22,47 @@ function App() {
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route
+          path="/services"
+          element={
+            <RequireAuth>
+              <Services />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <RequireAuth>
+              <Settings />
+            </RequireAuth>
+          }
+        />
         {/* Pages for each services */}
-        <Route path="/services/addMoney" element={<AddMoney />} />
-        <Route path="/services/sendMoney" element={<SendMoney />} />
-        <Route path="/services/saveMoney" element={<SaveMoney />} />
+        <Route
+          path="/services/addMoney"
+          element={
+            <RequireAuth>
+              <AddMoney />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/sendMoney"
+          element={
+            <RequireAuth>
+              <SendMoney />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/saveMoney"
+          element={
+            <RequireAuth>
+              <SaveMoney />
+            </RequireAuth>
+          }
+        />
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
