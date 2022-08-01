@@ -9,7 +9,7 @@ const UserFlow = () => {
         <div className="px-5 flow-1">
           <div className="flex items-center mb-8">
             <a href="" className="ac-create-icon m-auto">
-              <i className="fa-solid fa-user-plus text-4xl"></i>
+              <i className="fa-solid fa-user-plus text-5xl"></i>
             </a>
           </div>
           <h1 className="text-center text-xl">Create account</h1>
@@ -24,7 +24,7 @@ const UserFlow = () => {
         <div className="px-5 flow-2">
           <div className="flex items-center mb-8">
             <a href="" className="ac-create-icon m-auto">
-              <i className="fa-solid fa-credit-card text-4xl"></i>
+              <i className="fa-solid fa-credit-card text-5xl"></i>
             </a>
           </div>
           <h1 className="text-center text-xl">Add Money</h1>
@@ -37,14 +37,14 @@ const UserFlow = () => {
         <div className="px-5 flow-3">
           <div className="flex items-center mb-8">
             <a href="" className="ac-create-icon m-auto">
-              <i className="fa-solid fa-earth-americas text-4xl"></i>
+              <i className="fa-solid fa-earth-americas text-5xl"></i>
             </a>
           </div>
           <h1 className="text-center text-xl">Start Transaction</h1>
           <p className="text-center text-sm lg:px-4">
             You can do any type of Transaction from Shohoj Pay account. you can
             enjoy all our services by going to service after creating an
-            account.
+            account. P
           </p>
         </div>
       </div>
