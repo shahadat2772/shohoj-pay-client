@@ -4,7 +4,7 @@ import "./style.css";
 const Banner = () => {
     return (
         <>
-        <div class=" min-h-screen bg-image bg-base-100">
+        <div class=" min-h-screen bg-image ">
   <div class="hero-overlay bg-opacity-60"></div>
   <div class="hero-content text-center text-neutral-content">
   <div className="max-w-lg">
