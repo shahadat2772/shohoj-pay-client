@@ -14,9 +14,9 @@ const UserFlow = () => {
           </div>
           <h1 className="text-center text-xl">Create account</h1>
           <p className="text-center text-sm lg:px-4">
-            Aspernatur sit adipisci quaerat unde at neque Redug Lagre dolor sit
-            amet consectetu. Agencies to define their new business objectives
-            and then create
+            You can easily create your account in Shohoj Pay. You can easily
+            create your account through Email, Password or Google by clicking on
+            the Sign Up button above.
           </p>
         </div>
 
@@ -29,9 +29,8 @@ const UserFlow = () => {
           </div>
           <h1 className="text-center text-xl">Add Money</h1>
           <p className="text-center text-sm lg:px-4">
-            Aspernatur sit adipisci quaerat unde at neque Redug Lagre dolor sit
-            amet consectetu. Agencies to define their new business objectives
-            and then create
+            After creating an account, you can easily add money to your account
+            from Stripe or other Shohoj Pay accounts at any time.
           </p>
         </div>
         {/* USERFLOW CARD */}
@@ -43,9 +42,9 @@ const UserFlow = () => {
           </div>
           <h1 className="text-center text-xl">Start Transaction</h1>
           <p className="text-center text-sm lg:px-4">
-            Aspernatur sit adipisci quaerat unde at neque Redug Lagre dolor sit
-            amet consectetu. Agencies to define their new business objectives
-            and then create
+            You can do any type of Transaction from Shohoj Pay account. you can
+            enjoy all our services by going to service after creating an
+            account.
           </p>
         </div>
       </div>
