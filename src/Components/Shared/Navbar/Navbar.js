@@ -10,28 +10,12 @@ import toast from "react-hot-toast";
 const Navbar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
-  // NAV OPACITY CHANGER
-  // const navbar = document.querySelector(".navbarContainer");
-  // window.onscroll = () => {
-  //   if (window.scrollY > 20) {
-  //     navbar.classList.add("nav-active");
-  //   } else {
-  //     navbar.classList.remove("nav-active");
-  //   }
-  // };
-  // ALL ROUTE
-  const link = [
-    { id: 1, name: "Home", link: "/" },
-    // { id: 2, name: "About", link: "/about" },
-    // { id: 3, name: "Blogs", link: "/blogs" },
-    // { id: 4, name: "Contact", link: "/contact" },
-    // { id: 5, name: "Other", link: "/other" },
-  ];
+  const link = [{ name: "Home", link: "/" }];
 
   const restrictedLinks = [
-    { id: 6, name: "Shohoj", link: "/dashboard" },
-    { id: 6, name: "Services", link: "/services" },
-    { id: 6, name: "Settings", link: "/settings" },
+    { name: "Dashboard", link: "/dashboard" },
+    { name: "Services", link: "/services" },
+    { name: "Settings", link: "/settings" },
   ];
 
   // RESPONSIVE TOGGLER BTN STATE
@@ -72,14 +56,14 @@ const Navbar = () => {
                 }`}
               >
                 {link.map((item) => (
-                  <li className="block text-center " key={item.id}>
+                  <li className="block text-center">
                     <Link to={item.link}>{item.name}</Link>
                   </li>
                 ))}
                 {/* Routes for authenticated users   */}
                 {user &&
                   restrictedLinks.map((item) => (
-                    <li className="block text-center " key={item.id}>
+                    <li className="block text-center">
                       <Link to={item.link}>{item.name}</Link>
                     </li>
                   ))}

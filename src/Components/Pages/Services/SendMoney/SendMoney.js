@@ -21,7 +21,7 @@ const SendMoney = () => {
       amount: sendMoneyAmount,
       date: date,
     };
-    fetch("https://radiant-reaches-08038.herokuapp.com/sendMoney", {
+    fetch("http://localhost:5000/sendMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -52,7 +52,11 @@ const SendMoney = () => {
             name="receiversEmail"
             placeholder="Receivers email"
           />
-          <input type="submit" className="btn btn-primary w-full mt-3" value="Send" />
+          <input
+            type="submit"
+            className="btn btn-primary w-full mt-3"
+            value="Send"
+          />
         </form>
       </div>
     </div>
