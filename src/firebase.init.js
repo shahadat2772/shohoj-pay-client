@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCnMcxddtbwMbd3Cxu7IcHYLGdHCPCtLow",
-  authDomain: "app-shohoj-pay.firebaseapp.com",
-  projectId: "app-shohoj-pay",
-  storageBucket: "app-shohoj-pay.appspot.com",
-  messagingSenderId: "630250828541",
-  appId: "1:630250828541:web:7b6c29db67f4a245be8494",
+  apiKey: "AIzaSyDSopuy0s7hVZ04IlzRfjmPY4PW6S0EGWo",
+  authDomain: "shohoj-pay-app.firebaseapp.com",
+  projectId: "shohoj-pay-app",
+  storageBucket: "shohoj-pay-app.appspot.com",
+  messagingSenderId: "327654270059",
+  appId: "1:327654270059:web:b6802803fc173a8c70bd2e",
 };
 
 // Initialize Firebase
