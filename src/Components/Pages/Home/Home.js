@@ -13,7 +13,6 @@ const Home = () => {
       <Banner/>
       <UserFlow></UserFlow>
       <YouHavePower></YouHavePower>
-      <WhyUs></WhyUs>
       <Countdown></Countdown>
       <SignUp></SignUp>
     </div>
