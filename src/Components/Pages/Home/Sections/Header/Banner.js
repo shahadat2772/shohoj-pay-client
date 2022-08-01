@@ -4,7 +4,7 @@ import "./style.css";
 const Banner = () => {
     return (
         <>
-        <div class=" min-h-screen bg-image ">
+        <div class=" min-h-screen bg-img ">
   <div class="hero-overlay bg-opacity-60"></div>
   <div class="hero-content text-center text-neutral-content">
   <div className="max-w-lg">
@@ -16,7 +16,7 @@ const Banner = () => {
               services that is Finance. Use Shohoj Pay and kick out your
               problems.
             </p>
-            <button class="btn text-blue-800 font-bold text-2xl border-2 border-indigo-500 px-8 mt-4 hover:bg-sky-700">Get Free 25$</button>
+            <button class=" text-blue-800 font-bold text-2xl border-2 rounded-lg border-indigo-500 px-8 py-2 mt-4 hover:bg-sky-700 hover:text-white">Get Free 25$</button>
           </div>
   </div>
 </div>

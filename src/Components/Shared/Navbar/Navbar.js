@@ -10,23 +10,14 @@ import toast from "react-hot-toast";
 const Navbar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
-  // NAV OPACITY CHANGER
-  // const navbar = document.querySelector(".navbarContainer");
-  // window.onscroll = () => {
-  //   if (window.scrollY > 20) {
-  //     navbar.classList.add("nav-active");
-  //   } else {
-  //     navbar.classList.remove("nav-active");
-  //   }
-  // };
-  // ALL ROUTE
-  const link = [
-    { id: 1, name: "Home", link: "/" },
-    { id: 2, name: "About", link: "/about" },
-    { id: 3, name: "Blogs", link: "/blogs" },
-    { id: 4, name: "Contact", link: "/contact" },
-    { id: 5, name: "Other", link: "/other" },
+  const link = [{ name: "Home", link: "/" }];
+
+  const restrictedLinks = [
+    { name: "Dashboard", link: "/dashboard" },
+    { name: "Services", link: "/services" },
+    { name: "Settings", link: "/settings" },
   ];
+
   // RESPONSIVE TOGGLER BTN STATE
   const [open, setOpen] = useState(false);
   // ONCLICK NAVIGATE
@@ -42,7 +33,7 @@ const Navbar = () => {
   };
   return (
     <div className="fixed top-0 w-[100%] z-50">
-      <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4">
+      <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
         <div className="p-1 lg:px-8 md:px-4">
           <nav className="flex items-center justify-between">
             {/* PROJECT LOGO */}
@@ -65,10 +56,17 @@ const Navbar = () => {
                 }`}
               >
                 {link.map((item) => (
-                  <li className="block text-center " key={item.id}>
+                  <li className="block text-center">
                     <Link to={item.link}>{item.name}</Link>
                   </li>
                 ))}
+                {/* Routes for authenticated users   */}
+                {user &&
+                  restrictedLinks.map((item) => (
+                    <li className="block text-center">
+                      <Link to={item.link}>{item.name}</Link>
+                    </li>
+                  ))}
                 {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                 <div className=" flex items-center justify-center lg:hidden">
                   {user ? (
@@ -80,10 +78,16 @@ const Navbar = () => {
                     </button>
                   ) : (
                     <>
-                      <button className="btn bg-transparent border-2 text-secondary hover:border-secondary hover:bg-secondary border-secondary hover:text-white btn-sm mr-3">
+                      <button
+                        onClick={handleNavigateLogin}
+                        className="btn bg-transparent border-2 text-secondary hover:border-secondary hover:bg-secondary border-secondary hover:text-white btn-sm mr-3"
+                      >
                         Login
                       </button>
-                      <button className=" btn bg-[#3F4AD9] hover:bg-primary border-0 btn-sm">
+                      <button
+                        onClick={handleNavigateSignUp}
+                        className=" btn bg-[#3F4AD9] hover:bg-primary border-0 btn-sm"
+                      >
                         Sign Up
                       </button>
                     </>
