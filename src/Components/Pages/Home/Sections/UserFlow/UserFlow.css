@@ -2,7 +2,7 @@
 .ac-create-icon {
   font-size: 60px;
   display: inline-block;
-  color: #2933c3;
+  color: #414cda;
   position: relative;
   width: 90px;
   height: 90px;
@@ -12,15 +12,22 @@
 .ac-create-icon::after {
   position: absolute;
   content: "";
-  left: 8px;
-  top: 15px;
-  background: url(http://rockstheme.com/rocks/paiment-live/img/about/shape-bg.png);
-  background-repeat: no-repeat;
+  left: -5px;
+  top: 20px;
+  background-color: blueviolet;
   z-index: -1;
-  width: 90%;
-  height: 90%;
-  background-size: cover;
-  opacity: 0.1;
+  width: 70%;
+  height: 70%;
+  opacity: 0.5;
+  border-radius: 50%;
+  transition: all ease-in-out 0.4s;
+}
+.flow-1:hover .ac-create-icon::after,
+.flow-2:hover .ac-create-icon::after,
+.flow-3:hover .ac-create-icon::after {
+  width: 35%;
+  height: 35%;
+  opacity: 1;
 }
 /* USERFLOW ARROW ICON STYLE */
 .rotted-down {
