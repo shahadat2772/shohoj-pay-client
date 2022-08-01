@@ -13,7 +13,6 @@ const Home = () => {
       <Header></Header>
       <UserFlow></UserFlow>
       <YouHavePower></YouHavePower>
-      <WhyUs></WhyUs>
       <Countdown></Countdown>
       <SignUp></SignUp>
     </div>
