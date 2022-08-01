@@ -5,7 +5,7 @@ import YouHavePower from "./Sections/YouHavePower/YouHavePower";
 import WhyUs from "./Sections/WhyUs/WhyUs";
 import Countdown from "./Sections/Countdown/Countdown";
 import SignUp from "./Sections/BottomSignUp/SignUp";
-import { useSelector } from "react-redux";
+
 
 const Home = () => {
   return (

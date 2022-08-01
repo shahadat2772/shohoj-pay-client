@@ -116,7 +116,7 @@ const CardForm = ({ addAmount }) => {
   };
 
   return (
-    <div>
+    <div className="">
       <form onSubmit={handleSubmit}>
         <CardElement
           options={{
@@ -124,9 +124,13 @@ const CardForm = ({ addAmount }) => {
               base: {
                 fontSize: "16px",
                 color: "#424770",
+                lineHeight: "3rem",
+                borderRadius: 30,
                 "::placeholder": {
                   color: "#aab7c4",
                 },
+                backgroundColor: "#fff",
+                // height: "12rem"
               },
               invalid: {
                 color: "#9e2146",
