@@ -1,11 +1,4 @@
-.countdown-app {
-    display: flex;
-    justify-content: space-around;
-    font-family: sans-serif;
-    text-align: center;
-    padding-top: 10px;
-}
-
-.time {
-    font-size: 32px;
+.bg {
+    background-image: url('../../../../../Images/dotted-world-map.webp');
+    background-size: contain;
 }
