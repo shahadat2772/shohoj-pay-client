@@ -46,7 +46,7 @@ const GoogleLogin = () => {
       }, 1000);
       navigate(from, { replace: true });
     }
-  }, [from, navigate, user]);
+  }, [from, navigate, user, date]);
   if (googleLoading) {
     return <Spinner />;
   }

@@ -65,7 +65,7 @@ const SignUp = () => {
       }, 1000);
       navigate("/");
     }
-  }, [user, navigate, user?.user?.displayName]);
+  }, [user, navigate, user?.user?.displayName, date]);
   if (userCreatLoading) {
     return <Spinner />;
   }
