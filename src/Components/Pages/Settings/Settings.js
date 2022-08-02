@@ -1,6 +1,9 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import "./settings.css";
-
+import {
+    faPen,
+} from "@fortawesome/free-solid-svg-icons";
 const Settings = () => {
     const [editAddress, setEditAddress] = useState(false);
     const [editContact, setEditContact] = useState(false);
@@ -25,7 +28,7 @@ const Settings = () => {
                     {/* title div */}
                     <div className='w-1/2 '>
                         <h3 className='text-xl text-left mb-3'>Addintional </h3>
-                        <hr></hr>
+
                     </div>
 
                     {/* options container */}
@@ -58,9 +61,14 @@ const Settings = () => {
                 <div className='rounded-lg p-5 w-full lg:w-10/12 place-self-end  bg-white '>
 
                     {/* title div */}
-                    <div className='w-1/2 '>
+                    <div className='flex justify-between items-center'>
                         <h3 className='text-xl text-left mb-3'>Address</h3>
-                        <hr></hr>
+                        <button onClick={() => setEditAddress(true)} className='btn btn-ghost bg-white'>
+                            <FontAwesomeIcon
+                                className=' text-gray-200'
+                                icon={faPen}
+                            />
+                        </button>
                     </div>
 
                     {/* options container */}
@@ -86,9 +94,12 @@ const Settings = () => {
                 {/* contact div */}
                 <div className='rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-white '>
                     {/* title div */}
-                    <div className='w-1/2 '>
+                    <div className='flex justify-between items-center '>
                         <h3 className='text-xl text-left mb-3'>Contact informations</h3>
-                        <hr></hr>
+                        <button onClick={() => setEditContact(true)} className='btn btn-ghost'><FontAwesomeIcon
+                            className=' text-gray-200'
+                            icon={faPen}
+                        /></button>
                     </div>
 
                     {/* options container */}
