@@ -9,6 +9,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
+import "./CardForm.css";
 
 const CardForm = ({ addAmount }) => {
   const date = new Date().toLocaleDateString();
@@ -121,6 +122,7 @@ const CardForm = ({ addAmount }) => {
         <CardElement
           options={{
             style: {
+              padding: "10px",
               base: {
                 fontSize: "16px",
                 color: "#424770",
@@ -139,7 +141,7 @@ const CardForm = ({ addAmount }) => {
           }}
         />
         <button
-          className="btn btn-primary btn-sm mt-6"
+          className="actionButton mt-11"
           type="submit"
           disabled={!stripe || !clientSecret || confirmed}
         >
@@ -147,12 +149,12 @@ const CardForm = ({ addAmount }) => {
         </button>
       </form>
       <p className="text-xs text-red-500 mt-1 ml-1">{cardError && cardError}</p>
-      <p className="text-xs text-green-500 mt-2 ml-1">
+      {/* <p className="text-xs text-green-500 mt-2 ml-1">
         {confirmed && confirmed}
-      </p>
-      <p className="text-sm text-orange-400  ml-1">
+      </p> */}
+      {/* <p className="text-sm text-orange-400  ml-1">
         {transactionId && <span>Transaction id: {transactionId}</span>}
-      </p>
+      </p> */}
     </div>
   );
 };

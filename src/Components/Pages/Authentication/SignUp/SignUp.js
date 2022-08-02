@@ -9,9 +9,7 @@ import {
 import auth from "../../../../firebase.init";
 import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
-import { async } from "@firebase/util";
-import { setUser } from "../../../../redux/actions/userActions";
-import { useDispatch } from "react-redux";
+
 const SignUp = () => {
   const date = new Date().toLocaleDateString();
 
@@ -39,6 +37,7 @@ const SignUp = () => {
     }
   }, [userCreateError]);
   useEffect(() => {
+    console.log(user);
     if (user?.user?.displayName) {
       const userInfo = {
         type: "personal",
@@ -66,7 +65,7 @@ const SignUp = () => {
       }, 1000);
       navigate("/");
     }
-  }, [user, navigate, user?.user?.displayName]);
+  }, [user, navigate, user?.user?.displayName, date]);
   if (userCreatLoading) {
     return <Spinner />;
   }

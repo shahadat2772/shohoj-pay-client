@@ -5,7 +5,6 @@ import Countdown from "./Sections/Countdown/Countdown";
 import SignUp from "./Sections/BottomSignUp/SignUp";
 import Banner from "./Sections/Header/Banner";
 
-
 const Home = () => {
   return (
     <div>
