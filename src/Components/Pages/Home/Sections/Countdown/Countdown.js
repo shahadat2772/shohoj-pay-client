@@ -1,105 +1,41 @@
 import React from "react";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import "./Countdown.css";
+import Stat from "./Stat";
+import client from "../../../../../Images/counter-up-logo/icons8-person-tipping-hand-96.png"
+import merchant from "../../../../../Images/counter-up-logo/icons8-bookshop-96.png"
+import partner from "../../../../../Images/counter-up-logo/icons8-handshake-96.png"
+import country from "../../../../../Images/counter-up-logo/icons8-globe-96.png"
 
-const minuteSeconds = 60;
-const hourSeconds = 3600;
-const daySeconds = 86400;
+// countup data 
+const countUp = [
+    { id: 1, icon: client, title: 'Happy Client', figure: 12000 },
+    { id: 2, icon: merchant, title: 'Merchant', figure: 480 },
+    { id: 3, icon: partner, title: 'Official Partner', figure: 144 },
+    { id: 4, icon: country, title: 'Country', figure: 13 }
+]
 
-const timerProps = {
-    isPlaying: true,
-    size: 120,
-    strokeWidth: 6
-};
-
-const renderTime = (dimension, time) => {
+const Countdown = () => {
     return (
-        <div className="time-wrapper">
-            <div className="time">{time}</div>
-            <div>{dimension}</div>
-        </div>
-    );
-};
-
-const getTimeSeconds = (time) => (minuteSeconds - time) | 0;
-const getTimeMinutes = (time) => ((time % hourSeconds) / minuteSeconds) | 0;
-const getTimeHours = (time) => ((time % daySeconds) / hourSeconds) | 0;
-const getTimeDays = (time) => (time / daySeconds) | 0;
-
-export default function Countdown() {
-    const stratTime = Date.now() / 1000; // use UNIX timestamp in seconds
-    const endTime = stratTime + 243248; // use UNIX timestamp in seconds
-
-    const remainingTime = endTime - stratTime;
-    const days = Math.ceil(remainingTime / daySeconds);
-    const daysDuration = days * daySeconds;
-
-    return (
-        <div className="pb-10 lg:pb-20">
-            <div className="mb-20">
+        <div className=" text-center bg py-10 lg:py-20" >
+            {/* bonus heading div */}
+            <div>
                 <h2 className="text-3xl text-center font-bold font-sans text-primary">
-                    Get your new user bonus before times out!
+                    Get your new user <span className="text-error text-4xl">$25</span> bonus before times out!
                 </h2>
+                <h1 className="text-3xl lg:text-5xl m-10 lg:m-16 p-2 font-semibold">Real People. Real Relationships.</h1>
+                {/* stats count div */}
+                <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 lg:mb-20'>
+                    {
+                        countUp.map((e) => <Stat
+                            key={e.id}
+                            e={e}>
+                        </Stat>)
+                    }
+                </div>
             </div>
-            <div className="countdown-app">
-                <CountdownCircleTimer
-                    {...timerProps}
-                    colors="#7E2E84"
-                    duration={daysDuration}
-                    initialRemainingTime={remainingTime}
-                >
-                    {({ elapsedTime, color }) => (
-                        <span style={{ color }}>
-                            {renderTime("days", getTimeDays(daysDuration - elapsedTime))}
-                        </span>
-                    )}
-                </CountdownCircleTimer>
-                <CountdownCircleTimer
-                    {...timerProps}
-                    colors="#D14081"
-                    duration={daySeconds}
-                    initialRemainingTime={remainingTime % daySeconds}
-                    onComplete={(totalElapsedTime) => ({
-                        shouldRepeat: remainingTime - totalElapsedTime > hourSeconds
-                    })}
-                >
-                    {({ elapsedTime, color }) => (
-                        <span style={{ color }}>
-                            {renderTime("hours", getTimeHours(daySeconds - elapsedTime))}
-                        </span>
-                    )}
-                </CountdownCircleTimer>
-                <CountdownCircleTimer
-                    {...timerProps}
-                    colors="#EF798A"
-                    duration={hourSeconds}
-                    initialRemainingTime={remainingTime % hourSeconds}
-                    onComplete={(totalElapsedTime) => ({
-                        shouldRepeat: remainingTime - totalElapsedTime > minuteSeconds
-                    })}
-                >
-                    {({ elapsedTime, color }) => (
-                        <span style={{ color }}>
-                            {renderTime("minutes", getTimeMinutes(hourSeconds - elapsedTime))}
-                        </span>
-                    )}
-                </CountdownCircleTimer>
-                <CountdownCircleTimer
-                    {...timerProps}
-                    colors="#218380"
-                    duration={minuteSeconds}
-                    initialRemainingTime={remainingTime % minuteSeconds}
-                    onComplete={(totalElapsedTime) => ({
-                        shouldRepeat: remainingTime - totalElapsedTime > 0
-                    })}
-                >
-                    {({ elapsedTime, color }) => (
-                        <span style={{ color }}>
-                            {renderTime("seconds", getTimeSeconds(elapsedTime))}
-                        </span>
-                    )}
-                </CountdownCircleTimer>
-            </div>
+
         </div>
     );
 }
+
+export default Countdown;
