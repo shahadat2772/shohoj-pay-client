@@ -34,27 +34,25 @@ const SendMoney = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <div className="addMoneyContainer w-11/12 lg:w-1/2 bg-secondary bg-opacity-75 rounded-xl px-10 py-8">
-        <h2 className="servicesHeader md:text-3xl text-2xl font-medium mb-12 text-center text-white">
-          Send Money
-        </h2>
+      <div className="addMoneyContainer w-[30rem]">
+        <h2 className="servicesHeader text-[1.73rem] mb-11 pl-1">Send Money</h2>
         <form onSubmit={(e) => handleSendMoney(e)} action="">
           <input
             type="number"
-            className="h-12 p-2 w-full rounded-lg mb-3"
+            className="h-12 p-2 w-full mb-5 rounded"
             name="sendMoneyAmount"
-            placeholder="How much to send"
+            placeholder="How much to send?"
           />
 
           <input
             type="email"
-            className="h-12 p-2 w-full  rounded-lg "
+            className="h-12 p-2 w-full rounded"
             name="receiversEmail"
             placeholder="Receivers email"
           />
           <input
             type="submit"
-            className="btn btn-primary w-full mt-3"
+            className="actionButton mt-12 border-0"
             value="Send"
           />
         </form>
@@ -62,7 +60,7 @@ const SendMoney = () => {
     </div>
     // <div className="min-h-screen flex justify-center items-center">
     //   <div className="addMoneyContainer w-[30rem]">
-    //     <h2 className="servicesHeader text-[1.73rem] mb-12 pl-1">Add Money</h2>
+    //     <h2 className="servicesHeader text-[1.73rem] mb-12 pl-1">Send Money</h2>
     //     <input
     //       placeholder="How much to add?"
     //       className="h-12 p-2 w-full rounded"
