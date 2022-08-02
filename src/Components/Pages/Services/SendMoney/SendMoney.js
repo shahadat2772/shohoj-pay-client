@@ -34,8 +34,8 @@ const SendMoney = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <div className="addMoneyContainer w-[30rem]">
-        <h2 className="servicesHeader text-[1.70rem] mb-11 pl-1">Send Money</h2>
+      <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
+        <h2 className="textColor text-[1.70rem] mb-11 pl-1">Send Money</h2>
         <form onSubmit={(e) => handleSendMoney(e)} action="">
           <input
             type="number"

@@ -1,4 +1,4 @@
-.addMoneyContainer {
+.eachServicesContainer {
   /* box-shadow: 1px 1px 3px gray; */
   box-shadow: 0px 0px 3px rgb(129, 129, 129);
   padding: 40px 40px;
@@ -6,7 +6,7 @@
   background-color: white;
 }
 
-.servicesHeader {
+.textColor {
   color: rgba(80, 80, 80, 0.884);
 }
 

@@ -51,7 +51,7 @@ const Services = () => {
   return (
     <section className="min-h-screen">
       <div className="servicesContainer pt-28 pb-32">
-        <h1 className="servicesHeader md:text-4xl text-3xl font-medium mb-12 text-center">
+        <h1 className="textColor md:text-4xl text-3xl font-medium mb-12 text-center">
           A lot to <span className="text-primary">do!</span>
         </h1>
         {/* Services */}
