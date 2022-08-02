@@ -63,13 +63,13 @@ const Services = () => {
               onClick={() => navigate(`/services/${service.id}`)}
               className="eachService cursor-pointer h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 shadow rounded-xl flex items-center justify-center flex-col"
             >
-              <div className="icon bg-blue-200 rounded p-3">
+              <div className="icon bg-blue-100 rounded p-3">
                 <FontAwesomeIcon
                   className="lg:text-5xl md:text-5xl text-3xl text-secondary"
                   icon={service.serviceIcon}
                 />
               </div>
-              <h3 className="serviceName lg:text-2xl md:text-2xl text-xl mt-4 text-secondary">
+              <h3 className="serviceName lg:text-2xl md:text-2xl text-xl mt-4">
                 {service.serviceName}
               </h3>
             </div>

@@ -35,7 +35,7 @@ const SendMoney = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="addMoneyContainer w-[30rem]">
-        <h2 className="servicesHeader text-[1.73rem] mb-11 pl-1">Send Money</h2>
+        <h2 className="servicesHeader text-[1.70rem] mb-11 pl-1">Send Money</h2>
         <form onSubmit={(e) => handleSendMoney(e)} action="">
           <input
             type="number"
@@ -58,24 +58,6 @@ const SendMoney = () => {
         </form>
       </div>
     </div>
-    // <div className="min-h-screen flex justify-center items-center">
-    //   <div className="addMoneyContainer w-[30rem]">
-    //     <h2 className="servicesHeader text-[1.73rem] mb-12 pl-1">Send Money</h2>
-    //     <input
-    //       placeholder="How much to add?"
-    //       className="h-12 p-2 w-full rounded"
-    //       type="number"
-    //       onChange={(e) => {
-    //         setAddAmount(e.target.value);
-    //       }}
-    //     />
-    //     <div className="w-full mt-6">
-    //       <Elements stripe={stripePromise}>
-    //         <CardForm addAmount={addAmount} />
-    //       </Elements>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 
