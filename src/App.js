@@ -78,6 +78,7 @@ function App() {
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      
       <Footer />
       <Toaster />
     </div>

@@ -18,9 +18,29 @@ const GoogleLogin = () => {
       toast.error(errorMessage);
     }
   }, [googleError]);
-
+  const date = new Date().toLocaleDateString();
   useEffect(() => {
     if (user) {
+      const userInfo = {
+        type: "personal",
+        name: user.user.displayName,
+        email: user?.user?.email,
+        date,
+      };
+      const createAccount = async () => {
+        fetch("http://localhost:5000/createAccount", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ userInfo }),
+        })
+          .then((res) => res.json())
+          .then((result) => console.log(result));
+      };
+
+      // dispatch(setUser(userInfo))
+      createAccount();
       setTimeout(() => {
         toast.success("User Login SuccessFull");
       }, 1000);
