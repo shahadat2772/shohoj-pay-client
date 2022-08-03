@@ -10,9 +10,9 @@ const Settings = () => {
     const [editName, setEditName] = useState(false);
 
     return (
-        <section className='px-5 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
+        <section className='px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
             {/* right part */}
-            <div className='w-full lg:w-1/2 order-2 p-5 lg:p-10 '>
+            <div className='w-full lg:w-1/2 order-2 p-3 lg:p-10 '>
                 {/* user div */}
                 <div className='rounded-lg p-5 w-full lg:w-10/12 bg-white relative'>
                     <div className='w-full lg:flex lg:flex-row flex-col items-center '>
@@ -20,11 +20,11 @@ const Settings = () => {
                             <figure className='flex justify-start items-center mb-3'>
                                 <div className='h-44 w-44 bg-primary  rounded-full' ></div>
                             </figure>
-                            <p className=' text-primary  text-center cursor-pointer font-semibold' >change photo</p>
+                            <p className='w-44 text-primary text-left ml-4 lg:ml-0 lg:text-center cursor-pointer font-semibold' >change photo</p>
 
                         </div>
                         <div className="w-full">
-                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-full' type="text" value='users Name' />
+                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full' type="text" value='users Name' />
                         </div>
                     </div>
                     <div className='absolute top-3 right-3'>

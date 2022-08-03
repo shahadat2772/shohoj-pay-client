@@ -1,16 +1,20 @@
 input[type="text"]:disabled{
     background-color:white;
-    border: none
+    border: none;
+    padding: 0
 }
 input[type="email"]:disabled{
     background-color:white;
-    border: none
+    border: none;
+    padding: 0
 }
 input[type="number"]:disabled{
     background-color:white;
-    border: none
+    border: none;
+    padding: 0
 }
 input[type="tel"]:disabled{
     background-color:white;
-    border: none
+    border: none;
+    padding: 0
 }
