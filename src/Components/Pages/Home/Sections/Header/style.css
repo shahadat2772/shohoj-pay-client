@@ -1,13 +1,6 @@
 .bg-img{
     background: linear-gradient(180deg, #f0eff1a1, #fffafa) 100%,
-    url(https://wallpapercave.com/wp/wp6871230.jpg);
-  background-color: #010101;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.btn{
-    background: linear-gradient(180deg, #f0eff1a1, #fffafa) 100%;
+    url(../../../../../../public/assets/images/banner-image.svg);
   background-color: #010101;
   background-position: 50%;
   background-repeat: no-repeat;
