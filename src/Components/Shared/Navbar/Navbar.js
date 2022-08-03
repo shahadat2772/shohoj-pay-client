@@ -8,6 +8,8 @@ import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
+  const [show, setShow] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const link = [{ name: "Home", link: "/" }];
@@ -19,9 +21,6 @@ const Navbar = () => {
   ];
 
   // on scroll hide and show navbar functionality 
-  const [show, setShow] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
   const controlNavbar = () => {
     if (typeof window !== 'undefined') {
       if (window.scrollY > lastScrollY) { // if scroll down hide the navbar
