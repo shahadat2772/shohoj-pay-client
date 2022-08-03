@@ -15,12 +15,9 @@ const CardForm = ({ addAmount }) => {
   const date = new Date().toLocaleDateString();
 
   const [confirmed, setConfirmed] = useState("");
-  const [transactionId, setTransactionId] = useState("");
-  // Storing the client secret
   const [clientSecret, setClientSecret] = useState("");
-  // Storing card error
   const [cardError, setCardError] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -69,22 +66,17 @@ const CardForm = ({ addAmount }) => {
     if (!stripe || !elements) {
       return;
     }
-
     const card = elements.getElement(CardElement);
-
     if (!card) {
       return;
     }
-
     toast.loading("Please wait.", {
       id: "waitingToast",
     });
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
-
     setCardError(error?.message || "");
 
     const { paymentIntent, error: intentErr } = await stripe.confirmCardPayment(
@@ -93,8 +85,8 @@ const CardForm = ({ addAmount }) => {
         payment_method: {
           card: card,
           billing_details: {
-            name: "Mokles Al Molom",
-            email: "mokles@molom.com",
+            name: `${user?.displayName}`,
+            email: `${user?.email}`,
           },
         },
       }
@@ -106,13 +98,11 @@ const CardForm = ({ addAmount }) => {
       setConfirmed("");
     } else {
       const id = paymentIntent?.id;
-
       toast.dismiss("waitingToast");
       card.clear();
       setCardError("");
-      setTransactionId(id);
       addMoneyToBackend(id);
-      setConfirmed("Money Added Successfully.");
+      setConfirmed(`$${addAmount} Added Successfully.`);
     }
   };
 
@@ -132,7 +122,6 @@ const CardForm = ({ addAmount }) => {
                   color: "#aab7c4",
                 },
                 backgroundColor: "#fff",
-                // height: "12rem"
               },
               invalid: {
                 color: "#9e2146",
@@ -143,18 +132,12 @@ const CardForm = ({ addAmount }) => {
         <button
           className="actionButton mt-11"
           type="submit"
-          disabled={!stripe || !clientSecret || confirmed}
+          disabled={!stripe || !clientSecret || confirmed || !addAmount}
         >
           Add
         </button>
       </form>
       <p className="text-xs text-red-500 mt-1 ml-1">{cardError && cardError}</p>
-      {/* <p className="text-xs text-green-500 mt-2 ml-1">
-        {confirmed && confirmed}
-      </p> */}
-      {/* <p className="text-sm text-orange-400  ml-1">
-        {transactionId && <span>Transaction id: {transactionId}</span>}
-      </p> */}
     </div>
   );
 };

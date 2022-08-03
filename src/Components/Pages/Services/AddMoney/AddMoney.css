@@ -13,3 +13,42 @@
 input {
   border: 1px solid rgba(128, 128, 128, 0.301);
 }
+
+/* .actionactionButton {
+  padding: 10px 35px;
+  font-weight: 500;
+  color: white;
+  border-radius: 30px;
+  background-color: #b9b0f5;
+  box-shadow: 1px 2px 3px rgb(129, 129, 129);
+  cursor: pointer;
+} */
+
+.actionButton {
+  padding: 10px 35px;
+  font-weight: 500;
+  color: white;
+  border-radius: 30px;
+  background-color: #b9b0f5;
+  box-shadow: 1px 2px 3px rgb(129, 129, 129);
+  cursor: pointer;
+}
+
+.actionButton:active:hover,
+.actionButton:active:focus {
+  animation: none;
+  transform: scale(var(--actionButton-focus-scale, 0.95));
+}
+.actionButton:active:hover,
+.actionButton:active:focus {
+  animation: none;
+  transform: scale(var(--actionButton-focus-scale, 0.95));
+}
+
+.actionButton:hover {
+  background-color: #b1a6fc;
+}
+
+.actionButton[disabled] {
+  pointer-events: none;
+}

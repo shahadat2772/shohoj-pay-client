@@ -18,6 +18,7 @@ const AddMoney = () => {
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Add Money</h2>
         <input
+          required
           placeholder="How much to add?"
           className="h-12 p-2 w-full rounded"
           type="number"
