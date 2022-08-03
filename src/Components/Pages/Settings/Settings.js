@@ -24,7 +24,7 @@ const Settings = () => {
 
                         </div>
                         <div className="w-full">
-                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full' type="text" value='users Name' />
+                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full ml-4' type="text" value='users Name' />
                         </div>
                     </div>
                     <div className='absolute top-3 right-3'>
@@ -40,7 +40,7 @@ const Settings = () => {
                     </div>
                 </div>
 
-                {/* general options section */}
+                {/* additional options section */}
                 <div className='rounded-lg p-5 w-full lg:w-10/12 mt-3 bg-white '>
 
                     {/* title div */}
@@ -57,17 +57,9 @@ const Settings = () => {
                         <div className='flex space-x-4'>
                             <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
                         </div>
-                        {/* email subscription  */}
+                        {/* allow to request money  */}
                         <div className='flex space-x-4'>
-                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
-                        </div>
-                        {/* email subscription  */}
-                        <div className='flex space-x-4'>
-                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
-                        </div>
-                        {/* email subscription  */}
-                        <div className='flex space-x-4'>
-                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
+                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Allow others to send Money Request</p>
                         </div>
                     </div>
                 </div>
