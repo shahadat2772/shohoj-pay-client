@@ -126,7 +126,7 @@ const Dashboard = () => {
               </h1>
               <div class="text-left">
                 <h4 className="">Total Balance</h4>
-                <h1 className="text-4xl font-bold">$ 245</h1>
+                <h1 className="text-6xl font-bold">$ 245</h1>
               </div>
             </div>
           </div>
@@ -134,7 +134,16 @@ const Dashboard = () => {
             <h2 className="border-b-4 border-black w-48 font-bold text-xl">
               Get Service
             </h2>
-            <div className="flex align-center justify-between lg:p-20 mt-8 lg:mt-0">
+            <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
+              <div className="hidden lg:block">
+                <div
+                  onClick={() => navigate("/services/addMoney")}
+                  className="cursor-pointer bg-primary p-6 rounded-full"
+                >
+                  <i class="fa-solid fa-credit-card text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">Add</p>
+              </div>
               <div>
                 <div
                   onClick={() => navigate("/services/sendMoney")}
@@ -165,17 +174,16 @@ const Dashboard = () => {
             </div>
           </div>
           {/* START  LAST TRANSACTION*/}
-          <div className="mt-10">
+          <div className="mt-10 lg:mt-0">
             <div className=" px-2">
               <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48">
                 Last Transaction
               </h3>
-
               <div className="mt-8">
                 <ul>
                   {fakeTransaction.slice(0, 4).map((transAction) => (
                     <li
-                      className={`flex items-center my-4 p-3 rounded-lg shadow-lg w-full ${
+                      className={`flex items-center my-4 p-3 rounded-lg w-full ${
                         transAction.actionType === "Add Money"
                           ? "bg-green-200"
                           : "bg-red-200"
