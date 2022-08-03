@@ -153,17 +153,17 @@ const Settings = () => {
 
                     <form className='grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5'>
                         {/* Current Password */}
-                        <input className='input input-password ' type="password" value='Current Password' />
+                        <input className='input input-password ' type="password" placeholder='Current Password' />
 
-                        <input className='input input-password ' type="password" value='New Password' />
-                        <div type="submit" className='btn max-w-min btn-primary'>change</div>
+                        <input className='input input-password ' type="password" placeholder='New Password' />
+                        <div type="submit" className='btn bg-primary max-w-min border-none px-4 py-2 text-white rounded'>change</div>
                     </form>
 
                 </div>
 
                 {/* delete div */}
-                <div className='p-5 lg:px-20 lg:pt-20 lg:pb-0 '>
-                    <div className='btn pl-0  text-error btn-ghost bg-white-b-2 bg-white-b-error rounded-none'>Delete Account</div>
+                <div className='p-5 lg:px-24 lg:pt-20 lg:pb-0 '>
+                    <div className='btn pl-0  text-error btn-ghost  rounded'>Delete Account</div>
 
                 </div>
             </div>
