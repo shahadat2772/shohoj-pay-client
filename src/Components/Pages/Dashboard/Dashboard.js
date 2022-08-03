@@ -5,6 +5,7 @@ import auth from "../../../firebase.init";
 import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 // USER TRANSACTION FAKE DATA
 const fakeTransaction = [
   {
@@ -87,8 +88,7 @@ const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const todayDate = new Date().toLocaleDateString();
-  console.log(typeof date);
-  console.log(balance);
+  const navigate = useNavigate();
   const [user] = useAuthState(auth);
   useEffect(() => {
     axios
@@ -130,7 +130,41 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          {/* START SAVINGS MONTH */}
+          <div className="mt-10 px-2">
+            <h2 className="border-b-4 border-black w-48 font-bold text-xl">
+              Get Service
+            </h2>
+            <div className="flex align-center justify-between lg:p-20 mt-8 lg:mt-0">
+              <div>
+                <div
+                  onClick={() => navigate("/services/sendMoney")}
+                  className="cursor-pointer bg-primary p-6 rounded-full"
+                >
+                  <i class="fa-solid fa-paper-plane text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">Send</p>
+              </div>
+              <div>
+                <div
+                  onClick={() => navigate("/services/requestMoney")}
+                  className="bg-primary p-6 rounded-full cursor-pointer"
+                >
+                  <i class="fa-solid fa-hand-holding-dollar text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">Request</p>
+              </div>
+              <div>
+                <div
+                  onClick={() => navigate("/services")}
+                  className="bg-primary p-6 rounded-full cursor-pointer"
+                >
+                  <i class="fa-solid fa-ellipsis-vertical text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">More</p>
+              </div>
+            </div>
+          </div>
+          {/* START  LAST TRANSACTION*/}
           <div className="mt-10">
             <div className=" px-2">
               <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48">
@@ -190,9 +224,6 @@ const Dashboard = () => {
                               : "-" + transAction.money}{" "}
                             $
                           </h3>
-                          <h6 style={{ fontSize: "14px" }}>
-                            TRX: lakshdfaoeeryhalkha45
-                          </h6>
                         </div>
                       </div>
                     </li>
@@ -243,59 +274,6 @@ const Dashboard = () => {
                   </PieChart>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="md:mx-10 lg:mx-0 card lg:w-96 shadow-xl bg-primary text-white py-5 rounded card-1-bg">
-            <div class="card-body">
-              <h1 className="text-left text-4xl font-bold">
-                {user?.displayName}
-              </h1>
-              <h5 class="text-left">{user?.email}</h5>
-
-              <div class="text-left">
-                <h4 className="font-bold">Total Balance</h4>
-                <h1 className="text-3xl">${balance?.balance}</h1>
-              </div>
-            </div>
-          </div>
-          {/* START RESECT TRANSACTION  */}
-          <div className="mt-10 text-left md:mx-10 mx-5 lg:mx-0">
-            <h3 className="font-bold text-xl border-b border-black pb-1">
-              Recent Transaction
-            </h3>
-            <div className="mt-8">
-              <ul>
-                {fakeTransaction.slice(0, 4).map((transAction) => (
-                  <li
-                    className="flex items-center my-4 p-3 rounded-lg shadow-lg"
-                    key={transAction._id}
-                  >
-                    <div class="avatar">
-                      <div class="w-16 rounded-full ">
-                        <img src={transAction.img} alt="User Image" />
-                      </div>
-                    </div>
-                    <div className="ml-5 flex items-center justify-between w-full">
-                      <div>
-                        <h3 className="font-bold text-lg">
-                          {transAction.name}
-                        </h3>
-                        <h5>{transAction.location}</h5>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold">
-                          ${transAction.money}
-                        </h3>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-                <div className="text-center">
-                  <button className="btn btn-primary btn-sm mt-5 p-2">
-                    View All Transaction
-                  </button>
-                </div>
-              </ul>
             </div>
           </div>
         </div>
