@@ -12,19 +12,19 @@ const Settings = () => {
     return (
         <section className='px-5 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
             {/* right part */}
-            <div className='w-full lg:w-1/2 order-2 p-10'>
+            <div className='w-full lg:w-1/2 order-2 p-5 lg:p-10 '>
                 {/* user div */}
                 <div className='rounded-lg p-5 w-full lg:w-10/12 bg-white relative'>
-                    <div className='w-full flex items-center'>
+                    <div className='w-full lg:flex lg:flex-row flex-col items-center '>
                         <div>
                             <figure className='flex justify-start items-center mb-3'>
                                 <div className='h-44 w-44 bg-primary  rounded-full' ></div>
                             </figure>
-                            <p className='lg:ml-8 ml-4 text-primary cursor-pointer font-semibold' >change photo</p>
+                            <p className=' text-primary  text-center cursor-pointer font-semibold' >change photo</p>
 
                         </div>
                         <div className="w-full">
-                            <input disabled={!editName} className='input input-text text-3xl bg-white w-full' type="text" value='users Name' />
+                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-full' type="text" value='users Name' />
                         </div>
                     </div>
                     <div className='absolute top-3 right-3'>
