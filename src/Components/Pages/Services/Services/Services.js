@@ -51,7 +51,7 @@ const Services = () => {
   return (
     <section className="min-h-screen">
       <div className="servicesContainer pt-28 pb-32">
-        <h1 className="servicesHeader md:text-4xl text-3xl font-medium mb-12 text-center">
+        <h1 className="textColor md:text-4xl text-3xl font-medium mb-12 text-center">
           A lot to <span className="text-primary">do!</span>
         </h1>
         {/* Services */}
@@ -63,13 +63,13 @@ const Services = () => {
               onClick={() => navigate(`/services/${service.id}`)}
               className="eachService cursor-pointer h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 shadow rounded-xl flex items-center justify-center flex-col"
             >
-              <div className="icon bg-blue-200 rounded p-3">
+              <div className="icon bg-blue-100 rounded p-3">
                 <FontAwesomeIcon
                   className="lg:text-5xl md:text-5xl text-3xl text-secondary"
                   icon={service.serviceIcon}
                 />
               </div>
-              <h3 className="serviceName lg:text-2xl md:text-2xl text-xl mt-4 text-secondary">
+              <h3 className="serviceName lg:text-2xl md:text-2xl text-xl mt-4">
                 {service.serviceName}
               </h3>
             </div>
