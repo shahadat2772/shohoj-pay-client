@@ -7,23 +7,41 @@ import {
 const Settings = () => {
     const [editAddress, setEditAddress] = useState(false);
     const [editContact, setEditContact] = useState(false);
+    const [editName, setEditName] = useState(false);
 
     return (
         <section className='px-5 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
             {/* right part */}
             <div className='w-full lg:w-1/2 order-2 p-10'>
                 {/* user div */}
-                <div className='py-10'>
-                    <div className='w-full lg:w-10/12 '>
-                        <figure className='flex justify-end mb-3'>
-                            <div className='h-48 w-48 bg-white  rounded-full' ></div>
-                        </figure>
-                        <h3 className='text-4xl text-right font-semibold'>User Name</h3>
+                <div className='rounded-lg p-5 w-full lg:w-10/12 bg-white relative'>
+                    <div className='w-full flex items-center'>
+                        <div>
+                            <figure className='flex justify-start items-center mb-3'>
+                                <div className='h-44 w-44 bg-primary  rounded-full' ></div>
+                            </figure>
+                            <p className='lg:ml-8 ml-4 text-primary cursor-pointer font-semibold' >change photo</p>
+
+                        </div>
+                        <div className="w-full">
+                            <input disabled={!editName} className='input input-text text-3xl bg-white w-full' type="text" value='users Name' />
+                        </div>
+                    </div>
+                    <div className='absolute top-3 right-3'>
+                        <div onClick={() => setEditName(true)} className={`${editName && "hidden"} cursor-pointer col-span-3 place-self-center`}>
+                            <FontAwesomeIcon
+                                className=' text-gray-500'
+                                icon={faPen}
+                            />
+                        </div>
+                        <div className={`${!editName && "hidden"} cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}>
+                            save
+                        </div>
                     </div>
                 </div>
 
                 {/* general options section */}
-                <div className='rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-white '>
+                <div className='rounded-lg p-5 w-full lg:w-10/12 mt-3 bg-white '>
 
                     {/* title div */}
                     <div className='w-1/2 '>
@@ -63,13 +81,13 @@ const Settings = () => {
                     {/* title div */}
                     <div className='flex justify-between items-center'>
                         <h3 className='text-xl text-left mb-3'>Address</h3>
-                        <div onClick={() => setEditAddress(true)} className={`${editAddress && "hidden"} cursor-pointer`}>
+                        <div onClick={() => setEditAddress(true)} className={`${editAddress && "hidden"} cursor-pointer col-span-2`}>
                             <FontAwesomeIcon
                                 className=' text-gray-500'
                                 icon={faPen}
                             />
                         </div>
-                        <div className={`${!editAddress && "hidden"} cursor-pointer bg-primary px-4 py-2 text-white rounded`}>
+                        <div className={`${!editAddress && "hidden"} cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}>
                             save
                         </div>
                     </div>
@@ -99,13 +117,13 @@ const Settings = () => {
                     {/* title div */}
                     <div className='flex justify-between items-center '>
                         <h3 className='text-xl text-left mb-3'>Contact informations</h3>
-                        <div onClick={() => setEditContact(true)} className={`${editContact && "hidden"} cursor-pointer`}>
+                        <div onClick={() => setEditContact(true)} className={`${editContact && "hidden"} cursor-pointer col-span-2`}>
                             <FontAwesomeIcon
                                 className=' text-gray-500'
                                 icon={faPen}
                             />
                         </div>
-                        <div className={`${!editContact && "hidden"} cursor-pointer bg-primary px-4 py-2 text-white rounded`}>
+                        <div className={`${!editContact && "hidden"} cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}>
                             save
                         </div>
                     </div>
