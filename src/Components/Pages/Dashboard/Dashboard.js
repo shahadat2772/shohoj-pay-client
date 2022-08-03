@@ -1,6 +1,9 @@
-import React from "react";
-import { PieChart, Pie, Cell, Tooltip, Bar, Legend } from "recharts";
+import React, { useEffect, useState } from "react";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import "./Dashboard.css";
+import auth from "../../../firebase.init";
+import { useAuthState } from "react-firebase-hooks/auth";
+import axios from "axios";
 // USER TRANSACTION FAKE DATA
 const fakeTransaction = [
   {
@@ -86,6 +89,14 @@ let getDate =
 
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
+  const [balance, setBalance] = useState(0);
+  console.log(balance);
+  const [user] = useAuthState(auth);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getUserBalances/${user.email}`)
+      .then((res) => setBalance(res.data));
+  }, [user.email]);
   return (
     <div className="container mx-auto mt-24 lg:mt-28 lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
@@ -93,12 +104,14 @@ const Dashboard = () => {
         <div>
           <div class="md:mx-10 lg:mx-0 card lg:w-96 shadow-xl bg-primary text-white py-5 rounded card-1-bg">
             <div class="card-body">
-              <h1 className="text-left text-4xl font-bold">Minhajul Alam</h1>
-              <h5 class="text-left">UserEmail@gmail.com</h5>
+              <h1 className="text-left text-4xl font-bold">
+                {user?.displayName}
+              </h1>
+              <h5 class="text-left">{user?.email}</h5>
 
               <div class="text-left">
                 <h4 className="font-bold">Total Balance</h4>
-                <h1 className="text-3xl">$5464</h1>
+                <h1 className="text-3xl">${balance?.balance}</h1>
               </div>
             </div>
           </div>
