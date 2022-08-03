@@ -63,12 +63,15 @@ const Settings = () => {
                     {/* title div */}
                     <div className='flex justify-between items-center'>
                         <h3 className='text-xl text-left mb-3'>Address</h3>
-                        <button onClick={() => setEditAddress(true)} className='btn btn-ghost bg-white'>
+                        <div onClick={() => setEditAddress(true)} className={`${editAddress && "hidden"} cursor-pointer`}>
                             <FontAwesomeIcon
-                                className=' text-gray-200'
+                                className=' text-gray-500'
                                 icon={faPen}
                             />
-                        </button>
+                        </div>
+                        <div className={`${!editAddress && "hidden"} cursor-pointer bg-primary px-4 py-2 text-white rounded`}>
+                            save
+                        </div>
                     </div>
 
                     {/* options container */}
@@ -96,10 +99,15 @@ const Settings = () => {
                     {/* title div */}
                     <div className='flex justify-between items-center '>
                         <h3 className='text-xl text-left mb-3'>Contact informations</h3>
-                        <button onClick={() => setEditContact(true)} className='btn btn-ghost'><FontAwesomeIcon
-                            className=' text-gray-200'
-                            icon={faPen}
-                        /></button>
+                        <div onClick={() => setEditContact(true)} className={`${editContact && "hidden"} cursor-pointer`}>
+                            <FontAwesomeIcon
+                                className=' text-gray-500'
+                                icon={faPen}
+                            />
+                        </div>
+                        <div className={`${!editContact && "hidden"} cursor-pointer bg-primary px-4 py-2 text-white rounded`}>
+                            save
+                        </div>
                     </div>
 
                     {/* options container */}
@@ -128,7 +136,7 @@ const Settings = () => {
                     {/* title div */}
                     <div className='w-1/2 '>
                         <h3 className='text-xl text-left mb-3'>Security</h3>
-                        <hr />
+
                     </div>
 
                     {/* options container */}
@@ -138,14 +146,14 @@ const Settings = () => {
                         <input className='input input-password ' type="password" value='Current Password' />
 
                         <input className='input input-password ' type="password" value='New Password' />
-                        <button type="submit" className='btn max-w-min btn-primary'>change</button>
+                        <div type="submit" className='btn max-w-min btn-primary'>change</div>
                     </form>
 
                 </div>
 
                 {/* delete div */}
                 <div className='p-5 lg:px-20 lg:pt-20 lg:pb-0 '>
-                    <button className='btn pl-0  text-error btn-ghost bg-white-b-2 bg-white-b-error rounded-none'>Delete Account</button>
+                    <div className='btn pl-0  text-error btn-ghost bg-white-b-2 bg-white-b-error rounded-none'>Delete Account</div>
 
                 </div>
             </div>
