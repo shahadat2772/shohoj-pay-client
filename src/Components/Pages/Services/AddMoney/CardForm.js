@@ -49,15 +49,34 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
     }
   }, [addAmount]);
 
+  const addMoneyToBackend = (id) => {
+    const addMoneyInfo = {
+      type: "addMoney",
+      email: user.email,
+      amount: addAmount,
+      transactionId: id,
+      date: date,
+    };
+    fetch("http://localhost:5000/addMoney", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ addMoneyInfo }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
-      addAmount < 5 ||
+      addAmount <= 5 ||
       addAmount >= 999998.99 ||
       addAmount.slice(0, 1) == "0"
     ) {
-      setMinAmountErr("$5 is the minimum add amount.");
+      console.log(addAmount);
       setClientSecret("");
       console.log("true");
       return;
@@ -66,13 +85,10 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
     if (!stripe || !elements) {
       return;
     }
-
     const card = elements.getElement(CardElement);
-
     if (!card) {
       return;
     }
-
     toast.loading("Money is being added.", {
       id: "waitingToast",
     });
@@ -100,32 +116,13 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
       setCardError(intentErr?.message);
     } else {
       const id = paymentIntent?.id;
-      const addMoneyInfo = {
-        type: "addMoney",
-        email: user.email,
-        amount: addAmount,
-        transactionId: id,
-        date: date,
-      };
-
-      fetch("http://localhost:5000/addMoney", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ addMoneyInfo }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.modifiedCount > 0) {
-            toast.dismiss("waitingToast");
-            setClientSecret("");
-            document.getElementById("addAmountInput").value = "";
-            card.clear();
-            setCardError("");
-            toast.success(`$${addAmount} Added Successfully.`);
-          }
-        });
+      addMoneyToBackend(id);
+      toast.dismiss("waitingToast");
+      setClientSecret("");
+      document.getElementById("addAmountInput").value = "";
+      card.clear();
+      setCardError("");
+      toast.success(`$${addAmount} Added Successfully.`);
     }
   };
 

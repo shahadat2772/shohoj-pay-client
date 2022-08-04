@@ -47,29 +47,7 @@ const fakeTransaction = [
 ];
 const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
 // FAKE SAVINGS DATA
-const monthSavings = [
-  {
-    _id: 1,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    month: "January",
-    year: "2022",
-    money: 713,
-  },
-  {
-    _id: 2,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    month: "April",
-    year: "2022",
-    money: 45136,
-  },
-  {
-    _id: 3,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    month: "July",
-    year: "2022",
-    money: 4548,
-  },
-];
+
 // FAKE DATA
 
 const data = [
@@ -86,14 +64,27 @@ let getDate =
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
   const [balance, setBalance] = useState(0);
+  const [transactionData, setTransactionData] = useState([]);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-  const todayDate = new Date().toLocaleDateString();
-  const navigate = useNavigate();
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const todayDate = new Date().toLocaleDateString();
+
+  // LATEST TRANSACTION
+  const latestTransaction = [...transactionData].splice(
+    transactionData.length - 4,
+    transactionData.length
+  );
+  console.log(latestTransaction);
   useEffect(() => {
+    // USER BALANCE AMOUNT GET
     axios
       .get(`http://localhost:5000/getUserBalances/${user.email}`)
       .then((res) => setBalance(res.data));
+    // USER TRANSACTION DATA GET
+    axios
+      .get(`http://localhost:5000/transactionStatus/${user.email}`)
+      .then((res) => setTransactionData(res.data));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
@@ -102,9 +93,9 @@ const Dashboard = () => {
   const onShare = (data) => {
     navigator.clipboard.writeText(`
     Date: ${data.date}
-    Name:${data.name}
-    Type: ${data.actionType}
-    Amount: ${data.money}$
+    Email: ${data.email}
+    Type: ${data.type}
+    Amount: ${data.amount}$
     `);
     setShareLinkCopied(true);
     setTimeout(() => {
@@ -119,14 +110,14 @@ const Dashboard = () => {
         {/* CARD DIVIDER HORIZONTAL */}
 
         <div className="w-full mt-10 lg:mt-0">
-          <div class="md:mx-10 lg:mx-0 card lg:w-96 rounded ">
-            <div class="card-body py-0">
+          <div className="md:mx-10 lg:mx-0 card lg:w-96 rounded ">
+            <div className="card-body py-0">
               <h1 className="text-left text-3xl font-bold mb-3">
                 Hi, {user?.displayName}
               </h1>
-              <div class="text-left">
+              <div className="text-left">
                 <h4 className="">Total Balance</h4>
-                <h1 className="text-6xl font-bold">$ 245</h1>
+                <h1 className="text-6xl font-bold">$ {balance?.balance}</h1>
               </div>
             </div>
           </div>
@@ -140,7 +131,7 @@ const Dashboard = () => {
                   onClick={() => navigate("/services/addMoney")}
                   className="cursor-pointer bg-primary p-6 rounded-full"
                 >
-                  <i class="fa-solid fa-credit-card text-3xl text-white"></i>
+                  <i className="fa-solid fa-credit-card text-3xl text-white"></i>
                 </div>
                 <p className="mt-2 font-bold text-center">Add</p>
               </div>
@@ -149,7 +140,7 @@ const Dashboard = () => {
                   onClick={() => navigate("/services/sendMoney")}
                   className="cursor-pointer bg-primary p-6 rounded-full"
                 >
-                  <i class="fa-solid fa-paper-plane text-3xl text-white"></i>
+                  <i className="fa-solid fa-paper-plane text-3xl text-white"></i>
                 </div>
                 <p className="mt-2 font-bold text-center">Send</p>
               </div>
@@ -158,7 +149,7 @@ const Dashboard = () => {
                   onClick={() => navigate("/services/requestMoney")}
                   className="bg-primary p-6 rounded-full cursor-pointer"
                 >
-                  <i class="fa-solid fa-hand-holding-dollar text-3xl text-white"></i>
+                  <i className="fa-solid fa-hand-holding-dollar text-3xl text-white"></i>
                 </div>
                 <p className="mt-2 font-bold text-center">Request</p>
               </div>
@@ -167,7 +158,7 @@ const Dashboard = () => {
                   onClick={() => navigate("/services")}
                   className="bg-primary p-6 rounded-full cursor-pointer"
                 >
-                  <i class="fa-solid fa-ellipsis-vertical text-3xl text-white"></i>
+                  <i className="fa-solid fa-ellipsis-vertical text-3xl text-white"></i>
                 </div>
                 <p className="mt-2 font-bold text-center">More</p>
               </div>
@@ -181,10 +172,11 @@ const Dashboard = () => {
               </h3>
               <div className="mt-8">
                 <ul>
-                  {fakeTransaction.slice(0, 4).map((transAction) => (
+                  {latestTransaction.slice(0, 4).map((transAction) => (
                     <li
                       className={`flex items-center my-4 p-3 rounded-lg w-full ${
-                        transAction.actionType === "Add Money"
+                        transAction.type === "addMoney" ||
+                        transAction.type === "receiveMoney"
                           ? "bg-green-200"
                           : "bg-red-200"
                       }`}
@@ -198,38 +190,48 @@ const Dashboard = () => {
                         </h5>
                         <h6>{transAction.time}</h6>
                       </div>
-                      <div class="avatar">
-                        <div class="w-16 rounded-full ">
-                          <img src={transAction.img} alt="User Image" />
+                      <div className="avatar">
+                        <div className="w-16 rounded-full ">
+                          <img
+                            src="https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg"
+                            alt="User Image"
+                          />
                         </div>
                       </div>
                       <div className="ml-5 flex items-center justify-between w-full">
                         <div>
                           <h5
                             className={`font-bold text-lg ${
-                              transAction.actionType === "Add Money"
+                              transAction.type === "addMoney" ||
+                              transAction.type === "receiveMoney"
                                 ? "text-green-800"
                                 : "text-red-800"
                             }`}
                           >
-                            {transAction.actionType}
+                            {transAction.type}
                           </h5>
-                          <h5 className="">{transAction.name}</h5>
+                          <h5 className="">
+                            {transAction.type === "receiveMoney"
+                              ? transAction.from
+                              : transAction.email}
+                          </h5>
                         </div>
                         <div className="" onClick={() => onShare(transAction)}>
-                          <i class="fa-solid fa-copy cursor-pointer"></i>
+                          <i className="fa-solid fa-copy cursor-pointer"></i>
                         </div>
                         <div>
                           <h3
                             className={`text-lg font-bold text-right ${
-                              transAction.actionType === "Add Money"
+                              transAction.type === "addMoney" ||
+                              transAction.type === "receiveMoney"
                                 ? "text-green-800"
                                 : "text-red-800"
                             }`}
                           >
-                            {transAction.actionType === "Add Money"
-                              ? "+" + transAction.money
-                              : "-" + transAction.money}{" "}
+                            {transAction.type === "addMoney" ||
+                            transAction.type === "receiveMoney"
+                              ? "+" + transAction.amount
+                              : "-" + transAction.amount}{" "}
                             $
                           </h3>
                         </div>
@@ -237,7 +239,10 @@ const Dashboard = () => {
                     </li>
                   ))}
                   <div className="text-center">
-                    <button className="btn btn-primary btn-sm mt-5 p-2">
+                    <button
+                      onClick={() => navigate("/dashboard/allTransAction")}
+                      className="btn btn-primary btn-sm mt-5 p-2"
+                    >
                       View All Transaction
                     </button>
                   </div>
@@ -247,12 +252,12 @@ const Dashboard = () => {
             {/* START STATISTIC */}
           </div>
         </div>
-        <div class="divider divider-horizontal divide-black px-9 divider-hidden"></div>
+        <div className="divider divider-horizontal divide-black px-9 divider-hidden"></div>
 
         <div>
           <div className="">
             <div className="px-2 w-full">
-              <h3 class="font-bold text-xl pb-2 border-b border-black">
+              <h3 className="font-bold text-xl pb-2 border-b border-black">
                 Statistic
               </h3>
               <h5 className="font-bold text-right text-xl">{getDate}</h5>
