@@ -117,13 +117,15 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.modifiedCount > 0) {
+          if (data.message === "success") {
             toast.dismiss("waitingToast");
             setClientSecret("");
             document.getElementById("addAmountInput").value = "";
             card.clear();
             setCardError("");
             toast.success(`$${addAmount} Added Successfully.`);
+          } else {
+            toast.error(data.error);
           }
         });
     }
