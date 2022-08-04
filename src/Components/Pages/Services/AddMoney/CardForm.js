@@ -13,17 +13,41 @@ import "./CardForm.css";
 import { Doughnut } from "react-chartjs-2";
 import id from "date-fns/esm/locale/id/index.js";
 
-const CardForm = ({ addAmount, setPaymentId }) => {
+const CardForm = ({ addAmount, setMinAmountErr }) => {
   const date = new Date().toLocaleDateString();
 
-  const [confirmed, setConfirmed] = useState("");
-  const [transactionId, setTransactionId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const [cardError, setCardError] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    if (
+      addAmount >= 5 &&
+      addAmount <= 999998.99 &&
+      addAmount.slice(0, 1) !== "0"
+    ) {
+      setMinAmountErr("");
+      fetch("http://localhost:5000/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ addAmount }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.clientSecret) {
+            setClientSecret(data.clientSecret);
+          }
+        });
+    } else {
+      setMinAmountErr("$5 is the minimum add amount.");
+      setClientSecret("");
+    }
+  }, [addAmount]);
 
   const addMoneyToBackend = (id) => {
     const addMoneyInfo = {
@@ -43,28 +67,20 @@ const CardForm = ({ addAmount, setPaymentId }) => {
       .then((res) => res.json())
       .then((data) => console.log(data));
   };
-  useEffect(() => {
-    if (addAmount && addAmount >= 1) {
-      console.log({ addAmount });
-
-      fetch("http://localhost:5000/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ addAmount }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          }
-        });
-    }
-  }, [addAmount]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      addAmount <= 5 ||
+      addAmount >= 999998.99 ||
+      addAmount.slice(0, 1) == "0"
+    ) {
+      console.log(addAmount);
+      setClientSecret("");
+      console.log("true");
+      return;
+    }
 
     if (!stripe || !elements) {
       return;
@@ -73,14 +89,13 @@ const CardForm = ({ addAmount, setPaymentId }) => {
     if (!card) {
       return;
     }
-    toast.loading("Please wait.", {
+    toast.loading("Money is being added.", {
       id: "waitingToast",
     });
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
-
     setCardError(error?.message || "");
 
     const { paymentIntent, error: intentErr } = await stripe.confirmCardPayment(
@@ -99,16 +114,14 @@ const CardForm = ({ addAmount, setPaymentId }) => {
     if (intentErr) {
       toast.dismiss("waitingToast");
       setCardError(intentErr?.message);
-      setConfirmed("");
     } else {
       const id = paymentIntent?.id;
-      toast.dismiss("waitingToast");
-      card.clear();
-      document.getElementById("addAmountInput").value = "";
-      setCardError("");
-      setTransactionId(id);
-      setPaymentId(id);
       addMoneyToBackend(id);
+      toast.dismiss("waitingToast");
+      setClientSecret("");
+      document.getElementById("addAmountInput").value = "";
+      card.clear();
+      setCardError("");
       toast.success(`$${addAmount} Added Successfully.`);
     }
   };
@@ -137,21 +150,15 @@ const CardForm = ({ addAmount, setPaymentId }) => {
             },
           }}
         />
+        <p className="text-xs text-red-500 mt-1">{cardError && cardError}</p>
         <button
           className="actionButton btn mt-11"
           type="submit"
-          disabled={!stripe || !clientSecret || !addAmount || addAmount <= 0}
+          disabled={!stripe || !clientSecret}
         >
           Add
         </button>
       </form>
-      <p className="text-xs text-red-500 mt-1 ml-1">{cardError && cardError}</p>
-      {/* <p className="text-xs text-green-500 mt-2 ml-1">
-        {confirmed && confirmed}
-      </p> */}
-      {/* <p className="text-sm text-orange-400  ml-1">
-        {transactionId && <span>Transaction id: {transactionId}</span>}
-      </p> */}
     </div>
   );
 };
