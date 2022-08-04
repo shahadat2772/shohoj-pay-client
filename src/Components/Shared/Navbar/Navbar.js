@@ -153,7 +153,11 @@ const Navbar = () => {
                 onClick={() => setOpen(!open)}
                 className="w-10 h-10 lg:hidden"
               >
-                {open ? <XIcon></XIcon> : <MenuIcon></MenuIcon>}
+                {open ? (
+                  <XIcon className="text-primary"></XIcon>
+                ) : (
+                  <MenuIcon className="text-primary"></MenuIcon>
+                )}
               </div>
             </nav>
           </div>

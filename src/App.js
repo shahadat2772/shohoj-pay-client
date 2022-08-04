@@ -16,6 +16,7 @@ import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
 import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import SupportEngine from "./Components/Pages/SupportEngine";
+import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 
 function App() {
   return (
@@ -76,10 +77,18 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/dashboard/allTransAction"
+          element={
+            <RequireAuth>
+              <AllTransaction />
+            </RequireAuth>
+          }
+        />
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <SupportEngine/>
+      <SupportEngine />
       <Footer />
       <Toaster />
     </div>
