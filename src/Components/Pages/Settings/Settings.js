@@ -4,11 +4,27 @@ import "./settings.css";
 import {
     faPen,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../../firebase.init';
 const Settings = () => {
     const [editAddress, setEditAddress] = useState(false);
     const [editContact, setEditContact] = useState(false);
     const [editName, setEditName] = useState(false);
+    const [user, setUser] = useState({});
+    const [firebaseUser, loading] = useAuthState(auth);
 
+    useState(() => {
+
+        fetch("http://localhost:5000/getUserInfo", {
+            method: "GET",
+            headers: {
+                email: firebaseUser.email
+            },
+
+        }).then(res => res.json()).then(data => setUser(data))
+
+    }, [firebaseUser])
+    if (loading) return <p>loading...</p>
     return (
         <section className='px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
             {/* right part */}
@@ -24,7 +40,7 @@ const Settings = () => {
 
                         </div>
                         <div className="w-full">
-                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full ml-4' type="text" value='users Name' />
+                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full ml-4' type="text" value={user?.name} />
                         </div>
                     </div>
                     <div className='absolute top-3 right-3'>
