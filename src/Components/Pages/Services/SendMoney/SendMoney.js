@@ -1,26 +1,44 @@
 import { Result } from "postcss";
-import React from "react";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
+import "./SendMoney.css";
 
 const SendMoney = () => {
   const date = new Date().toLocaleDateString();
-
   const [user] = useAuthState(auth);
+  const [amountErr, setAmountErr] = useState("");
 
-  const handleSendMoney = (e) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-    const receiversEmail = e.target.receiversEmail.value;
-    const sendMoneyAmount = e.target.sendMoneyAmount.value;
+  const onSubmit = (data) => {
+    const amount = data?.amount;
+    const email = data?.email;
+
+    if (amount.slice(0, 1) === "0") {
+      toast.error("Invalid amount");
+      return;
+    }
+
+    toast.loading("Money is being sended.", { id: "sendingMoney" });
+
     const sendMoneyInfo = {
       type: "sendMoney",
       email: user?.email,
       from: user?.email,
-      to: receiversEmail,
-      amount: sendMoneyAmount,
+      to: email,
+      amount: amount,
       date: date,
     };
+
     fetch("http://localhost:5000/sendMoney", {
       method: "POST",
       headers: {
@@ -29,26 +47,49 @@ const SendMoney = () => {
       body: JSON.stringify({ sendMoneyInfo }),
     })
       .then((res) => res.json())
-      .then((result) => console.log(result));
+      .then((result) => {
+        toast.dismiss("sendingMoney");
+        if (result?.error) {
+          toast.error(result.error);
+        } else {
+          reset();
+          toast.success(result.success);
+        }
+      });
   };
 
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Send Money</h2>
-        <form onSubmit={(e) => handleSendMoney(e)} action="">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
+            {...register("amount", {
+              min: {
+                value: 5,
+                message: "$5 is the minimum send amount.",
+              },
+              max: {
+                value: 1000,
+                message: "$1000 is the maximum send amount at a time.",
+              },
+            })}
             type="number"
-            className="h-12 p-2 w-full mb-5 rounded"
-            name="sendMoneyAmount"
-            placeholder="How much to send?"
-          />
-
-          <input
-            type="email"
             className="h-12 p-2 w-full rounded"
-            name="receiversEmail"
+            placeholder="How much to send?"
+            required
+          />
+          {errors.amount?.message && (
+            <span className="text-[12px] text-red-600">
+              {errors.amount?.message}
+            </span>
+          )}
+          <input
+            {...register("email")}
+            type="email"
+            className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Receivers email"
+            required
           />
           <input
             type="submit"
