@@ -12,7 +12,7 @@ const Settings = () => {
     const [editName, setEditName] = useState(false);
     const [user, setUser] = useState({});
     const [firebaseUser, loading] = useAuthState(auth);
-
+    const [userName, setUserName] = useState(user?.name);
     useState(() => {
 
         fetch("http://localhost:5000/getUserInfo", {
@@ -23,7 +23,22 @@ const Settings = () => {
 
         }).then(res => res.json()).then(data => setUser(data))
 
-    }, [firebaseUser])
+    }, [])
+    const updateUser = () => {
+        const updatedUser = { name: userName }
+        console.log(updatedUser)
+        fetch("http://localhost:5000/updateUserInfo", {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json",
+                email: firebaseUser.email,
+
+            },
+            body: JSON.stringify(updatedUser)
+
+        }).then(res => res.json()).then(data => console.log(data))
+    }
+
     if (loading) return <p>loading...</p>
     return (
         <section className='px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
@@ -40,7 +55,7 @@ const Settings = () => {
 
                         </div>
                         <div className="w-full">
-                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full ml-4' type="text" value={user?.name} />
+                            <input disabled={!editName} className='input input-text text-3xl lg:text-left text-center bg-white w-44 lg:w-full ml-4' type="text" value={userName || user?.name} onChange={(e) => setUserName(e.target.value)} />
                         </div>
                     </div>
                     <div className='absolute top-3 right-3'>
@@ -50,7 +65,7 @@ const Settings = () => {
                                 icon={faPen}
                             />
                         </div>
-                        <div className={`${!editName && "hidden"} cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}>
+                        <div onClick={() => updateUser()} className={`${!editName && "hidden"} cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}>
                             save
                         </div>
                     </div>
