@@ -66,6 +66,25 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       }
   }, [addAmount]);
 
+  const addMoneyToBackend = (id) => {
+    const addMoneyInfo = {
+      type: "addMoney",
+      email: user.email,
+      amount: addAmount,
+      transactionId: id,
+      date: date,
+    };
+    fetch("http://localhost:5000/addMoney", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ addMoneyInfo }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -91,13 +110,10 @@ const CardForm = ({ addAmount, setAmountErr }) => {
     if (!stripe || !elements) {
       return;
     }
-
     const card = elements.getElement(CardElement);
-
     if (!card) {
       return;
     }
-
     toast.loading("Money is being added.", {
       id: "waitingToast",
     });
