@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
@@ -86,14 +86,14 @@ const Navbar = () => {
                 >
                   {link.map((item) => (
                     <li key={item.name} className="block text-center">
-                      <Link to={item.link}>{item.name}</Link>
+                      <NavLink to={item.link}>{item.name}</NavLink>
                     </li>
                   ))}
                   {/* Routes for authenticated users   */}
                   {user &&
                     restrictedLinks.map((item) => (
                       <li key={item.name} className="block text-center">
-                        <Link to={item.link}>{item.name}</Link>
+                        <NavLink to={item.link}>{item.name}</NavLink>
                       </li>
                     ))}
                   {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
@@ -153,7 +153,11 @@ const Navbar = () => {
                 onClick={() => setOpen(!open)}
                 className="w-10 h-10 lg:hidden"
               >
-                {open ? <XIcon></XIcon> : <MenuIcon></MenuIcon>}
+                {open ? (
+                  <XIcon className="text-primary"></XIcon>
+                ) : (
+                  <MenuIcon className="text-primary"></MenuIcon>
+                )}
               </div>
             </nav>
           </div>
