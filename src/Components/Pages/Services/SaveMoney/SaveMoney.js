@@ -32,7 +32,7 @@ const SaveMoney = () => {
       date: date,
     };
 
-    fetch("http://localhost:5000/saveMoney", {
+    fetch("https://shohoj-pay-server.herokuapp.com/saveMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",

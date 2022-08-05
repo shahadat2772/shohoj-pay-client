@@ -46,7 +46,7 @@ const SignUp = () => {
         date,
       };
       const createAccount = async () => {
-        fetch("http://localhost:5000/createAccount", {
+        fetch("https://shohoj-pay-server.herokuapp.com/createAccount", {
           method: "POST",
           headers: {
             "content-type": "application/json",

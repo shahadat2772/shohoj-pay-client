@@ -50,7 +50,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         addAmount.slice(0, 1) !== "0"
       ) {
         setAmountErr("");
-        fetch("http://localhost:5000/create-payment-intent", {
+        fetch("https://shohoj-pay-server.herokuapp.com/create-payment-intent", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -74,7 +74,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       transactionId: id,
       date: date,
     };
-    fetch("http://localhost:5000/addMoney", {
+    fetch("https://shohoj-pay-server.herokuapp.com/addMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
