@@ -31,6 +31,7 @@ const SendMoney = () => {
 
     const sendMoneyInfo = {
       type: "sendMoney",
+      name: user?.displayName,
       email: user?.email,
       from: user?.email,
       to: email,
