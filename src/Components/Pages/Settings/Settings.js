@@ -13,6 +13,8 @@ const Settings = () => {
     const [user, setUser] = useState({});
     const [firebaseUser, loading] = useAuthState(auth);
     const [userName, setUserName] = useState(user?.name);
+    const [userAddress, setUserAddress] = useState(user?.address);
+    const [userZip, setUserZip] = useState(user?.zip);
     useState(() => {
 
         fetch("http://localhost:5000/getUserInfo", {
@@ -24,14 +26,13 @@ const Settings = () => {
         }).then(res => res.json()).then(data => setUser(data))
 
     }, [])
-    const updateUser = () => {
-        const updatedUser = { name: userName }
-        console.log(updatedUser)
+    const updateUser = (updatedUser) => {
+
         fetch("http://localhost:5000/updateUserInfo", {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
-                email: firebaseUser.email,
+                email: user.email,
 
             },
             body: JSON.stringify(updatedUser)
@@ -40,6 +41,7 @@ const Settings = () => {
     }
 
     if (loading) return <p>loading...</p>
+    if (!user) return <p>Loading user ....</p>
     return (
         <section className='px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full'>
             {/* right part */}
@@ -65,7 +67,7 @@ const Settings = () => {
                                 icon={faPen}
                             />
                         </div>
-                        <div onClick={() => updateUser()} className={`${!editName && "hidden"} cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}>
+                        <div onClick={() => updateUser({ name: userName })} className={`${!editName && "hidden"} cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}>
                             save
                         </div>
                     </div>
@@ -110,7 +112,7 @@ const Settings = () => {
                                 icon={faPen}
                             />
                         </div>
-                        <div className={`${!editAddress && "hidden"} cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}>
+                        <div onClick={() => updateUser({ address: userAddress, zip: userZip })} className={`${!editAddress && "hidden"} cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}>
                             save
                         </div>
                     </div>
@@ -122,13 +124,13 @@ const Settings = () => {
                         {/* address */}
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center font-semibold ">Address:</label>
-                            <input disabled={!editAddress} className='input input-text  bg-white col-span-5' type="text" value='City, Country' />
+                            <input onChange={(e) => setUserAddress(e.target.value)} disabled={!editAddress} className='input input-text  bg-white col-span-5' type="text" value={userAddress || user?.address} />
                         </form>
                         <hr />
                         {/* zip code */}
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center font-semibold ">Zip:</label>
-                            <input disabled={!editAddress} className='input bg-white col-span-5' type="number" value='3822' />
+                            <input onChange={(e) => setUserZip(e.target.value)} disabled={!editAddress} className='input bg-white col-span-5' type="number" value={userZip || user?.zip} />
                         </form>
 
                     </div>
