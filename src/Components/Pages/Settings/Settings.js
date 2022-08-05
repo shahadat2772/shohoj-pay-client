@@ -15,6 +15,8 @@ const Settings = () => {
     const [userName, setUserName] = useState(user?.name);
     const [userAddress, setUserAddress] = useState(user?.address);
     const [userZip, setUserZip] = useState(user?.zip);
+    const [userEmail, setUserEmail] = useState(user?.email);
+    const [userPhone, setUserPhone] = useState(user?.phone);
     useState(() => {
 
         fetch("http://localhost:5000/getUserInfo", {
@@ -148,7 +150,7 @@ const Settings = () => {
                                 icon={faPen}
                             />
                         </div>
-                        <div className={`${!editContact && "hidden"} cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}>
+                        <div onClick={() => updateUser({ email: userEmail, phone: userPhone })} className={`${!editContact && "hidden"} cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}>
                             save
                         </div>
                     </div>
@@ -160,14 +162,14 @@ const Settings = () => {
                         {/* Email */}
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center font-semibold ">Email:</label>
-                            <input disabled={!editContact} className='input input-text  bg-white col-span-5' type="email" value='Email' />
+                            <input onChange={(e) => setUserEmail(e.target.value)} disabled={true} className='input input-text  bg-white col-span-5' type="email" value={userEmail || user?.email} />
                         </form>
                         <hr />
                         {/* phone number */}
 
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center font-semibold ">Phone :</label>
-                            <input disabled={!editContact} className='input input-text  bg-white col-span-5' type={"tel"} value='Phone Number' />
+                            <input onChange={(e) => setUserPhone(e.target.value)} disabled={!editContact} className='input input-text  bg-white col-span-5' type={"tel"} value={userPhone || user?.phone} />
                         </form>
 
 
