@@ -6,6 +6,8 @@ import auth from "../../../../firebase.init";
 import toast from "react-hot-toast";
 import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../../redux/actions/userActions";
 
 const Login = () => {
   const [signInWithEmailAndPassword, user, signinLoading, signInError] =
@@ -21,6 +23,7 @@ const Login = () => {
     resetField,
     formState: { errors },
   } = useForm();
+  const dispatch = useDispatch();
 
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
@@ -43,9 +46,12 @@ const Login = () => {
     return <Spinner />;
   }
 
-  const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
+
+  const onSubmit = async (data) => {
+    await signInWithEmailAndPassword(data.email, data.password);
+
     if (user) {
+      console.log("user logged in")
       resetField("email");
       resetField("password");
     }
