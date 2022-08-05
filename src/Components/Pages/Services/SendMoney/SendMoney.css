@@ -1,0 +1,5 @@
+#sendMoneyAmountInput::-webkit-outer-spin-button,
+#sendMoneyAmountInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

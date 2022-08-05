@@ -13,7 +13,7 @@ import "./CardForm.css";
 import { Doughnut } from "react-chartjs-2";
 import id from "date-fns/esm/locale/id/index.js";
 
-const CardForm = ({ addAmount, setMinAmountErr }) => {
+const CardForm = ({ addAmount, setAmountErr }) => {
   const date = new Date().toLocaleDateString();
 
   const [clientSecret, setClientSecret] = useState("");
@@ -24,29 +24,46 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
   const elements = useElements();
 
   useEffect(() => {
-    if (
-      addAmount >= 5 &&
-      addAmount <= 999998.99 &&
-      addAmount.slice(0, 1) !== "0"
-    ) {
-      setMinAmountErr("");
-      fetch("http://localhost:5000/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ addAmount }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          }
-        });
-    } else {
-      setMinAmountErr("$5 is the minimum add amount.");
+    if (addAmount < 5) {
       setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$5 is the minimum add amount.");
+      return;
     }
+    if (addAmount > 1000) {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$1000 is the maximum add amount at a time.");
+      return;
+    }
+    if (addAmount.slice(0, 1) === "0") {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("Invalid add amount.");
+      return;
+    }
+
+    if (addAmount)
+      if (
+        addAmount >= 5 &&
+        addAmount <= 1000 &&
+        addAmount.slice(0, 1) !== "0"
+      ) {
+        setAmountErr("");
+        fetch("https://shohoj-pay-server.herokuapp.com/create-payment-intent", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ addAmount }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.clientSecret) {
+              setClientSecret(data.clientSecret);
+            }
+          });
+      }
   }, [addAmount]);
 
   const addMoneyToBackend = (id) => {
@@ -57,7 +74,7 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
       transactionId: id,
       date: date,
     };
-    fetch("http://localhost:5000/addMoney", {
+    fetch("https://shohoj-pay-server.herokuapp.com/addMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -78,7 +95,20 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
     ) {
       console.log(addAmount);
       setClientSecret("");
-      console.log("true");
+      setAmountErr("");
+      setAmountErr("$5 is the minimum add amount.");
+      return;
+    }
+    if (addAmount > 1000) {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$1000 is the maximum add amount at a time.");
+      return;
+    }
+    if (addAmount.slice(0, 1) === "0") {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("Invalid add amount.");
       return;
     }
 
@@ -92,10 +122,12 @@ const CardForm = ({ addAmount, setMinAmountErr }) => {
     toast.loading("Money is being added.", {
       id: "waitingToast",
     });
+
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
+
     setCardError(error?.message || "");
 
     const { paymentIntent, error: intentErr } = await stripe.confirmCardPayment(

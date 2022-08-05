@@ -16,6 +16,7 @@ import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
 import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import SupportEngine from "./Components/Pages/SupportEngine";
+import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 
 function App() {
@@ -62,6 +63,14 @@ function App() {
           element={
             <RequireAuth>
               <SaveMoney />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/requestMoney"
+          element={
+            <RequireAuth>
+              <RequestMoney />
             </RequireAuth>
           }
         />

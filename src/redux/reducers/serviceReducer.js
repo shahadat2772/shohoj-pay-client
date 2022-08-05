@@ -5,7 +5,7 @@ const initialState = {
 const addMoney = (state, info) => {
   const newState = { ...state };
   newState.transcationInfo = info;
-  fetch("http://localhost:5000/addMoney", {
+  fetch("https://shohoj-pay-server.herokuapp.com/addMoney", {
     method: "POST",
     headers: {
       "content-type": "application/json",
