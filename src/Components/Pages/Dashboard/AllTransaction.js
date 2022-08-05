@@ -66,7 +66,7 @@ const AllTransaction = () => {
                 <div className="avatar">
                   <div className="w-16 rounded-full ">
                     <img
-                      src="https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg"
+                      src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                       alt="User Image"
                     />
                   </div>
