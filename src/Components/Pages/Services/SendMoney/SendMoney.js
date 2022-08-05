@@ -9,7 +9,6 @@ import "./SendMoney.css";
 const SendMoney = () => {
   const date = new Date().toLocaleDateString();
   const [user] = useAuthState(auth);
-  const [amountErr, setAmountErr] = useState("");
 
   const {
     register,

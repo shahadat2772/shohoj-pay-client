@@ -10,7 +10,7 @@ const stripePromise = loadStripe(
 
 const AddMoney = () => {
   const [addAmount, setAddAmount] = useState(0);
-  const [minAmountErr, setMinAmountErr] = useState(null);
+  const [amountErr, setAmountErr] = useState(null);
 
   return (
     <div className="min-h-screen flex justify-center items-center">
@@ -25,12 +25,10 @@ const AddMoney = () => {
             setAddAmount(e.target.value);
           }}
         />
-        <p className="text-xs text-red-500 mt-1">
-          {minAmountErr && minAmountErr}
-        </p>
+        <p className="text-xs text-red-500 mt-1">{amountErr && amountErr}</p>
         <div className="w-full mt-7">
           <Elements stripe={stripePromise}>
-            <CardForm setMinAmountErr={setMinAmountErr} addAmount={addAmount} />
+            <CardForm setAmountErr={setAmountErr} addAmount={addAmount} />
           </Elements>
         </div>
       </div>
