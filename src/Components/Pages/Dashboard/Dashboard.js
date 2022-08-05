@@ -6,45 +6,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../Shared/Spinner/Spinner";
 // USER TRANSACTION FAKE DATA
-const fakeTransaction = [
-  {
-    _id: 1,
-    date: "8/3/2022",
-    time: "11:40 PM",
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    actionType: "Send Money",
-    money: 465,
-  },
-  {
-    _id: 2,
-    date: "7/3/2022",
-    time: "10:40 PM",
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    actionType: "Add Money",
-    money: 345,
-  },
-  {
-    _id: 3,
-    time: "12:40 PM",
-    date: "6/3/2022",
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    actionType: "Send Money",
-    money: 545,
-  },
-  {
-    _id: 4,
-    date: "7/3/2022",
-    time: "12:40 PM",
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    actionType: "Add Money",
-    money: 235,
-  },
-];
 const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
 // FAKE SAVINGS DATA
 
@@ -106,7 +69,9 @@ const Dashboard = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-
+  if (transactionData === 0) {
+    return <Spinner />;
+  }
   return (
     <div className="container mx-auto lg:mt-28 lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
@@ -197,7 +162,7 @@ const Dashboard = () => {
                       <div className="avatar">
                         <div className="w-16 rounded-full ">
                           <img
-                            src="https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg"
+                            src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                             alt="User Image"
                           />
                         </div>
