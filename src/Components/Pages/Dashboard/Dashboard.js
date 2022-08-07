@@ -97,7 +97,7 @@ const Dashboard = () => {
         {/* CARD DIVIDER HORIZONTAL */}
 
         <div className="w-full mt-10 lg:mt-0">
-          <div className="md:mx-10 lg:mx-0 card lg:w-96 rounded ">
+          <div className="md:mx-10 lg:mx-0 card  rounded ">
             <div className="card-body py-0">
               <h1 className="text-left text-3xl font-bold mb-3">
                 Hi, {user?.displayName}
