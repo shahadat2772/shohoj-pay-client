@@ -13,9 +13,7 @@ const AllTransaction = () => {
   console.log(transactionData);
   useEffect(() => {
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`
-      )
+      .get(`http://localhost:5000/transactionStatus/${user.email}`)
       .then((res) => setTransactionData(res.data));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");

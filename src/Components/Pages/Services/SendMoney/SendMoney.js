@@ -39,7 +39,7 @@ const SendMoney = () => {
       date: date,
     };
 
-    fetch("https://shohoj-pay-server.herokuapp.com/sendMoney", {
+    fetch("http://localhost:5000/sendMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
