@@ -7,7 +7,6 @@ import {
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
-import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SignUp = () => {
@@ -217,8 +216,6 @@ const SignUp = () => {
               Login
             </Link>
           </p>
-          <div className="divider">OR</div>
-          <GoogleLogin />
         </div>
       </div>
     </div>

@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import toast from "react-hot-toast";
-import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
 
 const Login = () => {
@@ -145,8 +144,6 @@ const Login = () => {
               Register
             </Link>
           </p>
-          <div className="divider">OR</div>
-          <GoogleLogin />
         </div>
       </div>
     </div>
