@@ -42,15 +42,11 @@ const Dashboard = () => {
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/getUserBalances/${user.email}`
-      )
+      .get(`http://localhost:5000/getUserBalances/${user.email}`)
       .then((res) => setBalance(res.data));
     // USER TRANSACTION DATA GET
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`
-      )
+      .get(`http://localhost:5000/transactionStatus/${user.email}`)
       .then((res) => setTransactionData(res.data));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
