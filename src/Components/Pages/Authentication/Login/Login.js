@@ -5,11 +5,13 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import toast from "react-hot-toast";
 import Spinner from "../../../Shared/Spinner/Spinner";
+import useToken from "../../Hooks/useToken";
 
 const Login = () => {
   const [signInWithEmailAndPassword, user, signinLoading, signInError] =
     useSignInWithEmailAndPassword(auth);
   const [show, setShow] = useState(false);
+  const [token] = useToken(user);
   const passwordShowRef = useRef("");
   let navigate = useNavigate();
   let location = useLocation();
@@ -26,11 +28,11 @@ const Login = () => {
     setShow(passShow);
   };
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate(from, { replace: true });
       toast.success("User Login SuccessFull");
     }
-  }, [from, navigate, user]);
+  }, [from, navigate, token]);
 
   useEffect(() => {
     if (signInError) {
@@ -139,7 +141,7 @@ const Login = () => {
             <input className="btn w-full" type="submit" value="Login" />
           </form>
           <p className="text-center my-2">
-            New to Doctors | Portal ?{" "}
+            New to Shohoj Pay | Portal ?{" "}
             <Link className="font-bold text-secondary" to="/signUp">
               Register
             </Link>
