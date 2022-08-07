@@ -50,7 +50,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         addAmount.slice(0, 1) !== "0"
       ) {
         setAmountErr("");
-        fetch("https://shohoj-pay-server.herokuapp.com/create-payment-intent", {
+        fetch("http://localhost:5000/create-payment-intent", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -74,7 +74,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       transactionId: id,
       date: date,
     };
-    fetch("https://shohoj-pay-server.herokuapp.com/addMoney", {
+    fetch("http://localhost:5000/addMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -88,12 +88,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      addAmount <= 5 ||
-      addAmount >= 999998.99 ||
-      addAmount.slice(0, 1) == "0"
-    ) {
-      console.log(addAmount);
+    if (addAmount < 5) {
       setClientSecret("");
       setAmountErr("");
       setAmountErr("$5 is the minimum add amount.");
@@ -148,13 +143,33 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       setCardError(intentErr?.message);
     } else {
       const id = paymentIntent?.id;
-      addMoneyToBackend(id);
-      toast.dismiss("waitingToast");
-      setClientSecret("");
-      document.getElementById("addAmountInput").value = "";
-      card.clear();
-      setCardError("");
-      toast.success(`$${addAmount} Added Successfully.`);
+      const addMoneyInfo = {
+        type: "addMoney",
+        email: user.email,
+        amount: addAmount,
+        transactionId: id,
+      };
+
+      fetch("http://localhost:5000/addMoney", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ addMoneyInfo }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          toast.dismiss("waitingToast");
+          setCardError("");
+          setClientSecret("");
+          if (data?.success) {
+            document.getElementById("addAmountInput").value = "";
+            card.clear();
+            toast.success(data.success);
+          } else {
+            toast.error(data.error);
+          }
+        });
     }
   };
 

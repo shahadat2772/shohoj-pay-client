@@ -7,6 +7,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
+import { signOut } from "firebase/auth";
 // USER TRANSACTION FAKE DATA
 const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
 // FAKE SAVINGS DATA
@@ -38,24 +39,41 @@ const Dashboard = () => {
     transactionData.length - 4,
     transactionData.length
   );
-  console.log(latestTransaction);
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/getUserBalances/${user.email}`
-      )
-      .then((res) => setBalance(res.data));
+      .get(`http://localhost:5000/getUserBalances/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => {
+        setBalance(res.data);
+      })
+      .catch((error) => {
+        localStorage.removeItem("accessToken");
+        signOut(auth);
+        toast.error(error?.message);
+        navigate("/");
+      });
     // USER TRANSACTION DATA GET
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`
-      )
-      .then((res) => setTransactionData(res.data));
+      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setTransactionData(res.data))
+      .catch((error) => {
+        toast.error(error?.message);
+        signOut(auth);
+        localStorage.removeItem("accessToken");
+        navigate("/");
+      });
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied]);
+  }, [user.email, shareLinkCopied, navigate]);
   // COPY TEXT FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
@@ -79,7 +97,7 @@ const Dashboard = () => {
         {/* CARD DIVIDER HORIZONTAL */}
 
         <div className="w-full mt-10 lg:mt-0">
-          <div className="md:mx-10 lg:mx-0 card lg:w-96 rounded ">
+          <div className="md:mx-10 lg:mx-0 card  rounded ">
             <div className="card-body py-0">
               <h1 className="text-left text-3xl font-bold mb-3">
                 Hi, {user?.displayName}
@@ -135,89 +153,102 @@ const Dashboard = () => {
           </div>
           {/* START  LAST TRANSACTION*/}
           <div className="mt-10 lg:mt-0">
-            <div className=" px-2">
-              <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48">
-                Last Transaction
-              </h3>
-              <div className="mt-8">
-                <ul>
-                  {latestTransaction.slice(0, 4).map((transAction) => (
-                    <li
-                      className={`flex items-center my-4 p-3 rounded-lg w-full ${
-                        transAction.type === "addMoney" ||
-                        transAction.type === "receiveMoney"
-                          ? "bg-green-200"
-                          : "bg-red-200"
-                      }`}
-                      key={transAction._id}
-                    >
-                      <div className="lg:mr-8 w-36">
-                        <h5>
-                          {transAction.date === todayDate
-                            ? "Today"
-                            : transAction.date}
-                        </h5>
-                        <h6>{transAction.time}</h6>
-                      </div>
-                      <div className="avatar">
-                        <div className="w-16 rounded-full ">
-                          <img
-                            src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                            alt="User Image"
-                          />
-                        </div>
-                      </div>
-                      <div className="ml-5 flex items-center justify-between w-full">
-                        <div>
-                          <h5
-                            className={`font-bold text-lg ${
-                              transAction.type === "addMoney" ||
-                              transAction.type === "receiveMoney"
-                                ? "text-green-800"
-                                : "text-red-800"
-                            }`}
-                          >
-                            {transAction.type}
-                          </h5>
-                          <h5 className="">
-                            {transAction.type === "receiveMoney"
-                              ? transAction.from
-                              : transAction.email}
-                          </h5>
-                        </div>
-                        <div className="" onClick={() => onShare(transAction)}>
-                          <i className="fa-solid fa-copy cursor-pointer"></i>
-                        </div>
-                        <div>
-                          <h3
-                            className={`text-lg font-bold text-right ${
-                              transAction.type === "addMoney" ||
-                              transAction.type === "receiveMoney"
-                                ? "text-green-800"
-                                : "text-red-800"
-                            }`}
-                          >
-                            {transAction.type === "addMoney" ||
-                            transAction.type === "receiveMoney"
-                              ? "+" + transAction.amount
-                              : "-" + transAction.amount}{" "}
-                            $
-                          </h3>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                  <div className="text-center">
-                    <button
-                      onClick={() => navigate("/dashboard/allTransAction")}
-                      className="btn btn-primary btn-sm mt-5 p-2"
-                    >
-                      View All Transaction
-                    </button>
-                  </div>
-                </ul>
+            {transactionData.length === 0 ? (
+              <div className="p-14 text-center">
+                <h2 className="text-2xl font-bold text-red-500">
+                  You Have Not Made Any Transactions Yet
+                </h2>
               </div>
-            </div>
+            ) : (
+              <div className=" px-2">
+                <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48">
+                  Last Transaction
+                </h3>
+                <div className="mt-8">
+                  <ul>
+                    {latestTransaction.slice(0, 4).map((transAction) => (
+                      <li
+                        className={`flex items-center my-4 p-3 rounded-lg w-full ${
+                          transAction.type === "addMoney" ||
+                          transAction.type === "receiveMoney"
+                            ? "bg-green-200"
+                            : "bg-red-200"
+                        }`}
+                        key={transAction._id}
+                      >
+                        <div className="lg:mr-8 w-36">
+                          <h5>
+                            {transAction.date === todayDate
+                              ? "Today"
+                              : transAction.date}
+                          </h5>
+                          <h6>{transAction.time}</h6>
+                        </div>
+                        <div className="avatar">
+                          <div className="w-16 rounded-full ">
+                            <img
+                              src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
+                              alt="User Image"
+                            />
+                          </div>
+                        </div>
+                        <div className="ml-5 flex items-center justify-between w-full">
+                          <div>
+                            <h5
+                              className={`font-bold text-lg ${
+                                transAction.type === "addMoney" ||
+                                transAction.type === "receiveMoney"
+                                  ? "text-green-800"
+                                  : "text-red-800"
+                              }`}
+                            >
+                              {transAction.type}
+                            </h5>
+                            <h5 className="">
+                              {transAction.type === "receiveMoney"
+                                ? transAction.from
+                                : transAction.email}
+                            </h5>
+                          </div>
+                          <div
+                            className=""
+                            onClick={() => onShare(transAction)}
+                          >
+                            <i className="fa-solid fa-copy cursor-pointer"></i>
+                          </div>
+                          <div>
+                            <h3
+                              className={`text-lg font-bold text-right ${
+                                transAction.type === "addMoney" ||
+                                transAction.type === "receiveMoney"
+                                  ? "text-green-800"
+                                  : "text-red-800"
+                              }`}
+                            >
+                              {transAction.type === "addMoney" ||
+                              transAction.type === "receiveMoney"
+                                ? "+" + transAction.amount
+                                : "-" + transAction.amount}{" "}
+                              $
+                            </h3>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                    <div className="text-center">
+                      {transactionData.length >= 1 && (
+                        <button
+                          onClick={() => navigate("/dashboard/allTransAction")}
+                          className="btn btn-primary btn-sm mt-5 p-2"
+                        >
+                          View All Transaction
+                        </button>
+                      )}
+                    </div>
+                  </ul>
+                </div>
+              </div>
+            )}
             {/* START STATISTIC */}
           </div>
         </div>

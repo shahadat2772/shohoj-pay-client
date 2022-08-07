@@ -2,27 +2,26 @@ import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import useToken from "../../Hooks/useToken";
 import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
-import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../../../redux/actions/userActions";
 
 const SignUp = () => {
+  const [show, setShow] = useState(false);
   const date = new Date().toLocaleDateString();
 
   const passwordShowRef = useRef("");
-  const [show, setShow] = useState(false);
   const [
     createUserWithEmailAndPassword,
     user,
     userCreatLoading,
     userCreateError,
   ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+  const [token] = useToken(user);
   const navigate = useNavigate();
   const [updateProfile] = useUpdateProfile(auth);
   const {
@@ -30,7 +29,7 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   useEffect(() => {
     if (userCreateError) {
@@ -48,7 +47,7 @@ const SignUp = () => {
         date,
       };
       const createAccount = async () => {
-        fetch("https://shohoj-pay-server.herokuapp.com/createAccount", {
+        fetch("http://localhost:5000/createAccount", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -56,17 +55,20 @@ const SignUp = () => {
           body: JSON.stringify({ userInfo }),
         })
           .then((res) => res.json())
-          .then((data) => data?.acknowledged && dispatch(setUser({ email: userInfo.email })));
+          .then((result) => console.log(result));
       };
 
+      // dispatch(setUser(userInfo))
       createAccount();
 
-      setTimeout(() => {
-        toast.success("Create Account SuccessFully");
-      }, 1000);
-      navigate("/");
+      if (token) {
+        setTimeout(() => {
+          toast.success("Create Account SuccessFully");
+        }, 1000);
+        navigate("/");
+      }
     }
-  }, [user, navigate, user?.user?.displayName, date]);
+  }, [user, navigate, user?.user?.displayName, date, token]);
   if (userCreatLoading) {
     return <Spinner />;
   }
@@ -218,8 +220,6 @@ const SignUp = () => {
               Login
             </Link>
           </p>
-          <div className="divider">OR</div>
-          <GoogleLogin />
         </div>
       </div>
     </div>

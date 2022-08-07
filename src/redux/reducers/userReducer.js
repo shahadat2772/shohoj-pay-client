@@ -1,31 +1,22 @@
 import { ActionTypes } from "../constants/actionTypes";
 
 const initialState = {
-    user: {}
+    user: { name: "mahfuz swaron" }
 }
-// const setUserInfo = async (email, state) => {
+const setUser = (user, state) => {
+    const newState = { ...state };
+    newState.user = user;
+    console.log(user)
+    return newState;
+}
 
-//     const res = await fetch("http://localhost:5000/getUserInfo", {
-//         method: "GET",
-//         headers: {
-//             email: email
-//         },
+export const userReducer = (state = initialState, type, payload) => {
+    // switch (type) {
+    //     case ActionTypes.SET_USER:
+    //         return setUser(payload, state)
 
-//     })
-//     const data = await res.json();
-//     const newState = { ...state }
-//     newState.user = data
-//     const user = { ...data }
-//     return { user }
-// }
-
-export const userReducer = (state = initialState, { type, payload }) => {
-    switch (type) {
-        case ActionTypes.SET_USER:
-            console.log(payload)
-            return { ...state, user: payload }
-
-        default:
-            return state;
-    }
+    //     default:
+    //         return state;
+    // }
+    return { user: payload }
 }

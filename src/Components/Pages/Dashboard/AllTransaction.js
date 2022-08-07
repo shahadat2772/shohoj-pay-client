@@ -1,26 +1,37 @@
 import axios from "axios";
+import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 
 const AllTransaction = () => {
   const [transactionData, setTransactionData] = useState([]);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
+  const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
   console.log(transactionData);
   useEffect(() => {
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`
-      )
-      .then((res) => setTransactionData(res.data));
+      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setTransactionData(res.data))
+      .catch((error) => {
+        localStorage.removeItem("accessToken");
+        signOut(auth);
+        toast.error(error?.message);
+        navigate("/");
+      });
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied]);
+  }, [user.email, shareLinkCopied, navigate]);
   if (transactionData.length === 0) {
     return <Spinner />;
   }
