@@ -1,11 +1,7 @@
 export const styles = {
     chatWithMeButton: {
         cursor: 'pointer',
-<<<<<<< HEAD
         boxShadow: '0px 0px 12px 6px rgba(0, 0, 0, 0.30)',
-=======
-        boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
->>>>>>> e124bdbe8ca0fdc6fae3ac687c321068104f0623
         // Border
         borderRadius: '50%',
         // Background 
