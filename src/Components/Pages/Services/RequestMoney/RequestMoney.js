@@ -29,11 +29,14 @@ const RequestMoney = () => {
     toast.loading("Money is being requested.", { id: "requestingMoney" });
 
     const requestMoneyInfo = {
-      name: user?.displayName,
+      type: "requestMoney",
+      status: "pending",
+      requesterName: user?.displayName,
       amount: amount,
-      email: user?.email,
       from: user?.email,
       to: email,
+      date,
+      time,
     };
 
     fetch("http://localhost:5000/requestMoney", {

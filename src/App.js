@@ -18,6 +18,7 @@ import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import SupportEngine from "./Components/Pages/SupportEngine";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
+import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
 
 function App() {
   return (
@@ -63,6 +64,14 @@ function App() {
           element={
             <RequireAuth>
               <SaveMoney />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/moneyRequests"
+          element={
+            <RequireAuth>
+              <MoneyRequests />
             </RequireAuth>
           }
         />

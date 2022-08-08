@@ -7,6 +7,7 @@ import auth from "../../../../firebase.init";
 const SaveMoney = () => {
   const [user] = useAuthState(auth);
   const date = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
 
   const {
     register,
@@ -27,9 +28,11 @@ const SaveMoney = () => {
 
     const saveMoneyInfo = {
       type: "saveMoney",
+      name: "Save Money",
       email: user?.email,
       amount: amount,
-      date: date,
+      date,
+      time,
     };
 
     fetch("http://localhost:5000/saveMoney", {

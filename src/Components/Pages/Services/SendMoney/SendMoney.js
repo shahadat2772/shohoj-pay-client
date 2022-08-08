@@ -8,6 +8,7 @@ import "./SendMoney.css";
 
 const SendMoney = () => {
   const date = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
 
   const {
@@ -33,10 +34,11 @@ const SendMoney = () => {
       type: "sendMoney",
       name: user?.displayName,
       email: user?.email,
+      amount: amount,
       from: user?.email,
       to: email,
-      amount: amount,
-      date: date,
+      date,
+      time,
     };
 
     fetch("http://localhost:5000/sendMoney", {
