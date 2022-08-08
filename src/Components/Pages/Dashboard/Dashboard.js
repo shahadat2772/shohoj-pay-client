@@ -4,76 +4,14 @@ import "./Dashboard.css";
 import auth from "../../../firebase.init";
 import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../../Shared/Spinner/Spinner";
+import { signOut } from "firebase/auth";
 // USER TRANSACTION FAKE DATA
-const fakeTransaction = [
-  {
-    _id: 1,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    location: "Location",
-    money: 465,
-  },
-  {
-    _id: 2,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    location: "Location",
-    money: 345,
-  },
-  {
-    _id: 3,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    location: "Location",
-    money: 545,
-  },
-  {
-    _id: 4,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    location: "Location",
-    money: 235,
-  },
-  {
-    _id: 5,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    location: "Location",
-    money: 955,
-  },
-  {
-    _id: 6,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    name: "User Name",
-    location: "Location",
-    money: 713,
-  },
-];
 const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
 // FAKE SAVINGS DATA
-const monthSavings = [
-  {
-    _id: 1,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    month: "January",
-    year: "2022",
-    money: 713,
-  },
-  {
-    _id: 2,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    month: "April",
-    year: "2022",
-    money: 45136,
-  },
-  {
-    _id: 3,
-    img: "https://thumbs.dreamstime.com/z/businessman-icon-image-male-avatar-profile-vector-glasses-beard-hairstyle-179728610.jpg",
-    month: "July",
-    year: "2022",
-    money: 4548,
-  },
-];
+
 // FAKE DATA
 
 const data = [
@@ -90,154 +28,263 @@ let getDate =
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
   const [balance, setBalance] = useState(0);
-  console.log(balance);
+  const [transactionData, setTransactionData] = useState([]);
+  const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const todayDate = new Date().toLocaleDateString();
+
+  // LATEST TRANSACTION
+  const latestTransaction = [...transactionData].splice(
+    transactionData.length - 4,
+    transactionData.length
+  );
   useEffect(() => {
+    // USER BALANCE AMOUNT GET
     axios
-      .get(`http://localhost:5000/getUserBalances/${user.email}`)
-      .then((res) => setBalance(res.data));
-  }, [user.email]);
+      .get(`http://localhost:5000/getUserBalances/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => {
+        setBalance(res.data);
+      })
+      .catch((error) => {
+        localStorage.removeItem("accessToken");
+        signOut(auth);
+        toast.error(error?.message);
+        navigate("/");
+      });
+    // USER TRANSACTION DATA GET
+    axios
+      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setTransactionData(res.data))
+      .catch((error) => {
+        toast.error(error?.message);
+        signOut(auth);
+        localStorage.removeItem("accessToken");
+        navigate("/");
+      });
+    if (shareLinkCopied) {
+      toast.success("Copied Transaction Information");
+    }
+  }, [user.email, shareLinkCopied, navigate]);
+  // COPY TEXT FUNCTION
+  const onShare = (data) => {
+    navigator.clipboard.writeText(`
+    Date: ${data.date}
+    Email: ${data.email}
+    Type: ${data.type}
+    Amount: ${data.amount}$
+    `);
+    setShareLinkCopied(true);
+    setTimeout(() => {
+      setShareLinkCopied(false);
+    }, 2000);
+  };
+  if (transactionData === 0) {
+    return <Spinner />;
+  }
   return (
-    <div className="container mx-auto mt-24 lg:mt-28 lg:px-10 py-10">
+    <div className="container mx-auto lg:mt-28 lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
       <div className="lg:flex">
-        <div>
-          <div class="md:mx-10 lg:mx-0 card lg:w-96 shadow-xl bg-primary text-white py-5 rounded card-1-bg">
-            <div class="card-body">
-              <h1 className="text-left text-4xl font-bold">
-                {user?.displayName}
-              </h1>
-              <h5 class="text-left">{user?.email}</h5>
+        {/* CARD DIVIDER HORIZONTAL */}
 
-              <div class="text-left">
-                <h4 className="font-bold">Total Balance</h4>
-                <h1 className="text-3xl">${balance?.balance}</h1>
+        <div className="w-full mt-10 lg:mt-0">
+          <div className="md:mx-10 lg:mx-0 card  rounded ">
+            <div className="card-body py-0">
+              <h1 className="text-left text-3xl font-bold mb-3">
+                Hi, {user?.displayName}
+              </h1>
+              <div className="text-left">
+                <h4 className="">Total Balance</h4>
+                <h1 className="text-6xl font-bold">$ {balance?.balance}</h1>
               </div>
             </div>
           </div>
-          {/* START RESECT TRANSACTION  */}
-          <div className="mt-10 text-left md:mx-10 mx-5 lg:mx-0">
-            <h3 className="font-bold text-xl border-b border-black pb-1">
-              Recent Transaction
-            </h3>
-            <div className="mt-8">
-              <ul>
-                {fakeTransaction.slice(0, 4).map((transAction) => (
-                  <li
-                    className="flex items-center my-4 p-3 rounded-lg shadow-lg"
-                    key={transAction._id}
-                  >
-                    <div class="avatar">
-                      <div class="w-16 rounded-full ">
-                        <img src={transAction.img} alt="User Image" />
-                      </div>
-                    </div>
-                    <div className="ml-5 flex items-center justify-between w-full">
-                      <div>
-                        <h3 className="font-bold text-lg">
-                          {transAction.name}
-                        </h3>
-                        <h5>{transAction.location}</h5>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold">
-                          ${transAction.money}
-                        </h3>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-                <div className="text-center">
-                  <button className="btn btn-primary btn-sm mt-5 p-2">
-                    View All Transaction
-                  </button>
+          <div className="mt-10 px-2">
+            <h2 className="border-b-4 border-black w-48 font-bold text-xl">
+              Get Service
+            </h2>
+            <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
+              <div className="hidden lg:block">
+                <div
+                  onClick={() => navigate("/services/addMoney")}
+                  className="cursor-pointer bg-primary p-6 rounded-full"
+                >
+                  <i className="fa-solid fa-credit-card text-3xl text-white"></i>
                 </div>
-              </ul>
+                <p className="mt-2 font-bold text-center">Add</p>
+              </div>
+              <div>
+                <div
+                  onClick={() => navigate("/services/sendMoney")}
+                  className="cursor-pointer bg-primary p-6 rounded-full"
+                >
+                  <i className="fa-solid fa-paper-plane text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">Send</p>
+              </div>
+              <div>
+                <div
+                  onClick={() => navigate("/services/requestMoney")}
+                  className="bg-primary p-6 rounded-full cursor-pointer"
+                >
+                  <i className="fa-solid fa-hand-holding-dollar text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">Request</p>
+              </div>
+              <div>
+                <div
+                  onClick={() => navigate("/services")}
+                  className="bg-primary p-6 rounded-full cursor-pointer"
+                >
+                  <i className="fa-solid fa-ellipsis-vertical text-3xl text-white"></i>
+                </div>
+                <p className="mt-2 font-bold text-center">More</p>
+              </div>
             </div>
+          </div>
+          {/* START  LAST TRANSACTION*/}
+          <div className="mt-10 lg:mt-0">
+            {transactionData.length === 0 ? (
+              <div className="p-14 text-center">
+                <h2 className="text-2xl font-bold text-red-500">
+                  You Have Not Made Any Transactions Yet
+                </h2>
+              </div>
+            ) : (
+              <div className=" px-2">
+                <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48">
+                  Last Transaction
+                </h3>
+                <div className="mt-8">
+                  <ul>
+                    {latestTransaction.slice(0, 4).map((transAction) => (
+                      <li
+                        className={`flex items-center my-4 p-3 rounded-lg w-full ${
+                          transAction.type === "addMoney" ||
+                          transAction.type === "receiveMoney"
+                            ? "bg-green-200"
+                            : "bg-red-200"
+                        }`}
+                        key={transAction._id}
+                      >
+                        <div className="lg:mr-8 w-36">
+                          <h5>
+                            {transAction.date === todayDate
+                              ? "Today"
+                              : transAction.date}
+                          </h5>
+                          <h6>{transAction.time}</h6>
+                        </div>
+                        <div className="avatar">
+                          <div className="w-16 rounded-full ">
+                            <img
+                              src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
+                              alt="User Image"
+                            />
+                          </div>
+                        </div>
+                        <div className="ml-5 flex items-center justify-between w-full">
+                          <div>
+                            <h5
+                              className={`font-bold text-lg ${
+                                transAction.type === "addMoney" ||
+                                transAction.type === "receiveMoney"
+                                  ? "text-green-800"
+                                  : "text-red-800"
+                              }`}
+                            >
+                              {transAction.type}
+                            </h5>
+                            <h5 className="">
+                              {transAction.type === "receiveMoney"
+                                ? transAction.from
+                                : transAction.email}
+                            </h5>
+                          </div>
+                          <div
+                            className=""
+                            onClick={() => onShare(transAction)}
+                          >
+                            <i className="fa-solid fa-copy cursor-pointer"></i>
+                          </div>
+                          <div>
+                            <h3
+                              className={`text-lg font-bold text-right ${
+                                transAction.type === "addMoney" ||
+                                transAction.type === "receiveMoney"
+                                  ? "text-green-800"
+                                  : "text-red-800"
+                              }`}
+                            >
+                              {transAction.type === "addMoney" ||
+                              transAction.type === "receiveMoney"
+                                ? "+" + transAction.amount
+                                : "-" + transAction.amount}{" "}
+                              $
+                            </h3>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                    <div className="text-center">
+                      {transactionData.length >= 1 && (
+                        <button
+                          onClick={() => navigate("/dashboard/allTransAction")}
+                          className="btn btn-primary btn-sm mt-5 p-2"
+                        >
+                          View All Transaction
+                        </button>
+                      )}
+                    </div>
+                  </ul>
+                </div>
+              </div>
+            )}
+            {/* START STATISTIC */}
           </div>
         </div>
-        {/* CARD DIVIDER HORIZONTAL */}
-        <div class="divider divider-horizontal divide-black px-9 divider-hidden"></div>
-        <div className="w-full mt-10 lg:mt-0">
-          <div class="card  shadow-xl rounded bg-image py-8 text-white">
-            <div class="card-body">
-              <h3 className="text-xl">Hi User!</h3>
-              <div className="mt-2">
-                <h3 className="font-bold text-xl">
-                  Have a Good Day With Shohoj Pay
-                </h3>
-                <h5>Thank You For Staying With Shohoj Pay.</h5>
-                <h5>We Are Always Working To Keep Your Account Safe.</h5>
-                <button className="btn btn-primary mt-4">Button</button>
-              </div>
-            </div>
-          </div>
-          {/* START SAVINGS MONTH */}
-          <div className="mt-10 md:flex lg:flex block">
-            <div className="lg:w-3/6 md:w-3/6 px-2">
-              <h3 className="font-bold text-xl border-b border-black pb-2">
-                Recent Month Savings
+        <div className="divider divider-horizontal divide-black px-9 divider-hidden"></div>
+
+        <div>
+          <div className="">
+            <div className="px-2 w-full">
+              <h3 className="font-bold text-xl pb-2 border-b border-black">
+                Statistic
               </h3>
-              <div className="mt-16">
-                <ul>
-                  {monthSavings.slice(0, 3).map((savings) => (
-                    <li
-                      className="flex items-center my-4 p-3 rounded-lg shadow-lg"
-                      key={savings._id}
+              <h5 className="font-bold text-right text-xl">{getDate}</h5>
+              <div className="">
+                {/* <h4 className="font-bold text-2xl">Expense</h4> */}
+                <div className=" flex justify-center h-22">
+                  <PieChart width={290} height={330}>
+                    <Tooltip />
+                    <Legend style={{ width: "363px" }} />
+                    <Pie
+                      data={data}
+                      cx={120}
+                      cy={200}
+                      innerRadius={65}
+                      outerRadius={78}
+                      fill="#8884d8"
+                      paddingAngle={1}
+                      dataKey="value"
                     >
-                      <div class="avatar">
-                        <div class="w-16 rounded-full ">
-                          <img src={savings.img} alt="User Image" />
-                        </div>
-                      </div>
-                      <div className="ml-5 flex items-center justify-between w-full">
-                        <div>
-                          <h3 className="font-bold text-lg">{savings.month}</h3>
-                          <h5>{savings.year}</h5>
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-bold">
-                            ${savings.money}
-                          </h3>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            {/* START STATISTIC */}
-            <div className="lg:w-3/6 md:w-3/6 px-2 md:ml-8 lg:mt-0 md:mt-0 mt-10">
-              <div className="px-2">
-                <h3 class="font-bold text-xl pb-2 border-b border-black">
-                  Statistic
-                </h3>
-                <h5 className="font-bold text-right text-xl">{getDate}</h5>
-                <div className="">
-                  {/* <h4 className="font-bold text-2xl">Expense</h4> */}
-                  <div className=" flex justify-center">
-                    <PieChart width={290} height={330}>
-                      <Tooltip />
-                      <Legend style={{ width: "363px" }} />
-                      <Pie
-                        data={data}
-                        cx={120}
-                        cy={200}
-                        innerRadius={65}
-                        outerRadius={78}
-                        fill="#8884d8"
-                        paddingAngle={1}
-                        dataKey="value"
-                      >
-                        {data.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </div>
+                      {data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
                 </div>
               </div>
             </div>

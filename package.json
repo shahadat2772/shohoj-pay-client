@@ -23,7 +23,6 @@
     "fortawesome": "^0.0.1-security",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
-    "react-chat-engine": "^1.11.23",
     "react-countdown-circle-timer": "^3.0.9",
     "react-countup": "^6.3.0",
     "react-day-picker": "^8.0.7",

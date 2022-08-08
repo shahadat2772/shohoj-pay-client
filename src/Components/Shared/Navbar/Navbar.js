@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
@@ -20,12 +20,14 @@ const Navbar = () => {
     { name: "Settings", link: "/settings" },
   ];
 
-  // on scroll hide and show navbar functionality 
+  // on scroll hide and show navbar functionality
   const controlNavbar = () => {
-    if (typeof window !== 'undefined') {
-      if (window.scrollY > lastScrollY) { // if scroll down hide the navbar
+    if (typeof window !== "undefined") {
+      if (window.scrollY > lastScrollY) {
+        // if scroll down hide the navbar
         setShow(true);
-      } else { // if scroll up show the navbar
+      } else {
+        // if scroll up show the navbar
         setShow(false);
       }
 
@@ -35,12 +37,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', controlNavbar);
-
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", controlNavbar);
       // cleanup function
       return () => {
-        window.removeEventListener('scroll', controlNavbar);
+        window.removeEventListener("scroll", controlNavbar);
       };
     }
   }, [lastScrollY]);
@@ -59,7 +60,7 @@ const Navbar = () => {
     toast.success("Sign Out Successfully");
   };
   return (
-    <nav className={`active ${show && 'hidden'}`}>
+    <nav className={`active ${show && "hidden"}`}>
       <div className="fixed top-0 w-[100%] z-50">
         <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
           <div className="p-1 lg:px-8 md:px-4">
@@ -79,19 +80,20 @@ const Navbar = () => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
-                    }`}
+                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
+                    open ? "left-[-10px] top-16" : "left-[-1080px]"
+                  }`}
                 >
                   {link.map((item) => (
-                    <li className="block text-center">
-                      <Link to={item.link}>{item.name}</Link>
+                    <li key={item.name} className="block text-center">
+                      <NavLink to={item.link}>{item.name}</NavLink>
                     </li>
                   ))}
                   {/* Routes for authenticated users   */}
                   {user &&
                     restrictedLinks.map((item) => (
-                      <li className="block text-center">
-                        <Link to={item.link}>{item.name}</Link>
+                      <li key={item.name} className="block text-center">
+                        <NavLink to={item.link}>{item.name}</NavLink>
                       </li>
                     ))}
                   {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
@@ -147,8 +149,15 @@ const Navbar = () => {
                 </ul>
               </div>
               {/* NAVBAR TOGGLER ICON */}
-              <div onClick={() => setOpen(!open)} className="w-10 h-10 lg:hidden">
-                {open ? <XIcon></XIcon> : <MenuIcon></MenuIcon>}
+              <div
+                onClick={() => setOpen(!open)}
+                className="w-10 h-10 lg:hidden"
+              >
+                {open ? (
+                  <XIcon className="text-primary"></XIcon>
+                ) : (
+                  <MenuIcon className="text-primary"></MenuIcon>
+                )}
               </div>
             </nav>
           </div>

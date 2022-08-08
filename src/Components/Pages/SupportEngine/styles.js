@@ -1,17 +1,21 @@
 export const styles = {
     chatWithMeButton: {
         cursor: 'pointer',
+<<<<<<< HEAD
         boxShadow: '0px 0px 12px 6px rgba(0, 0, 0, 0.30)',
+=======
+        boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
+>>>>>>> e124bdbe8ca0fdc6fae3ac687c321068104f0623
         // Border
         borderRadius: '50%',
         // Background 
         backgroundImage: `url(https://i.ibb.co/1mWKqd7/img.jpg)`, 
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundSize: '60px',
+        backgroundSize: '84px',
         // Size
-        width: '60px',
-        height: '60px',
+        width: '84px',
+        height: '84px',
     },
     avatarHello: { 
         // Position
@@ -20,7 +24,7 @@ export const styles = {
         top: 'calc(50% - 24px)', 
         // Layering
         zIndex: '10000',
-        boxShadow: '0px 0px 12px 6px rgba(0, 0, 0, 0.33)',
+        boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
         // Border
         padding: '12px 12px 12px 16px',
         borderRadius: '24px', 
@@ -34,8 +38,8 @@ export const styles = {
         bottom: '116px',
         right: '24px',
         // Size
-        width: '360px',
-        height: '400px',
+        width: '420px',
+        height: '530px',
         maxWidth: 'calc(100% - 48px)',
         maxHeight: 'calc(100% - 48px)',
         backgroundColor: 'white',
@@ -44,7 +48,7 @@ export const styles = {
         border: `2px solid #7a39e0`,
         overflow: 'hidden',
         // Shadow
-        boxShadow: '0px 0px 4px 2px rgba(0, 0, 0, 0.33)',
+        boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
     },
     emailFormWindow: { 
         width: '100%',  
@@ -55,9 +59,9 @@ export const styles = {
     },
     stripe: {
         position: 'relative',
-        top: '-60px',
+        top: '-45px',
         width: '100%',
-        height: '295px',
+        height: '308px',
         backgroundColor: '#7a39e0',
         transform: 'skewY(-12deg)',
     },
@@ -80,7 +84,7 @@ export const styles = {
     bottomText: { 
         position: 'absolute', 
         width: '100%', 
-        top: '70%', 
+        top: '60%', 
         color: '#7a39e0', 
         fontSize: '24px', 
         fontWeight: '600' 

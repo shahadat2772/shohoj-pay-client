@@ -16,6 +16,9 @@ import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
 import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import SupportEngine from "./Components/Pages/SupportEngine";
+import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
+import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
+import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
 
 function App() {
   return (
@@ -64,6 +67,22 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/services/moneyRequests"
+          element={
+            <RequireAuth>
+              <MoneyRequests />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/requestMoney"
+          element={
+            <RequireAuth>
+              <RequestMoney />
+            </RequireAuth>
+          }
+        />
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
@@ -76,10 +95,18 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/dashboard/allTransAction"
+          element={
+            <RequireAuth>
+              <AllTransaction />
+            </RequireAuth>
+          }
+        />
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <SupportEngine/>
+      <SupportEngine />
       <Footer />
       <Toaster />
     </div>

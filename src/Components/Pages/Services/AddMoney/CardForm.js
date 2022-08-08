@@ -10,73 +10,93 @@ import {
 } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import "./CardForm.css";
+import { Doughnut } from "react-chartjs-2";
+import id from "date-fns/esm/locale/id/index.js";
 
-const CardForm = ({ addAmount }) => {
+const CardForm = ({ addAmount, setAmountErr }) => {
   const date = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
 
-  const [confirmed, setConfirmed] = useState("");
-  const [transactionId, setTransactionId] = useState("");
-  // Storing the client secret
   const [clientSecret, setClientSecret] = useState("");
-  // Storing card error
   const [cardError, setCardError] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const stripe = useStripe();
   const elements = useElements();
 
-  const addMoneyToBackend = (id) => {
-    const addMoneyInfo = {
-      type: "addMoney",
-      email: user.email,
-      amount: addAmount,
-      transactionId: id,
-      date: date,
-    };
-    fetch("http://localhost:5000/addMoney", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ addMoneyInfo }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  };
   useEffect(() => {
-    if (addAmount) {
-      console.log({ addAmount });
-
-      fetch("http://localhost:5000/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ addAmount }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          }
-        });
+    if (addAmount < 5) {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$5 is the minimum add amount.");
+      return;
     }
+    if (addAmount > 1000) {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$1000 is the maximum add amount at a time.");
+      return;
+    }
+    if (addAmount.slice(0, 1) === "0") {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("Invalid add amount.");
+      return;
+    }
+
+    if (addAmount)
+      if (
+        addAmount >= 5 &&
+        addAmount <= 1000 &&
+        addAmount.slice(0, 1) !== "0"
+      ) {
+        setAmountErr("");
+        fetch("http://localhost:5000/create-payment-intent", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ addAmount }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.clientSecret) {
+              setClientSecret(data.clientSecret);
+            }
+          });
+      }
   }, [addAmount]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (addAmount < 5) {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$5 is the minimum add amount.");
+      return;
+    }
+    if (addAmount > 1000) {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("$1000 is the maximum add amount at a time.");
+      return;
+    }
+    if (addAmount.slice(0, 1) === "0") {
+      setClientSecret("");
+      setAmountErr("");
+      setAmountErr("Invalid add amount.");
+      return;
+    }
+
     if (!stripe || !elements) {
       return;
     }
-
     const card = elements.getElement(CardElement);
-
     if (!card) {
       return;
     }
-
-    toast.loading("Please wait.", {
+    toast.loading("Money is being added.", {
       id: "waitingToast",
     });
 
@@ -93,8 +113,8 @@ const CardForm = ({ addAmount }) => {
         payment_method: {
           card: card,
           billing_details: {
-            name: "Mokles Al Molom",
-            email: "mokles@molom.com",
+            name: `${user?.displayName}`,
+            email: `${user?.email}`,
           },
         },
       }
@@ -103,16 +123,38 @@ const CardForm = ({ addAmount }) => {
     if (intentErr) {
       toast.dismiss("waitingToast");
       setCardError(intentErr?.message);
-      setConfirmed("");
     } else {
       const id = paymentIntent?.id;
+      const addMoneyInfo = {
+        type: "addMoney",
+        name: "Add Money",
+        email: user.email,
+        amount: addAmount,
+        transactionId: id,
+        date,
+        time,
+      };
 
-      toast.dismiss("waitingToast");
-      card.clear();
-      setCardError("");
-      setTransactionId(id);
-      addMoneyToBackend(id);
-      setConfirmed("Money Added Successfully.");
+      fetch("http://localhost:5000/addMoney", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ addMoneyInfo }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          toast.dismiss("waitingToast");
+          setCardError("");
+          setClientSecret("");
+          if (data?.success) {
+            document.getElementById("addAmountInput").value = "";
+            card.clear();
+            toast.success(data.success);
+          } else {
+            toast.error(data.error);
+          }
+        });
     }
   };
 
@@ -140,21 +182,15 @@ const CardForm = ({ addAmount }) => {
             },
           }}
         />
+        <p className="text-xs text-red-500 mt-1">{cardError && cardError}</p>
         <button
-          className="actionButton mt-11"
+          className="actionButton btn mt-11"
           type="submit"
-          disabled={!stripe || !clientSecret || confirmed}
+          disabled={!stripe || !clientSecret}
         >
           Add
         </button>
       </form>
-      <p className="text-xs text-red-500 mt-1 ml-1">{cardError && cardError}</p>
-      {/* <p className="text-xs text-green-500 mt-2 ml-1">
-        {confirmed && confirmed}
-      </p> */}
-      {/* <p className="text-sm text-orange-400  ml-1">
-        {transactionId && <span>Transaction id: {transactionId}</span>}
-      </p> */}
     </div>
   );
 };
