@@ -31,7 +31,7 @@ const SendMoney = () => {
     toast.loading("Money is being sended.", { id: "sendingMoney" });
 
     const sendMoneyInfo = {
-      type: "sendMoney",
+      type: "Send Money",
       name: user?.displayName,
       email: user?.email,
       amount: amount,
