@@ -15,7 +15,6 @@ import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
 import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
 import Dashboard from "./Components/Pages/Dashboard/Dashboard";
-import SupportEngine from "./Components/Pages/SupportEngine";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
@@ -106,7 +105,6 @@ function App() {
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <SupportEngine />
       <Footer />
       <Toaster />
     </div>
