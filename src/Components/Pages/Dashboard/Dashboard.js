@@ -39,6 +39,7 @@ const Dashboard = () => {
     transactionData.length - 4,
     transactionData.length
   );
+  console.log(transactionData);
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
@@ -170,7 +171,8 @@ const Dashboard = () => {
                       <li
                         className={`flex items-center my-4 p-3 rounded-lg w-full ${
                           transAction.type === "addMoney" ||
-                          transAction.type === "receiveMoney"
+                          transAction.type === "receiveMoney" ||
+                          transAction.from === user?.email
                             ? "bg-green-200"
                             : "bg-red-200"
                         }`}
@@ -197,7 +199,8 @@ const Dashboard = () => {
                             <h5
                               className={`font-bold text-lg ${
                                 transAction.type === "addMoney" ||
-                                transAction.type === "receiveMoney"
+                                transAction.type === "receiveMoney" ||
+                                transAction.from === user?.email
                                   ? "text-green-800"
                                   : "text-red-800"
                               }`}
@@ -207,7 +210,7 @@ const Dashboard = () => {
                             <h5 className="">
                               {transAction.type === "receiveMoney"
                                 ? transAction.from
-                                : transAction.email}
+                                : transAction.name}
                             </h5>
                           </div>
                           <div
@@ -220,13 +223,15 @@ const Dashboard = () => {
                             <h3
                               className={`text-lg font-bold text-right ${
                                 transAction.type === "addMoney" ||
-                                transAction.type === "receiveMoney"
+                                transAction.type === "receiveMoney" ||
+                                transAction.from === user?.email
                                   ? "text-green-800"
                                   : "text-red-800"
                               }`}
                             >
                               {transAction.type === "addMoney" ||
-                              transAction.type === "receiveMoney"
+                              transAction.type === "receiveMoney" ||
+                              transAction.from === user?.email
                                 ? "+" + transAction.amount
                                 : "-" + transAction.amount}{" "}
                               $
