@@ -70,7 +70,7 @@ export const styles = {
         fontWeight: '600',
     },
     emailInput: { 
-        width: '66%',
+        width: '68%',
         textAlign: 'center',
         outline: 'none',
         padding: '12px',
