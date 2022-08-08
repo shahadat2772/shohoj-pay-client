@@ -97,7 +97,7 @@ const MoneyRequests = () => {
                   <td>{request?.amount}</td>
                   <td>{request.status}</td>
                   <td>
-                    {type === "incoming" && (
+                    {type === "incoming" && request?.status === "pending" && (
                       <button
                         onClick={() => handleApprove(request)}
                         className="btn btn-xs btn-outline"

@@ -126,8 +126,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
     } else {
       const id = paymentIntent?.id;
       const addMoneyInfo = {
-        type: "addMoney",
-        name: "Add Money",
+        type: "Add Money",
         email: user.email,
         amount: addAmount,
         transactionId: id,

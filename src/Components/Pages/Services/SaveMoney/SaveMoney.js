@@ -27,8 +27,7 @@ const SaveMoney = () => {
     toast.loading("Money is being saved.", { id: "saveMoneyLoading" });
 
     const saveMoneyInfo = {
-      type: "saveMoney",
-      name: "Save Money",
+      type: "Save Money",
       email: user?.email,
       amount: amount,
       date,
