@@ -29,7 +29,7 @@ const RequestMoney = () => {
     toast.loading("Money is being requested.", { id: "requestingMoney" });
 
     const requestMoneyInfo = {
-      type: "requestMoney",
+      type: "Request Money",
       status: "pending",
       requesterName: user?.displayName,
       amount: amount,
