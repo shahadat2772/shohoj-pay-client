@@ -6,7 +6,11 @@ import auth from "../../../../firebase.init";
 
 const SaveMoney = () => {
   const [user] = useAuthState(auth);
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
   const time = new Date().toLocaleTimeString();
 
   const {
@@ -30,6 +34,7 @@ const SaveMoney = () => {
       type: "Save Money",
       email: user?.email,
       amount: amount,
+      fullDate,
       date,
       time,
     };

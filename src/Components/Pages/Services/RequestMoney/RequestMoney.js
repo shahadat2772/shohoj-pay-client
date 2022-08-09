@@ -5,7 +5,11 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 const RequestMoney = () => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
 
@@ -35,6 +39,7 @@ const RequestMoney = () => {
       amount: amount,
       from: user?.email,
       to: email,
+      fullDate,
       date,
       time,
     };
