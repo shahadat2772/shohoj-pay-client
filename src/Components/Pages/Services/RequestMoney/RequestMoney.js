@@ -30,7 +30,7 @@ const RequestMoney = () => {
 
     const requestMoneyInfo = {
       type: "Request Money",
-      status: "pending",
+      status: "Pending",
       requesterName: user?.displayName,
       amount: amount,
       from: user?.email,
