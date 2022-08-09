@@ -14,7 +14,12 @@ import { Doughnut } from "react-chartjs-2";
 import id from "date-fns/esm/locale/id/index.js";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
+  const time = new Date().toLocaleTimeString();
 
   const [clientSecret, setClientSecret] = useState("");
   const [cardError, setCardError] = useState("");
@@ -65,25 +70,6 @@ const CardForm = ({ addAmount, setAmountErr }) => {
           });
       }
   }, [addAmount]);
-
-  const addMoneyToBackend = (id) => {
-    const addMoneyInfo = {
-      type: "addMoney",
-      email: user.email,
-      amount: addAmount,
-      transactionId: id,
-      date: date,
-    };
-    fetch("http://localhost:5000/addMoney", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ addMoneyInfo }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,10 +130,14 @@ const CardForm = ({ addAmount, setAmountErr }) => {
     } else {
       const id = paymentIntent?.id;
       const addMoneyInfo = {
-        type: "addMoney",
-        email: user.email,
+        type: "Add Money",
+        email: user?.email,
+        name: user?.displayName,
         amount: addAmount,
         transactionId: id,
+        fullDate,
+        date,
+        time,
       };
 
       fetch("http://localhost:5000/addMoney", {

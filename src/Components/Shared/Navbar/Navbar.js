@@ -17,6 +17,7 @@ const Navbar = () => {
   const restrictedLinks = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
+    { name: "Request", link: "/moneyRequests" },
     { name: "Settings", link: "/settings" },
   ];
 

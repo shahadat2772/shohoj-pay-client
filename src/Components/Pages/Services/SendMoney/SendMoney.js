@@ -7,7 +7,12 @@ import auth from "../../../../firebase.init";
 import "./SendMoney.css";
 
 const SendMoney = () => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
+  const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
 
   const {
@@ -30,13 +35,15 @@ const SendMoney = () => {
     toast.loading("Money is being sended.", { id: "sendingMoney" });
 
     const sendMoneyInfo = {
-      type: "sendMoney",
+      type: "Send Money",
       name: user?.displayName,
       email: user?.email,
+      amount: amount,
       from: user?.email,
       to: email,
-      amount: amount,
-      date: date,
+      fullDate,
+      date,
+      time,
     };
 
     fetch("http://localhost:5000/sendMoney", {
