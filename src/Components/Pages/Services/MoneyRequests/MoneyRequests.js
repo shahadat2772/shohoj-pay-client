@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
 
-const MoneyRequests = () => {
+const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user, loading] = useAuthState(auth);
   const email = user?.email;
 
   const [requests, setRequests] = useState([]);
-  console.log(requests);
   const [type, setType] = useState("incoming");
 
   const fetchRequests = () => {
@@ -22,7 +21,6 @@ const MoneyRequests = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setRequests(data);
       });
   };
@@ -30,27 +28,6 @@ const MoneyRequests = () => {
   useEffect(() => {
     fetchRequests();
   }, [user, type]);
-
-  const handleApprove = (request) => {
-    console.log(request);
-    fetch("http://localhost:5000/approveRequestMoney", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ requestMoneyInfo: request }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data?.success) {
-          fetchRequests();
-          toast.success(data?.success);
-        } else {
-          toast.error(data?.error);
-        }
-      });
-  };
 
   return (
     <div className="min-h-screen">
@@ -63,7 +40,7 @@ const MoneyRequests = () => {
           <div className="btn-group mt-8 mb-4">
             <button
               onClick={() => setType("incoming")}
-              className={`btn btn-primary btn-outline btn-sm ${
+              className={`btn btn-secondary btn-outline btn-sm ${
                 type === "incoming" && "btn-active"
               }`}
             >
@@ -71,7 +48,7 @@ const MoneyRequests = () => {
             </button>
             <button
               onClick={() => setType("outgoing")}
-              className={`btn btn-primary btn-outline btn-sm ${
+              className={`btn btn-secondary btn-outline btn-sm ${
                 type !== "incoming" && "btn-active"
               }`}
             >
@@ -94,7 +71,7 @@ const MoneyRequests = () => {
             <tbody>
               {/* Each request */}
               {requests?.map((request, index) => (
-                <tr>
+                <tr key={index}>
                   <td>
                     {type === "incoming"
                       ? request?.requesterName
@@ -115,12 +92,16 @@ const MoneyRequests = () => {
                   </td>
                   <td>
                     {type === "incoming" && request?.status === "Pending" && (
-                      <button
-                        onClick={() => handleApprove(request)}
+                      <label
+                        htmlFor="MoneyRequestConfirmModal"
+                        // onClick={() => handleApprove(request)}
+                        onClick={() =>
+                          setRequestForConfirm([request, fetchRequests])
+                        }
                         className="btn btn-xs btn-outline btn-primary"
                       >
                         Approve
-                      </button>
+                      </label>
                     )}
                   </td>
                 </tr>
