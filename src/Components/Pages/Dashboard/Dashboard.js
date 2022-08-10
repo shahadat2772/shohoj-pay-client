@@ -11,11 +11,7 @@ import { signOut } from "firebase/auth";
 // USER TRANSACTION FAKE DATA
 const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
 // FAKE DATA
-const data = [
-  { name: "January", value: 7541, email: "ahsdf@gmail.com" },
-  { name: "April", value: 6574, email: "ahsdf@gmail.com" },
-  { name: "July", value: 5465, email: "ahsdf@gmail.com" },
-];
+
 // SERVICE DATA
 const someServices = [
   {
@@ -49,6 +45,7 @@ const todayDate = new Date().toLocaleDateString();
 const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [transactionData, setTransactionData] = useState([]);
+  const [monthService, setMonthService] = useState([]);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -57,6 +54,36 @@ const Dashboard = () => {
     transactionData.length - 4,
     transactionData.length
   );
+  const serviceType = (value) =>
+    monthService.filter((service) => service.type.includes(value));
+  serviceType("Receive Money");
+  serviceType("Add Money");
+  serviceType("Send Money");
+  serviceType("Request Money");
+
+  const totlaReceiveMoney = [
+    ...serviceType("Receive Money"),
+    ...serviceType("Add Money"),
+  ];
+  const totalLossMoney = [
+    ...serviceType("Send Money"),
+    ...serviceType("Request Money"),
+  ];
+  const reducerCount = (value) => {
+    return value.reduce(
+      (previousValue, currentValue) =>
+        Number(previousValue) + Number(currentValue?.amount),
+      0
+    );
+  };
+  const TotalRecive = reducerCount(totlaReceiveMoney);
+  const TotalCost = reducerCount(totalLossMoney);
+  const totalSavings = reducerCount(serviceType("Save Money"));
+  const data = [
+    { name: "Total Receive", value: TotalRecive, email: "ahsdf@gmail.com" },
+    { name: "Total Cost", value: TotalCost, email: "ahsdf@gmail.com" },
+    { name: "Total Savings", value: totalSavings, email: "ahsdf@gmail.com" },
+  ];
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
@@ -88,6 +115,17 @@ const Dashboard = () => {
         localStorage.removeItem("accessToken");
         navigate("/");
       });
+    const monthSavings = "Aug 2022";
+    axios
+      .get(`http://localhost:5000/getServices`, {
+        headers: {
+          "content-type": "application/json",
+          // email: user.email,
+          email: user.email,
+          monthSavings,
+        },
+      })
+      .then((res) => setMonthService(res.data));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
@@ -161,21 +199,16 @@ const Dashboard = () => {
                 <ul className="mt-8">
                   {latestTransaction.slice(0, 4).map((transAction) => (
                     <li
-                      className={`flex items-center my-4 p-3 rounded-lg w-full ${
-                        transAction.type === "Add Money" ||
-                        transAction.type === "Receive Money"
-                          ? "bg-green-200"
-                          : "bg-red-200"
-                      }`}
+                      className={`flex items-center my-4 p-3 rounded-lg w-full shadow`}
                       key={transAction._id}
                     >
                       <div className="lg:mr-8 w-36">
-                        <h5>
-                          {transAction.date === todayDate
+                        <h5 className="gray">
+                          {transAction.fullDate === todayDate
                             ? "Today"
-                            : transAction.date}
+                            : transAction.fullDate}
                         </h5>
-                        <h6>{transAction.time}</h6>
+                        <h6 className="gray">{transAction.time}</h6>
                       </div>
                       <div className="avatar">
                         <div className="w-16 rounded-full ">
@@ -197,7 +230,7 @@ const Dashboard = () => {
                           >
                             {transAction.type}
                           </h5>
-                          <h5 className="">{transAction?.userEmail}</h5>
+                          <h5 className="gray">{transAction?.userName}</h5>
                         </div>
                         <div className="" onClick={() => onShare(transAction)}>
                           <i className="fa-solid fa-copy cursor-pointer"></i>
