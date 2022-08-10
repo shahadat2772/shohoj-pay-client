@@ -58,21 +58,16 @@ const AllTransaction = () => {
           <ul>
             {transactionData.map((transAction) => (
               <li
-                className={`flex items-center my-4 p-3 rounded-lg w-full ${
-                  transAction.type === "addMoney" ||
-                  transAction.type === "receiveMoney"
-                    ? "bg-green-200"
-                    : "bg-red-200"
-                }`}
+                className={`flex items-center my-4 p-3 rounded-lg w-full shadow`}
                 key={transAction._id}
               >
                 <div className="lg:mr-8 w-36">
-                  <h5>
-                    {transAction.date === todayDate
+                  <h5 className="gray">
+                    {transAction.fullDate === todayDate
                       ? "Today"
-                      : transAction.date}
+                      : transAction.fullDate}
                   </h5>
-                  <h6>{transAction.time}</h6>
+                  <h6 className="gray">{transAction.time}</h6>
                 </div>
                 <div className="avatar">
                   <div className="w-16 rounded-full ">
@@ -86,19 +81,15 @@ const AllTransaction = () => {
                   <div>
                     <h5
                       className={`font-bold text-lg ${
-                        transAction.type === "addMoney" ||
-                        transAction.type === "receiveMoney"
+                        transAction.type === "Add Money" ||
+                        transAction.type === "Receive Money"
                           ? "text-green-800"
                           : "text-red-800"
                       }`}
                     >
                       {transAction.type}
                     </h5>
-                    <h5 className="">
-                      {transAction.type === "receiveMoney"
-                        ? transAction.from
-                        : transAction.email}
-                    </h5>
+                    <h5 className="gray">{transAction?.userName}</h5>
                   </div>
                   <div className="" onClick={() => onShare(transAction)}>
                     <i className="fa-solid fa-copy cursor-pointer"></i>
@@ -106,14 +97,14 @@ const AllTransaction = () => {
                   <div>
                     <h3
                       className={`text-lg font-bold text-right ${
-                        transAction.type === "addMoney" ||
-                        transAction.type === "receiveMoney"
+                        transAction.type === "Add Money" ||
+                        transAction.type === "Receive Money"
                           ? "text-green-800"
                           : "text-red-800"
                       }`}
                     >
-                      {transAction.type === "addMoney" ||
-                      transAction.type === "receiveMoney"
+                      {transAction.type === "Add Money" ||
+                      transAction.type === "Receive Money"
                         ? "+" + transAction.amount
                         : "-" + transAction.amount}{" "}
                       $
