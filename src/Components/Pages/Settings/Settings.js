@@ -201,6 +201,7 @@ const Settings = () => {
                     <div className='btn pl-0  text-error btn-ghost  rounded'>Delete Account</div>
 
                 </div>
+                {/* blank commit  */}
             </div>
         </section>
     );
