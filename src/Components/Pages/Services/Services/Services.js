@@ -43,11 +43,6 @@ const services = [
     serviceName: "Loan Request",
     serviceIcon: faSackDollar,
   },
-  {
-    id: "moneyRequests",
-    serviceName: "Money Requests",
-    serviceIcon: faHandHoldingDollar,
-  },
 ];
 
 const Services = () => {

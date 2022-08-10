@@ -18,9 +18,17 @@ import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
-import MessengerCustomerChat from 'react-messenger-customer-chat';
+
+import MessengerCustomerChat from "react-messenger-customer-chat";
+
+import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
+import { useState } from "react";
 
 function App() {
+  // State for confirming the money request
+  const [requestForConfirm, setRequestForConfirm] = useState([]);
+  const [request, fetchRequests] = requestForConfirm;
+
   return (
     <div>
       <Navbar></Navbar>
@@ -68,10 +76,10 @@ function App() {
           }
         />
         <Route
-          path="/services/moneyRequests"
+          path="/moneyRequests"
           element={
             <RequireAuth>
-              <MoneyRequests />
+              <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
             </RequireAuth>
           }
         />
@@ -106,12 +114,17 @@ function App() {
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <MessengerCustomerChat
-    pageId="107012672117270"
-    appId="586701279704824"
-  />,
+      <MessengerCustomerChat pageId="107012672117270" appId="586701279704824" />
+      ,
       <Footer />
       <Toaster />
+      {request && (
+        <MoneyRequestConfirmModal
+          setRequestForConfirm={setRequestForConfirm}
+          requestInfo={request}
+          fetchRequests={fetchRequests}
+        />
+      )}
     </div>
   );
 }
