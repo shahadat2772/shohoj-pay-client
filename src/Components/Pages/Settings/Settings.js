@@ -52,10 +52,11 @@ const Settings = () => {
                 <div className='rounded-lg p-5 w-full lg:w-10/12 bg-white relative'>
                     <div className='w-full flex-col items-center '>
                         <div>
-                            <figure className='flex justify-start items-center mb-3'>
+                            <figure className='flex justify-start items-end mb-3 relative '>
                                 <div className='h-44 w-44 bg-primary  rounded-full' ></div>
+
+                                <p className={` text-white text-center cursor-pointer font-semibold absolute h-24 w-44 bg-black opacity-0 hover:bg-opacity-25 hover:opacity-100 pt-5 rounded-br-full rounded-bl-full`} >change photo</p>
                             </figure>
-                            {/* <p className='w-44 text-primary text-left ml-4 lg:ml-0 lg:text-center cursor-pointer font-semibold' >change photo</p> */}
 
                         </div>
                         <div className="w-full">
