@@ -34,7 +34,6 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
       <h2 className="mt-24 text-[1.70rem] text-center textColor">
         Money Requests
       </h2>
-
       <div className="requests max-w-7xl mx-auto">
         <div className="overflow-x-auto md:max-w-6xl max-w-[95%] mx-auto">
           <div className="btn-group mt-8 mb-4">
@@ -55,63 +54,72 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
               Outgoing
             </button>
           </div>
-          <table className="table w-full">
-            {/* <!-- head --> */}
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Time</th>
-                {type === "outgoing" && <th>Status</th>}
-                {type === "incoming" && <th>Action</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {/* Each request */}
-              {requests?.map((request, index) => (
-                <tr key={index}>
-                  <td>
-                    {type === "incoming"
-                      ? request?.requesterName
-                      : request?.donorName}
-                  </td>
-                  <td>{type === "incoming" ? request?.from : request?.to}</td>
-                  <td>${request?.amount}</td>
-                  <td>{request?.date}</td>
-                  <td>{request?.time}</td>
-                  {type === "outgoing" && (
-                    <td
-                      className={`${
-                        request.status === "Pending"
-                          ? "text-red-600"
-                          : "text-green-600"
-                      }`}
-                    >
-                      {request.status}
-                    </td>
-                  )}
-                  {type === "incoming" && (
+          {requests.length === 0 ? (
+            <div className="min-h-[60vh] flex justify-center items-center">
+              <h2 className="text-2xl">
+                You have no {`${type === "incoming" ? "incoming" : "outgoing"}`}{" "}
+                requests ;(
+              </h2>
+            </div>
+          ) : (
+            <table className="table w-full">
+              {/* <!-- head --> */}
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  {type === "outgoing" && <th>Status</th>}
+                  {type === "incoming" && <th>Action</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {/* Each request */}
+                {requests?.map((request, index) => (
+                  <tr key={index}>
                     <td>
-                      <label
-                        htmlFor="MoneyRequestConfirmModal"
-                        // onClick={() => handleApprove(request)}
-                        onClick={() =>
-                          setRequestForConfirm([request, fetchRequests])
-                        }
-                        className={`btn btn-xs btn-outline btn-primary ${
-                          request.status === "Approved" && "btn-disabled"
+                      {type === "incoming"
+                        ? request?.requesterName
+                        : request?.donorName}
+                    </td>
+                    <td>{type === "incoming" ? request?.from : request?.to}</td>
+                    <td>${request?.amount}</td>
+                    <td>{request?.date}</td>
+                    <td>{request?.time}</td>
+                    {type === "outgoing" && (
+                      <td
+                        className={`${
+                          request.status === "Pending"
+                            ? "text-red-600"
+                            : "text-green-600"
                         }`}
                       >
-                        Approve{request.status === "Approved" && "d"}
-                      </label>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        {request.status}
+                      </td>
+                    )}
+                    {type === "incoming" && (
+                      <td>
+                        <label
+                          htmlFor="MoneyRequestConfirmModal"
+                          // onClick={() => handleApprove(request)}
+                          onClick={() =>
+                            setRequestForConfirm([request, fetchRequests])
+                          }
+                          className={`btn btn-xs btn-outline btn-primary ${
+                            request.status === "Approved" && "btn-disabled"
+                          }`}
+                        >
+                          Approve{request.status === "Approved" && "d"}
+                        </label>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
