@@ -158,7 +158,6 @@ const Settings = () => {
                         <hr />
 
                         {/* phone number */}
-
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center font-semibold ">Phone :</label>
                             <input onChange={(e) => setUserPhone(e.target.value)} disabled={!editContact} className='input input-text  bg-white col-span-5' type={"tel"} value={userPhone || user?.phone} />
@@ -166,11 +165,9 @@ const Settings = () => {
                     </div>
                 </div>
 
-
-
                 {/* delete div */}
                 <div className='p-5 lg:px-24 lg:pt-20 lg:pb-0 '>
-                    <div className='btn pl-0  text-error btn-ghost  rounded'>Delete Account</div>
+                    <div className='btn pl-0  text-error btn-ghost rounded'>Delete Account</div>
 
                 </div>
                 {/* blank commit  */}
