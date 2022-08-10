@@ -43,14 +43,21 @@ const EmailForm = props => {
         console.log('Sending Email', email)
 
         getOrCreateUser(
-            user => {
-                props.setUser && props.setUser(user)
-                getOrCreateChat(chat => {
-                    setLoading(false)
-                    props.setChat && props.setChat(chat)
-                })
+            user=>{
+                getOrCreateChat(
+                    chat=>console.log('success',chat)
+                )
             }
         )
+        // getOrCreateUser(
+        //     user => {
+        //         props.setUser && props.setUser(user)
+        //         getOrCreateChat(chat => {
+        //             setLoading(false)
+        //             props.setChat && props.setChat(chat)
+        //         })
+        //     }
+        // )
     }
 
     return (
