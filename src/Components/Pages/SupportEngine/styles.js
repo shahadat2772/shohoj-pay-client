@@ -1,17 +1,17 @@
 export const styles = {
     chatWithMeButton: {
         cursor: 'pointer',
-        boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
+        boxShadow: '0px 0px 12px 6px rgba(0, 0, 0, 0.30)',
         // Border
         borderRadius: '50%',
         // Background 
         backgroundImage: `url(https://i.ibb.co/1mWKqd7/img.jpg)`, 
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundSize: '84px',
+        backgroundSize: '66px',
         // Size
-        width: '84px',
-        height: '84px',
+        width: '66px',
+        height: '66px',
     },
     avatarHello: { 
         // Position
@@ -31,11 +31,11 @@ export const styles = {
     supportWindow: {
         // Position
         position: 'fixed',
-        bottom: '116px',
+        bottom: '100px',
         right: '24px',
         // Size
-        width: '420px',
-        height: '530px',
+        width: '360px',
+        height: '380px',
         maxWidth: 'calc(100% - 48px)',
         maxHeight: 'calc(100% - 48px)',
         backgroundColor: 'white',
@@ -44,7 +44,7 @@ export const styles = {
         border: `2px solid #7a39e0`,
         overflow: 'hidden',
         // Shadow
-        boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
+        boxShadow: '0px 0px 12px 6px rgba(0, 0, 0, 0.33)',
     },
     emailFormWindow: { 
         width: '100%',  
@@ -55,22 +55,22 @@ export const styles = {
     },
     stripe: {
         position: 'relative',
-        top: '-45px',
+        top: '-68px',
         width: '100%',
-        height: '308px',
+        height: '300px',
         backgroundColor: '#7a39e0',
         transform: 'skewY(-12deg)',
     },
     topText: { 
         position: 'relative',
         width: '100%', 
-        top: '15%', 
+        top: '12%', 
         color: 'white', 
         fontSize: '24px', 
         fontWeight: '600',
     },
     emailInput: { 
-        width: '66%',
+        width: '68%',
         textAlign: 'center',
         outline: 'none',
         padding: '12px',
@@ -80,7 +80,7 @@ export const styles = {
     bottomText: { 
         position: 'absolute', 
         width: '100%', 
-        top: '60%', 
+        top: '70%', 
         color: '#7a39e0', 
         fontSize: '24px', 
         fontWeight: '600' 

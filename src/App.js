@@ -15,14 +15,21 @@ import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
 import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
 import Dashboard from "./Components/Pages/Dashboard/Dashboard";
-import SupportEngine from "./Components/Pages/SupportEngine";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
+import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
+import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
+import { useState } from "react";
 
 function App() {
+  // State for confirming the money request
+  const [requestForConfirm, setRequestForConfirm] = useState([]);
+  const [request, fetchRequests] = requestForConfirm;
+
   return (
     <div>
       <Navbar></Navbar>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -67,6 +74,14 @@ function App() {
           }
         />
         <Route
+          path="/moneyRequests"
+          element={
+            <RequireAuth>
+              <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/services/requestMoney"
           element={
             <RequireAuth>
@@ -97,9 +112,15 @@ function App() {
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <SupportEngine />
       <Footer />
       <Toaster />
+      {request && (
+        <MoneyRequestConfirmModal
+          setRequestForConfirm={setRequestForConfirm}
+          requestInfo={request}
+          fetchRequests={fetchRequests}
+        />
+      )}
     </div>
   );
 }
