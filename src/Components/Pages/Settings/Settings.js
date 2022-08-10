@@ -6,6 +6,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
+import { useNavigate } from "react-router-dom";
+
 const Settings = () => {
     const [editAddress, setEditAddress] = useState(false);
     const [editContact, setEditContact] = useState(false);
@@ -17,6 +19,8 @@ const Settings = () => {
     const [userZip, setUserZip] = useState(user?.zip);
     const [userEmail, setUserEmail] = useState(user?.email);
     const [userPhone, setUserPhone] = useState(user?.phone);
+    const navigate = useNavigate();
+
     useState(() => {
 
         fetch("http://localhost:5000/getUserInfo", {
@@ -76,28 +80,14 @@ const Settings = () => {
                     </div>
                 </div>
 
-                {/* additional options section */}
-                <div className='rounded-lg p-5 w-full lg:w-10/12 mt-3 bg-white '>
-
+                {/* security div */}
+                <div className='rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 mt-5 bg-white '>
                     {/* title div */}
                     <div className='w-1/2 '>
-                        <h3 className='text-xl text-left mb-3'>Addintional </h3>
+                        <h3 className='text-xl text-left mb-3'>Security</h3>
 
                     </div>
-
-                    {/* options container */}
-
-                    <div className='mt-5 grid grid-cols-1 gap-2'>
-
-                        {/* email subscription  */}
-                        <div className='flex space-x-4'>
-                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Recieve Monthly Report</p>
-                        </div>
-                        {/* allow to request money  */}
-                        <div className='flex space-x-4'>
-                            <input type={"checkbox"} className="toggle checkbox-secondary" /><p> Allow others to send Money Request</p>
-                        </div>
-                    </div>
+                    <p onClick={() => navigate("/resetPassword")} className={"cursor-pointer btn-link"}>change your current password</p>
                 </div>
             </div>
 
@@ -166,36 +156,17 @@ const Settings = () => {
                             <input onChange={(e) => setUserEmail(e.target.value)} disabled={true} className='input input-text  bg-white col-span-5' type="email" value={userEmail || user?.email} />
                         </form>
                         <hr />
+
                         {/* phone number */}
 
                         <form className='grid grid-cols-1 lg:grid-cols-6 gap-3'>
                             <label className="flex items-center font-semibold ">Phone :</label>
                             <input onChange={(e) => setUserPhone(e.target.value)} disabled={!editContact} className='input input-text  bg-white col-span-5' type={"tel"} value={userPhone || user?.phone} />
                         </form>
-
-
                     </div>
                 </div>
 
-                {/* security div */}
-                <div className='rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-white '>
-                    {/* title div */}
-                    <div className='w-1/2 '>
-                        <h3 className='text-xl text-left mb-3'>Security</h3>
 
-                    </div>
-
-                    {/* options container */}
-
-                    <form className='grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5'>
-                        {/* Current Password */}
-                        <input className='input input-password ' type="password" placeholder='Current Password' />
-
-                        <input className='input input-password ' type="password" placeholder='New Password' />
-                        <div type="submit" className='btn bg-primary max-w-min border-none px-4 py-2 text-white rounded'>change</div>
-                    </form>
-
-                </div>
 
                 {/* delete div */}
                 <div className='p-5 lg:px-24 lg:pt-20 lg:pb-0 '>
