@@ -197,7 +197,7 @@ const Dashboard = () => {
                           >
                             {transAction.type}
                           </h5>
-                          <h5 className="">{transAction.name}</h5>
+                          <h5 className="">{transAction?.userEmail}</h5>
                         </div>
                         <div className="" onClick={() => onShare(transAction)}>
                           <i className="fa-solid fa-copy cursor-pointer"></i>
