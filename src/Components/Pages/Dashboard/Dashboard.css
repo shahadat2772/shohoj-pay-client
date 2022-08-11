@@ -16,7 +16,7 @@
   background-size: cover;
 }
 .gray {
-  color: rgb(154, 151, 151);
+  color: rgb(113, 113, 113);
 }
 @media only screen and (max-width: 768px) {
   .divider-hidden {
