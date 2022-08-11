@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { signOut } from "firebase/auth";
 // USER TRANSACTION FAKE DATA
-const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
+const COLORS = ["#0F9D58", "#DB4437", "#4285F4"];
 // FAKE DATA
 
 // SERVICE DATA
@@ -36,16 +36,25 @@ const someServices = [
   },
 ];
 // FIND TODAY DATE MONTH YEAR
-let dateObj = new Date();
-let shortMonth = dateObj.toLocaleString("default", { month: "long" });
-let getDate =
-  dateObj.getUTCDate() + " " + shortMonth + "," + dateObj.getUTCFullYear();
+const filterDate = new Date().toLocaleDateString("en-us", {
+  year: "numeric",
+  month: "short",
+});
+const getPreviousDate = (number) => {
+  const current = new Date();
+  current.setMonth(current.getMonth() - number);
+  return current.toLocaleString("default", {
+    year: "numeric",
+    month: "short",
+  });
+};
 const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
+  const [monthServiceFilter, serMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -77,12 +86,22 @@ const Dashboard = () => {
     );
   };
   const TotalRecive = reducerCount(totlaReceiveMoney);
+  console.log(TotalRecive);
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
+  // PAICHART DATA
   const data = [
-    { name: "Total Receive", value: TotalRecive, email: "ahsdf@gmail.com" },
-    { name: "Total Cost", value: TotalCost, email: "ahsdf@gmail.com" },
-    { name: "Total Savings", value: totalSavings, email: "ahsdf@gmail.com" },
+    {
+      name: "Receive",
+      value: TotalRecive ? TotalRecive : 1,
+      email: user.email,
+    },
+    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user.email },
+    {
+      name: "Savings",
+      value: totalSavings ? totalSavings : 1,
+      email: user.email,
+    },
   ];
   useEffect(() => {
     // USER BALANCE AMOUNT GET
@@ -115,21 +134,23 @@ const Dashboard = () => {
         localStorage.removeItem("accessToken");
         navigate("/");
       });
-    const monthSavings = "Aug 2022";
+    // const monthSavings = "Aug 2022";
+    console.log(monthServiceFilter);
     axios
       .get(`http://localhost:5000/getServices`, {
         headers: {
           "content-type": "application/json",
           // email: user.email,
           email: user.email,
-          monthSavings,
+          monthServiceFilter,
         },
       })
       .then((res) => setMonthService(res.data));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied, navigate]);
+  }, [user.email, shareLinkCopied, navigate, monthServiceFilter]);
+
   // COPY TEXT FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
@@ -271,40 +292,44 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="divider divider-horizontal divide-black px-9 divider-hidden"></div>
-
-        <div>
-          <div className="">
-            <div className="px-2 w-full">
-              <h3 className="font-bold text-xl pb-2 border-b border-black">
-                Statistic
-              </h3>
-              <h5 className="font-bold text-right text-xl">{getDate}</h5>
-              <div className="">
-                {/* <h4 className="font-bold text-2xl">Expense</h4> */}
-                <div className=" flex justify-center h-22">
-                  <PieChart width={290} height={330}>
-                    <Tooltip />
-                    <Legend style={{ width: "363px" }} />
-                    <Pie
-                      data={data}
-                      cx={120}
-                      cy={200}
-                      innerRadius={65}
-                      outerRadius={78}
-                      fill="#8884d8"
-                      paddingAngle={1}
-                      dataKey="value"
-                    >
-                      {data.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </div>
-              </div>
+        <div className="">
+          <div className="px-2 w-full">
+            <h3 className="font-bold text-xl pb-2 border-b border-black">
+              Statistic
+            </h3>
+            <div>
+              <select
+                name="option"
+                onChange={(e) => serMonthServiceFilter(e.target.value)}
+                class="select select-ghost w-full max-w-xs mb-50 text-xl"
+              >
+                <option defaultValue={filterDate}>{filterDate}</option>
+                <option value={getPreviousDate(1)}>{getPreviousDate(1)}</option>
+                <option value={getPreviousDate(2)}>{getPreviousDate(2)}</option>
+              </select>
+            </div>
+            <div className=" flex justify-center h-22 ">
+              <PieChart className="mt-[-80px] -z-20" width={290} height={330}>
+                <Tooltip />
+                <Legend style={{ width: "333px" }} />
+                <Pie
+                  data={data}
+                  cx={120}
+                  cy={200}
+                  innerRadius={65}
+                  outerRadius={82}
+                  fill="#8884d8"
+                  paddingAngle={1}
+                  dataKey="value"
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
             </div>
           </div>
         </div>
