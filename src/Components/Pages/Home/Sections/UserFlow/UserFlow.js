@@ -3,7 +3,7 @@ import "./UserFlow.css";
 
 const UserFlow = () => {
   return (
-    <div className="container md:max-w-[70rem] mx-auto py-20 lg:mt-10">
+    <div className="container md:max-w-[70rem] mx-auto md:py-20">
       {/* GRID USERFLOW CARD */}
       <div className="grid grid-cols-1 lg:gap-0 md:gap-0 gap-12 lg:grid-cols-3 md:grid-cols-2 bg-white rounded p-5 py-15  md:px-4 sm:px-4">
         <div className="px-4 flow-1">
