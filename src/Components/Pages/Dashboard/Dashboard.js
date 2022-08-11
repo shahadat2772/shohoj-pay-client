@@ -199,19 +199,19 @@ const Dashboard = () => {
                 <ul className="mt-8">
                   {latestTransaction.slice(0, 4).map((transAction) => (
                     <li
-                      className={`flex items-center my-4 p-3 rounded-lg w-full shadow`}
+                      className={`flex items-center my-4 p-3 rounded-lg w-full shadow-sm`}
                       key={transAction._id}
                     >
                       <div className="lg:mr-8 w-36">
-                        <h5 className="gray">
+                        <h5 className="gray text-sm mb-1">
                           {transAction.fullDate === todayDate
                             ? "Today"
                             : transAction.fullDate}
                         </h5>
-                        <h6 className="gray">{transAction.time}</h6>
+                        <h6 className="gray text-sm">{transAction.time}</h6>
                       </div>
                       <div className="avatar">
-                        <div className="w-16 rounded-full ">
+                        <div className="w-14 rounded-full ">
                           <img
                             src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                             alt="User Image"
@@ -221,33 +221,32 @@ const Dashboard = () => {
                       <div className="ml-5 flex items-center justify-between w-full">
                         <div>
                           <h5
-                            className={`font-bold text-lg ${
-                              transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money"
-                                ? "text-green-800"
-                                : "text-red-800"
-                            }`}
+                            className={` font-medium text-lg mb-[2px]
+                            `}
                           >
                             {transAction.type}
                           </h5>
-                          <h5 className="gray">{transAction?.userName}</h5>
+                          <h5 className="gray text-sm">
+                            {transAction?.userEmail}
+                          </h5>
                         </div>
                         <div className="" onClick={() => onShare(transAction)}>
-                          <i className="fa-solid fa-copy cursor-pointer"></i>
+                          <i className="fa-solid fa-copy cursor-pointer gray"></i>
                         </div>
                         <div>
                           <h3
-                            className={`text-lg font-bold text-right ${
-                              transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money"
-                                ? "text-green-800"
-                                : "text-red-800"
+                            className={`text-2xl font-medium text-right ${
+                              transAction.type === "Add Money" &&
+                              "text-green-600"
+                            } ${
+                              transAction.type === "Receive Money" &&
+                              "text-green-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||
                             transAction.type === "Receive Money"
                               ? "+" + transAction.amount
-                              : "-" + transAction.amount}{" "}
+                              : "-" + transAction.amount}
                             $
                           </h3>
                         </div>
