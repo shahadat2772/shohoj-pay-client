@@ -1,8 +1,10 @@
 import React from "react";
 import "./style.css";
 import "./Banner.css";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className=" min-h-screen bg-img1">
@@ -28,6 +30,7 @@ const Banner = () => {
               problems.
             </p>
             <button
+              onClick={() => navigate("/signUp")}
               style={{ fontFamily: "Raleway, sans-ser" }}
               className="text-color bg-white font lg:text-2xl md:text-2xl outline-base-300 border-4 rounded-full border-base-300 px-8 py-2 mt-4 hover:bg-primary hover:text-white duration-500"
             >
