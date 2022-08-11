@@ -13,7 +13,7 @@ import {
 
 const coreFeatures = () => {
   return (
-    <div className="lg:p-20 md:p-18 py-20 w-full mx-auto bg-white">
+    <div className="lg:p-20 md:p-18 py-20 w-full mx-auto">
       <h2 className="text-3xl text-center font-bold font-sans text-primary">
         You have the power
       </h2>
