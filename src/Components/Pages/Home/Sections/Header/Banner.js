@@ -6,9 +6,9 @@ const Banner = () => {
     <>
       <div className=" min-h-screen bg-img1">
         <div className="hero-overlay bg-opacity-30"></div>
-        <div className="hero-content text-center text-neutral-content">
+        <div className="hero-content text-center text-neutral-content min-h-screen">
           <div className="max-w-lg">
-            <h1 className="mb-5 mt-48 text-black text-4xl lg:text-5xl leading-10 font-bold ">
+            <h1 className="mb-5 text-black text-4xl lg:text-5xl leading-10 font-bold ">
               Empty Life Without <span className="block mt-4">Shohoj Pay</span>
             </h1>
             <p className="text-black mt-4 mb-4 text-xl">
