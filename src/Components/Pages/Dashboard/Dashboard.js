@@ -328,7 +328,7 @@ const Dashboard = () => {
               <select
                 name="option"
                 onChange={(e) => serMonthServiceFilter(e.target.value)}
-                class="select select-ghost w-full max-w-xs mb-50 text-xl"
+                className="select select-ghost w-full max-w-xs mb-50 text-xl"
               >
                 <option defaultValue={filterDate}>{filterDate}</option>
                 <option value={getPreviousDate(1)}>{getPreviousDate(1)}</option>
