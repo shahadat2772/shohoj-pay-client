@@ -16,7 +16,11 @@
   background-size: cover;
 }
 .gray {
+<<<<<<< HEAD
   color: rgb(113, 113, 113);
+=======
+  color: rgb(143, 134, 134);
+>>>>>>> 6c7417cf1d009d837375d6089d645feda5caed48
 }
 @media only screen and (max-width: 768px) {
   .divider-hidden {
