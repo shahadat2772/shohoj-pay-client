@@ -14,7 +14,7 @@ const useUser = (email) => {
                 setUser(data)
             })
         }
-    }, [email, user]);
+    }, [email]);
 
     return [user];
 };
