@@ -13,7 +13,7 @@ import {
 
 const coreFeatures = () => {
   return (
-    <div className="lg:p-20 md:p-18 py-20 mb-24 w-full mx-auto">
+    <div className="lg:p-20 md:p-18 py-20 w-full mx-auto">
       <h2 className="text-3xl text-center font-bold font-sans text-primary">
         You have the power
       </h2>
@@ -23,7 +23,7 @@ const coreFeatures = () => {
         <br /> Which is constantly getting better with you.
       </p>
       {/* CORE FUTURE CONTAINER */}
-      <div className="coreServicesContainer mt-14 grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+      <div className="coreServicesContainer mt-14 grid lg:grid-cols-4 md:grid-cols-2 gap-10">
         <div className="coreService text-center shadow rounded-xl p-5 m-5 lg:m-0 md:m-0">
           <figure className="w-24 h-24 mx-auto bg-[#F7FAFC] rounded-full flex justify-center items-center">
             <FontAwesomeIcon

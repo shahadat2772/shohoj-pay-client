@@ -1,4 +1,10 @@
 .sign-up {
-  background-color: #121661;
+  /* background-color: #121661; */
+
   text-align: center;
+}
+
+.bottomSignUpMainText {
+  line-height: 120%;
+  color: rgba(0, 0, 0, 0.89);
 }
