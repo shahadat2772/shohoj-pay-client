@@ -52,7 +52,7 @@ const AdminDashboard = () => {
         const updatedUser = {
             type: 'admin'
         }
-        fetch(`http://localhost:5000/makeadmin/:${user.email}`, {
+        fetch(`http://localhost:5000/makeadmin/${user.email}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
@@ -61,7 +61,9 @@ const AdminDashboard = () => {
             body: JSON.stringify(updatedUser)
         })
             .then(res => res.json())
-            .then(data => fetchUsers(admin.email));
+            .then(data => {
+                console.log(data)
+            });
     }
     return (
         <div className='py-5 lg:py-24 px-5 lg:px-20'>
