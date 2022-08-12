@@ -11,7 +11,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
   const [type, setType] = useState("incoming");
 
   const fetchRequests = () => {
-    fetch("http://localhost:5000/getRequests", {
+    fetch("https://shohoj-pay-server.herokuapp.com/getRequests", {
       method: "GET",
       headers: {
         "content-type": "application/json",

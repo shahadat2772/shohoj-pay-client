@@ -16,11 +16,14 @@ const AllTransaction = () => {
   console.log(transactionData);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      .get(
+        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
       .then((res) => setTransactionData(res.data))
       .catch((error) => {
         localStorage.removeItem("accessToken");
