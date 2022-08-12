@@ -7,7 +7,7 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [firebaseuser, loading] = useAuthState(auth);
     const [admin, setAdmin] = useState({})
-    // const [admin] = useUser(firebaseuser?.email);
+
     useEffect(() => {
         if (firebaseuser?.email) {
             fetch("http://localhost:5000/getUserInfo", {
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
             })
         }
     }, [firebaseuser?.email]);
-    // console.log(admin)
+
     const fetchUsers = (email) => {
         if (email) {
             fetch('http://localhost:5000/getalluser', {
@@ -47,8 +47,7 @@ const AdminDashboard = () => {
 
 
     const handlMakeAdmin = (user) => {
-        // console.log(user, 'is now admin');
-        // console.log("")
+
         const updatedUser = {
             type: 'admin'
         }
