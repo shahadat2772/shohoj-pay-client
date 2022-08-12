@@ -15,7 +15,7 @@ const UserFlow = () => {
           <h1 className="text-center font-[500] text-[22px] mb-3">
             Create account
           </h1>
-          <p className="text-center text-[16px] lg:px-4">
+          <p className="text-center text-color text-[16px] lg:px-4">
             Checkout how easy is to create an Shohoj Pay account. By the way
             don't forgot your 25$ free on sign up.
           </p>
@@ -29,7 +29,7 @@ const UserFlow = () => {
             </a>
           </div>
           <h1 className="text-center font-[500] text-[22px] mb-3">Add Money</h1>
-          <p className="text-center text-[16px] lg:px-4">
+          <p className="text-center text-color text-[16px] lg:px-4">
             You have never added balance that easy before, to your digital
             wallet. Requires only the amount and card info.
           </p>
@@ -44,7 +44,7 @@ const UserFlow = () => {
           <h1 className="text-center text-[22px] font-[500] mb-3">
             Start Transaction
           </h1>
-          <p className="text-center text-[16px] lg:px-4">
+          <p className="text-center text-color text-[16px] lg:px-4">
             You have got your account ready, balance in it, now what? Start
             transactions all over the world.
           </p>
