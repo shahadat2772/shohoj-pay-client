@@ -31,8 +31,8 @@ const SupportEngine = () => {
                 onClick={() => setVisible(true)}
                 style={{
                     position: 'fixed',
-                    bottom: '24px',
-                    right: '24px',
+                    bottom: '20px',
+                    right: '20px',
                 }}
             />
         </div>

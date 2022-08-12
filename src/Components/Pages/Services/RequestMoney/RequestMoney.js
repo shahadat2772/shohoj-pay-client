@@ -5,7 +5,11 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 const RequestMoney = () => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
 
@@ -29,11 +33,15 @@ const RequestMoney = () => {
     toast.loading("Money is being requested.", { id: "requestingMoney" });
 
     const requestMoneyInfo = {
-      name: user?.displayName,
+      type: "Request Money",
+      status: "Pending",
+      requesterName: user?.displayName,
       amount: amount,
-      email: user?.email,
       from: user?.email,
       to: email,
+      fullDate,
+      date,
+      time,
     };
 
     fetch("http://localhost:5000/requestMoney", {

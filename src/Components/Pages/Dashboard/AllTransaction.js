@@ -1,24 +1,37 @@
 import axios from "axios";
+import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 
 const AllTransaction = () => {
   const [transactionData, setTransactionData] = useState([]);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
+  const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
   console.log(transactionData);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`)
-      .then((res) => setTransactionData(res.data));
+      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setTransactionData(res.data))
+      .catch((error) => {
+        localStorage.removeItem("accessToken");
+        signOut(auth);
+        toast.error(error?.message);
+        navigate("/");
+      });
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied]);
+  }, [user.email, shareLinkCopied, navigate]);
   if (transactionData.length === 0) {
     return <Spinner />;
   }
@@ -45,21 +58,16 @@ const AllTransaction = () => {
           <ul>
             {transactionData.map((transAction) => (
               <li
-                className={`flex items-center my-4 p-3 rounded-lg w-full ${
-                  transAction.type === "addMoney" ||
-                  transAction.type === "receiveMoney"
-                    ? "bg-green-200"
-                    : "bg-red-200"
-                }`}
+                className={`flex items-center my-4 p-3 rounded-lg w-full shadow`}
                 key={transAction._id}
               >
                 <div className="lg:mr-8 w-36">
-                  <h5>
-                    {transAction.date === todayDate
+                  <h5 className="gray">
+                    {transAction.fullDate === todayDate
                       ? "Today"
-                      : transAction.date}
+                      : transAction.fullDate}
                   </h5>
-                  <h6>{transAction.time}</h6>
+                  <h6 className="gray">{transAction.time}</h6>
                 </div>
                 <div className="avatar">
                   <div className="w-16 rounded-full ">
@@ -73,19 +81,15 @@ const AllTransaction = () => {
                   <div>
                     <h5
                       className={`font-bold text-lg ${
-                        transAction.type === "addMoney" ||
-                        transAction.type === "receiveMoney"
+                        transAction.type === "Add Money" ||
+                        transAction.type === "Receive Money"
                           ? "text-green-800"
                           : "text-red-800"
                       }`}
                     >
                       {transAction.type}
                     </h5>
-                    <h5 className="">
-                      {transAction.type === "receiveMoney"
-                        ? transAction.from
-                        : transAction.email}
-                    </h5>
+                    <h5 className="gray">{transAction?.userName}</h5>
                   </div>
                   <div className="" onClick={() => onShare(transAction)}>
                     <i className="fa-solid fa-copy cursor-pointer"></i>
@@ -93,14 +97,14 @@ const AllTransaction = () => {
                   <div>
                     <h3
                       className={`text-lg font-bold text-right ${
-                        transAction.type === "addMoney" ||
-                        transAction.type === "receiveMoney"
+                        transAction.type === "Add Money" ||
+                        transAction.type === "Receive Money"
                           ? "text-green-800"
                           : "text-red-800"
                       }`}
                     >
-                      {transAction.type === "addMoney" ||
-                      transAction.type === "receiveMoney"
+                      {transAction.type === "Add Money" ||
+                      transAction.type === "Receive Money"
                         ? "+" + transAction.amount
                         : "-" + transAction.amount}{" "}
                       $
