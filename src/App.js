@@ -24,7 +24,7 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
-import AdminDashboard from "./Components/Pages/Dashboard/AdminDashboard";
+import AdminDashboard from "./Components/Pages/Dashboard/Admin/AdminDashboard";
 
 function App() {
   // State for confirming the money request
