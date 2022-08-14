@@ -11,7 +11,7 @@ const SignUp = () => {
       <Link
         to={"/signUp"}
         // style={{ fontFamily: "Raleway, serf" }}
-        className="text-xl block max-w-xs mx-auto mt-12 py-2 px-12 text-white lg:text-2xl md:text-2xl shadow rounded-full bg-primary hover:bg-white hover:text-black duration-500"
+        className="text-xl block max-w-xs mx-auto mt-12 py-2 px-12 text-white md:text-2xl shadow rounded-full bg-primary hover:bg-white hover:text-black duration-500"
       >
         SIGN UP FOR FREE!
       </Link>
