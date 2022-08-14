@@ -107,9 +107,11 @@ function App() {
           }
         />
         <Route path="/admindashboard" exact={true}
-          element={<RequireAdmin>
-            <AdminDashboard />
-          </RequireAdmin>
+          element={<RequireAuth>
+            <RequireAdmin>
+              <AdminDashboard />
+            </RequireAdmin>
+          </RequireAuth>
           } >
           <Route path='makeadmin' element={
             <RequireAdmin>

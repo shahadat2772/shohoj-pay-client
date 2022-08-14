@@ -46,7 +46,7 @@ const MakeAdmin = () => {
     };
 
     return (
-        <div className="min-h-screen flex justify-start items-start">
+        <div className="min-h-screen flex justify-start items-start ">
             <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
                 <h2 className="textColor text-[1.70rem] mb-3 pl-1">Make Admin</h2>
                 <form onSubmit={handleSubmit(onSubmit)}>

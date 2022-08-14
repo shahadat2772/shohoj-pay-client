@@ -6,12 +6,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
+import useUser from "../../Pages/Hooks/useUser";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const link = [{ name: "Home", link: "/" }];
 
   const restrictedLinks = [
@@ -20,6 +21,8 @@ const Navbar = () => {
     { name: "Request", link: "/moneyRequests" },
     { name: "Settings", link: "/settings" },
   ];
+
+  const [mongoUser] = useUser(user?.email);
 
   // on scroll hide and show navbar functionality
   const controlNavbar = () => {
@@ -60,8 +63,12 @@ const Navbar = () => {
     signOut(auth);
     toast.success("Sign Out Successfully");
   };
+  if (loading) {
+    return <p>loading....</p>
+  }
+
   return (
-    <nav className={`active ${show && "hidden"}`}>
+    <nav className={`active ${(show || mongoUser.type === "admin") ? "hidden" : "block"}`}>
       <div className="fixed top-0 w-[100%] z-50">
         <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
           <div className="p-1 lg:px-8 md:px-4">
@@ -81,9 +88,8 @@ const Navbar = () => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
-                    open ? "left-[-10px] top-16" : "left-[-1080px]"
-                  }`}
+                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
+                    }`}
                 >
                   {link.map((item) => (
                     <li key={item.name} className="block text-center">
