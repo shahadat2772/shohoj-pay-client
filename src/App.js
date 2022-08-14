@@ -25,7 +25,7 @@ import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/M
 import { useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
 import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
-import AdminPanal from "./Components/Pages/Dashboard/Admin/AdminPanal";
+import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
 
 function App() {
   // State for confirming the money request
@@ -106,10 +106,10 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/adminpanal" exact={true}
+        <Route path="/adminpanel" exact={true}
           element={<RequireAuth>
             <RequireAdmin>
-              <AdminPanal />
+              <AdminPanel />
             </RequireAdmin>
           </RequireAuth>
           } >

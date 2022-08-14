@@ -53,14 +53,14 @@ const MakeAdmin = () => {
                     <input
                         {...register("email")}
                         type="email"
-                        className="h-12 p-2 mb-5 w-full rounded"
+                        className="h-12 p-2 mb-5 w-full rounded-lg"
                         placeholder="User's email"
                         required
                     />
                     <input
                         type="submit"
-                        className="btn btn-primary px-8 rounded"
-                        value="Make"
+                        className="btn btn-sm btn-primary px-7  rounded-lg "
+                        value="ok"
                     />
                 </form>
             </div>
