@@ -25,6 +25,7 @@ import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/M
 import { useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
 import AdminDashboard from "./Components/Pages/Dashboard/Admin/AdminDashboard";
+import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
 
 function App() {
   // State for confirming the money request
@@ -105,11 +106,17 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/admindashboard"
+        <Route path="/admindashboard" exact={true}
           element={<RequireAdmin>
             <AdminDashboard />
-          </RequireAdmin>} />
-
+          </RequireAdmin>
+          } >
+          <Route path='makeadmin' element={
+            <RequireAdmin>
+              <MakeAdmin />
+            </RequireAdmin>
+          } />
+        </Route>
         <Route
           path="/dashboard/allTransAction"
           element={
