@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { Link, Outlet } from 'react-router-dom';
 import auth from '../../../../firebase.init';
 
-const AdminDashboard = () => {
+const AdminPanal = () => {
     return (
         <div className='bg-gray-50'>
             < div className='flex justify-evenly lg:justify-center items-center relative pt-14 pb-10' >
@@ -46,4 +46,4 @@ const AdminDashboard = () => {
     );
 };
 
-export default AdminDashboard;
+export default AdminPanal;

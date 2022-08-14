@@ -24,8 +24,8 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
-import AdminDashboard from "./Components/Pages/Dashboard/Admin/AdminDashboard";
 import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
+import AdminPanal from "./Components/Pages/Dashboard/Admin/AdminPanal";
 
 function App() {
   // State for confirming the money request
@@ -106,10 +106,10 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/admindashboard" exact={true}
+        <Route path="/adminpanal" exact={true}
           element={<RequireAuth>
             <RequireAdmin>
-              <AdminDashboard />
+              <AdminPanal />
             </RequireAdmin>
           </RequireAuth>
           } >

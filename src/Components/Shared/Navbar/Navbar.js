@@ -64,7 +64,7 @@ const Navbar = () => {
     toast.success("Sign Out Successfully");
   };
   if (loading) {
-    return <p>loading....</p>
+    return
   }
 
   return (
