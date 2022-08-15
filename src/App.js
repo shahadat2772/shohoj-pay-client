@@ -26,6 +26,7 @@ import { useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
 import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
 import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
+import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
 
 function App() {
   // State for confirming the money request
@@ -41,7 +42,9 @@ function App() {
           path="/services"
           element={
             <RequireAuth>
-              <Services />
+              <RequirePersonal>
+                <Services />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -58,7 +61,9 @@ function App() {
           path="/services/addMoney"
           element={
             <RequireAuth>
-              <AddMoney />
+              <RequirePersonal>
+                <AddMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -66,7 +71,9 @@ function App() {
           path="/services/sendMoney"
           element={
             <RequireAuth>
-              <SendMoney />
+              <RequirePersonal>
+                <SendMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -74,7 +81,9 @@ function App() {
           path="/services/saveMoney"
           element={
             <RequireAuth>
-              <SaveMoney />
+              <RequirePersonal>
+                <SaveMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -82,7 +91,9 @@ function App() {
           path="/moneyRequests"
           element={
             <RequireAuth>
-              <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
+              <RequirePersonal>
+                <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -90,7 +101,9 @@ function App() {
           path="/services/requestMoney"
           element={
             <RequireAuth>
-              <RequestMoney />
+              <RequirePersonal>
+                <RequestMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -102,7 +115,9 @@ function App() {
           path="/dashboard"
           element={
             <RequireAuth>
-              <Dashboard />
+              <RequirePersonal>
+                <Dashboard />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -123,7 +138,9 @@ function App() {
           path="/dashboard/allTransAction"
           element={
             <RequireAuth>
-              <AllTransaction />
+              <RequirePersonal>
+                <AllTransaction />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
