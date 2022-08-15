@@ -11,7 +11,7 @@ const RequireMerchant = ({ children }) => {
     if (!mongoUser?.type || loading) {
         return <Spinner />
     }
-    if (mongoUser.type !== 'merchant' && mongoUser.email !== "masterdev@mail.com") {
+    if (mongoUser.type !== 'merchant') {
         return <Navigate to='/' />
     }
     return children

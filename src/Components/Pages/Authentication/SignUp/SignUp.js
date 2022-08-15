@@ -12,7 +12,9 @@ import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
+  const [type, setType] = useState('personal');
   const date = new Date().toLocaleDateString();
+
 
   const passwordShowRef = useRef("");
   const [
@@ -38,10 +40,10 @@ const SignUp = () => {
     }
   }, [userCreateError]);
   useEffect(() => {
-    console.log(user);
+
     if (user?.user?.displayName) {
       const userInfo = {
-        type: "personal",
+        type,
         name: user.user.displayName,
         email: user?.user?.email,
         date,
@@ -68,11 +70,12 @@ const SignUp = () => {
         navigate("/");
       }
     }
-  }, [user, navigate, user?.user?.displayName, date, token]);
+  }, [user, navigate, user?.user?.displayName, date, type, token]);
   if (userCreatLoading) {
     return <Spinner />;
   }
   const onSubmit = async (data) => {
+    setType(data.type)
     if (data.password !== data.ConfirmPassword) {
       return toast.error("Opps Password Not Match");
     }
@@ -96,11 +99,11 @@ const SignUp = () => {
               <input
                 type="text"
                 placeholder="Name"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs lg:max-w-sm"
                 {...register("name", {
                   required: {
                     value: true,
-                    message: "Name Is Required",
+                    message: "Name is Required",
                   },
                 })}
               />
@@ -212,6 +215,40 @@ const SignUp = () => {
                 )}
               </label>
             </div>
+            <label className="label ">
+              Account Type
+            </label>
+            <div className="flex justify-between items-center mt-2 mb-7 px-1">
+              <div className="flex space-x-2 items-center">
+                <input
+                  {...register('type', { required: true })}
+                  type="radio"
+                  name="type"
+                  value="personal"
+                  className="radio radio-primary"
+                  id="personal"
+                  checked
+                />
+                <label htmlFor="personal">
+                  Personal
+                </label>
+              </div>
+              <div className="flex space-x-2 items-center">
+                <input
+                  {...register('type', { required: true })}
+                  type="radio"
+                  name="type"
+                  value="merchant"
+                  className="radio radio-primary"
+                  id="merchant"
+                />
+                <label htmlFor="merchant">
+                  Merchant
+                </label>
+              </div>
+            </div>
+
+
             <input className="btn w-full" type="submit" value="Register" />
           </form>
           <p className="text-center my-2">
