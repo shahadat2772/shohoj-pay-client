@@ -14,10 +14,10 @@ const Banner = () => {
             <h1
               style={{
                 fontFamily: "Raleway, sans-ser",
-                textShadow: "0px 1px 3px black",
+                textShadow: "0px 1px 2px black",
                 lineHeight: "120%",
               }}
-              className="mb-5 text-[#9C9EFE] md:text-6xl lg:text-6xl text-5xl font-bold"
+              className="mb-5 text-secondary md:text-6xl lg:text-6xl text-5xl font-bold"
             >
               EMPTY LIFE WITHOUT <br /> SHOHOJ PAY
             </h1>
