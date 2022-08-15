@@ -18,12 +18,7 @@ const Login = () => {
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
-  if (mongoUser?.type === "admin") {
-    from = "/adminpanel";
-  }
-  else if (mongoUser?.type === "merchant") {
-    from = location.state?.from?.pathname || "/merchant";
-  }
+
   const {
     register,
     handleSubmit,
@@ -36,11 +31,17 @@ const Login = () => {
     setShow(passShow);
   };
   useEffect(() => {
-    if (token) {
+    if (token && mongoUser) {
+      if (mongoUser?.type === "admin") {
+        navigate('/adminpanel')
+      }
+      else if (mongoUser?.type === "merchant") {
+        navigate("/")
+      }
       navigate(from, { replace: true });
       toast.success("User Login SuccessFull");
     }
-  }, [from, navigate, token]);
+  }, [from, navigate, token, mongoUser]);
 
   useEffect(() => {
     if (signInError) {
