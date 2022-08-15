@@ -63,7 +63,7 @@ const Navbar = () => {
     signOut(auth);
     toast.success("Sign Out Successfully");
   };
-  if (loading) {
+  if (loading || !mongoUser) {
     return
   }
 
