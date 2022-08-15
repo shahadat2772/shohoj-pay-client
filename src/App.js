@@ -27,11 +27,19 @@ import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/Requ
 import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
 import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
 import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
-
+import useUser from "./Components/Pages/Hooks/useUser";
+import { useAuthState } from "react-firebase-hooks/auth"
+import auth from "./firebase.init";
+import Spinner from "./Components/Shared/Spinner/Spinner";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
   const [request, fetchRequests] = requestForConfirm;
+  const [firebaseUser, loading] = useAuthState(auth)
+  const [user] = useUser(firebaseUser?.email);
+  if (loading || !user) {
+    return <Spinner />
+  }
 
   return (
     <div>
