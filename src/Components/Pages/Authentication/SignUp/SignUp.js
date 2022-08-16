@@ -274,6 +274,28 @@ const SignUp = () => {
                   </label>
                 </div>
               </div>
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-name">Avatar</span>
+                </label>
+                <input
+                  type="file"
+                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                  {...register("avatar", {
+                    required: {
+                      value: true,
+                      message: "Avatar is Required",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors.avatar?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.avatar.message}
+                    </span>
+                  )}
+                </label>
+              </div>
               <div className="flex justify-between items-center">
                 <button onClick={() => {
 
@@ -282,7 +304,7 @@ const SignUp = () => {
 
                 }} className="btn btn-outline lg:w-5/12" >Back</button>
                 <button onClick={() => {
-                  if (!errors?.address && !errors?.zip) {
+                  if (!errors?.address && !errors?.zip && !errors?.avatar) {
                     setShowPasswordPart(true)
                     setShowTypePart(false)
                   }
