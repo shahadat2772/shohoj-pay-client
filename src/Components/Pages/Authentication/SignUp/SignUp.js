@@ -38,7 +38,6 @@ const SignUp = () => {
     }
   }, [userCreateError]);
   useEffect(() => {
-    console.log(user);
     if (user?.user?.displayName) {
       const userInfo = {
         type: "personal",
@@ -47,7 +46,7 @@ const SignUp = () => {
         date,
       };
       const createAccount = async () => {
-        fetch("http://localhost:5000/createAccount", {
+        fetch("https://shohoj-pay-server.herokuapp.com/createAccount", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -87,13 +86,19 @@ const SignUp = () => {
     <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="text-center font-bold text-xl">Sign Up</h2>
+          <h2
+            data-testid="signUp-heading"
+            className="text-center font-bold text-xl"
+          >
+            Sign Up
+          </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-name">Name</span>
+              <label htmlFor="inputName" className="label">
+                Name
               </label>
               <input
+                id="inputName"
                 type="text"
                 placeholder="Name"
                 className="input input-bordered w-full max-w-xs"
@@ -113,10 +118,11 @@ const SignUp = () => {
               </label>
             </div>
             <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-email">Email</span>
+              <label htmlFor="inputEmail" className="label">
+                Email
               </label>
               <input
+                id="inputEmail"
                 type="email"
                 placeholder="Email"
                 className="input input-bordered w-full max-w-xs"
@@ -145,8 +151,8 @@ const SignUp = () => {
               </label>
             </div>
             <div className="relative form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-password">Password</span>
+              <label htmlFor="inputPass1" className="label">
+                Password
               </label>
               {/* PASSWORD SHOW HIDE */}
               <div
@@ -160,6 +166,7 @@ const SignUp = () => {
                 </label>
               </div>
               <input
+                id="inputPass1"
                 type={show ? "text" : "password"}
                 // type="password"
                 placeholder="Password"
@@ -189,11 +196,12 @@ const SignUp = () => {
               </label>
             </div>
             <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-password">Confirm Password</span>
+              <label htmlFor="inputPass2" className="label">
+                Confirm Password
               </label>
 
               <input
+                id="inputPass2"
                 type={show ? "text" : "password"}
                 placeholder="Confirm Password"
                 className="input input-bordered w-full max-w-xs"
@@ -212,7 +220,12 @@ const SignUp = () => {
                 )}
               </label>
             </div>
-            <input className="btn w-full" type="submit" value="Register" />
+            <input
+              role="submit"
+              className="btn w-full"
+              type="submit"
+              value="Register"
+            />
           </form>
           <p className="text-center my-2">
             Already have an account ?{" "}

@@ -89,7 +89,6 @@ const Dashboard = () => {
     );
   };
   const TotalRecive = reducerCount(totlaReceiveMoney);
-  console.log(TotalRecive);
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
@@ -124,23 +123,26 @@ const Dashboard = () => {
     {
       name: "Receive",
       value: TotalRecive ? TotalRecive : 1,
-      email: user.email,
+      email: user?.email,
     },
-    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user.email },
+    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user?.email },
     {
       name: "Savings",
       value: totalSavings ? totalSavings : 1,
-      email: user.email,
+      email: user?.email,
     },
   ];
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
-      .get(`http://localhost:5000/getUserBalances/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      .get(
+        `https://shohoj-pay-server.herokuapp.com/getUserBalances/${user?.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
       .then((res) => {
         setBalance(res.data);
       })
@@ -152,11 +154,14 @@ const Dashboard = () => {
       });
     // USER TRANSACTION DATA GET
     axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      .get(
+        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
       .then((res) => setTransactionData(res.data))
       .catch((error) => {
         toast.error(error?.message);
@@ -164,9 +169,8 @@ const Dashboard = () => {
         localStorage.removeItem("accessToken");
         navigate("/");
       });
-    console.log(monthServiceFilter);
     axios
-      .get(`http://localhost:5000/getServices`, {
+      .get(`https://shohoj-pay-server.herokuapp.com/getServices`, {
         headers: {
           "content-type": "application/json",
           email: user.email,
@@ -177,7 +181,7 @@ const Dashboard = () => {
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied, navigate, monthServiceFilter]);
+  }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
@@ -203,7 +207,10 @@ const Dashboard = () => {
         <div className="w-full mt-10 lg:mt-0">
           <div className="md:mx-10 lg:mx-0 card  rounded ">
             <div className="card-body py-0">
-              <h1 className="text-left text-3xl font-bold mb-3">
+              <h1
+                data-testid="user-name"
+                className="text-left text-3xl font-bold mb-3"
+              >
                 Hi, {user?.displayName}
               </h1>
               <div className="text-left">
@@ -285,11 +292,10 @@ const Dashboard = () => {
                         <div>
                           <h3
                             className={`text-2xl font-medium text-right ${
-                              transAction.type === "Add Money" &&
-                              "text-green-600"
-                            } ${
-                              transAction.type === "Receive Money" &&
-                              "text-green-600"
+                              transAction.type === "Add Money" ||
+                              transAction.type === "Receive Money"
+                                ? "text-green-600"
+                                : "text-red-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||

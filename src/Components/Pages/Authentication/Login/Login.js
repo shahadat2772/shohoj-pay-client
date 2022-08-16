@@ -13,15 +13,14 @@ const Login = () => {
     useSignInWithEmailAndPassword(auth);
   const [show, setShow] = useState(false);
   const [token] = useToken(user);
-  const [mongoUser] = useUser(user?.email)
+  const [mongoUser] = useUser(user?.email);
   const passwordShowRef = useRef("");
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
   if (mongoUser?.type === "admin") {
     from = "/adminpanel";
-  }
-  else if (mongoUser?.type === "merchant") {
+  } else if (mongoUser?.type === "merchant") {
     from = location.state?.from?.pathname || "/merchant";
   }
   const {
@@ -59,18 +58,24 @@ const Login = () => {
       resetField("password");
     }
   };
-
   return (
     <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="text-center font-bold text-xl">Login</h2>
+          <h2
+            data-testid="login-heading"
+            className="text-center font-bold text-xl"
+          >
+            Login
+          </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-email">Email</span>
+              <label htmlFor="inputEmail" className="label">
+                Email
               </label>
               <input
+                style={{ outline: "none" }}
+                id="inputEmail"
                 type="email"
                 placeholder="Email"
                 className="input input-bordered w-full max-w-xs"
@@ -99,8 +104,8 @@ const Login = () => {
               </label>
             </div>
             <div className="relative form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-password">Password</span>
+              <label htmlFor="inputPass" className="label">
+                Password
               </label>
               {/* PASSWORD SHOW HIDE */}
               <div
@@ -114,9 +119,11 @@ const Login = () => {
                 </label>
               </div>
               <input
+                id="inputPass"
                 type={show ? "text" : "password"}
                 placeholder="Password"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs "
+                style={{ outline: "none" }}
                 {...register("password", {
                   required: {
                     value: true,
