@@ -10,20 +10,16 @@ import { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
 import Services from "./Components/Pages/Services/Services/Services";
 import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
-import Settings from "./Components/Pages/Settings/Settings";
+// import Settings from "./Components/Pages/Settings/Settings";
 import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
 import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
-import Dashboard from "./Components/Pages/Dashboard/Dashboard";
+// import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
-import MessengerCustomerChat from 'react-messenger-customer-chat'
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 function App() {
-  // State for confirming the money request
-  const [requestForConfirm, setRequestForConfirm] = useState([]);
-  const [request, fetchRequests] = requestForConfirm;
-
   return (
     <div>
       <Navbar></Navbar>
@@ -34,28 +30,24 @@ function App() {
           path="/services"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <Services />
-              </RequirePersonal>
+              <Services />
             </RequireAuth>
           }
         />
-        <Route
+        {/* <Route
           path="/settings"
           element={
             <RequireAuth>
               <Settings />
             </RequireAuth>
           }
-        />
+        /> */}
         {/* Pages for each services */}
         <Route
           path="/services/addMoney"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <AddMoney />
-              </RequirePersonal>
+              <AddMoney />
             </RequireAuth>
           }
         />
@@ -63,9 +55,7 @@ function App() {
           path="/services/sendMoney"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <SendMoney />
-              </RequirePersonal>
+              <SendMoney />
             </RequireAuth>
           }
         />
@@ -73,65 +63,42 @@ function App() {
           path="/services/saveMoney"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <SaveMoney />
-              </RequirePersonal>
+              <SaveMoney />
             </RequireAuth>
           }
         />
-
+        
         <Route
-          path="/moneyRequests"
+          path="/services/requestMoney"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
-              </RequirePersonal>
+              <RequestMoney />
             </RequireAuth>
           }
         />
-
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <Dashboard />
-              </RequirePersonal>
+              <Dashboard />
             </RequireAuth>
           }
-        />
-        <Route path="/adminpanel" exact={true}
-          element={<RequireAuth>
-            <RequireAdmin>
-              <AdminPanel />
-            </RequireAdmin>
-          </RequireAuth>
-          } >
-          <Route path='makeadmin' element={
-            <RequireAdmin>
-              <MakeAdmin />
-            </RequireAdmin>
-          } />
-        </Route>
+        /> */}
         <Route
           path="/dashboard/allTransAction"
           element={
             <RequireAuth>
-              <RequirePersonal>
-                <AllTransaction />
-              </RequirePersonal>
+              <AllTransaction />
             </RequireAuth>
           }
         />
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-
       <MessengerCustomerChat
             pageId="107012672117270"
             appId="586701279704824"
