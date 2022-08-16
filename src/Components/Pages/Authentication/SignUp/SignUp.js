@@ -38,17 +38,6 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  // const dispatch = useDispatch()
-  // useEffect(() => {
-  //   if (errors?.name?.type || errors?.email?.type) {
-  //     console.log('error in email or name')
-  //     setShowNamePart(true)
-  //   }
-  //   else if (errors?.type?.type) {
-  //     console.log('error in email or name')
-  //     setShowTypePart(true)
-  //   }
-  // }, [errors])
   useEffect(() => {
     if (userCreateError) {
       const error = userCreateError?.message.split(":")[1];
@@ -265,12 +254,20 @@ const SignUp = () => {
                   </label>
                 </div>
               </div>
-              <button onClick={() => {
-                if (!errors?.address && !errors?.zip) {
-                  setShowPasswordPart(true)
+              <div className="flex justify-between items-center">
+                <button onClick={() => {
+
+                  setShowNamePart(true)
                   setShowTypePart(false)
-                }
-              }} className="btn w-full" > Next</button>
+
+                }} className="btn btn-outline lg:w-5/12" >Back</button>
+                <button onClick={() => {
+                  if (!errors?.address && !errors?.zip) {
+                    setShowPasswordPart(true)
+                    setShowTypePart(false)
+                  }
+                }} className="btn lg:w-6/12" >Next</button>
+              </div>
             </div>
             {/* ------------------------------- */}
             {/* Password Part  */}
@@ -342,11 +339,19 @@ const SignUp = () => {
                   )}
                 </label>
               </div>
-              <input className="btn w-full" type="submit" value="Register" />
+              <div className="flex justify-between items-center">
+                <button onClick={() => {
+
+                  setShowPasswordPart(false)
+                  setShowTypePart(true)
+
+                }} className="btn btn-outline lg:w-5/12" >Back</button>
+                <input className="btn lg:w-6/12" type="submit" value="Register" />
+              </div>
             </div>
             {/* ---------------------------------- */}
           </form>
-          <p className="text-center my-2">
+          <p className={`${showNamePart ? "block text-center my-2" : "hidden"}`} >
             Already have an account ?{" "}
             <Link className="font-bold text-secondary" to="/login">
               Login
