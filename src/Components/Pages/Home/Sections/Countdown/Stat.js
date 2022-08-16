@@ -6,8 +6,8 @@ const Stat = ({ e }) => {
     const { icon, title, figure } = e;
     return (
         <div className='flex items-center justify-center'>
-            <div className='m-2'>
-                <img className='w-[75px]' src={icon} alt="" />
+            <div className='m-4 p-2'>
+                <img className='w-[65px]' src={icon} alt="" />
             </div>
             <div>
                 <div className='flex items-center justify-center'>
