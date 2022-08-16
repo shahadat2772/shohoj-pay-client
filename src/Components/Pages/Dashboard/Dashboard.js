@@ -123,20 +123,20 @@ const Dashboard = () => {
     {
       name: "Receive",
       value: TotalRecive ? TotalRecive : 1,
-      email: user.email,
+      email: user?.email,
     },
-    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user.email },
+    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user?.email },
     {
       name: "Savings",
       value: totalSavings ? totalSavings : 1,
-      email: user.email,
+      email: user?.email,
     },
   ];
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
       .get(
-        `https://shohoj-pay-server.herokuapp.com/getUserBalances/${user.email}`,
+        `https://shohoj-pay-server.herokuapp.com/getUserBalances/${user?.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -181,7 +181,7 @@ const Dashboard = () => {
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied, navigate, monthServiceFilter]);
+  }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
@@ -207,7 +207,10 @@ const Dashboard = () => {
         <div className="w-full mt-10 lg:mt-0">
           <div className="md:mx-10 lg:mx-0 card  rounded ">
             <div className="card-body py-0">
-              <h1 className="text-left text-3xl font-bold mb-3">
+              <h1
+                data-testid="user-name"
+                className="text-left text-3xl font-bold mb-3"
+              >
                 Hi, {user?.displayName}
               </h1>
               <div className="text-left">
