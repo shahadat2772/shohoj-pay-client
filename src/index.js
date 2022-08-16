@@ -8,7 +8,6 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const path = window.location.pathname;
 
 root.render(
   <React.StrictMode>

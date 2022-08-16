@@ -89,7 +89,6 @@ const Dashboard = () => {
     );
   };
   const TotalRecive = reducerCount(totlaReceiveMoney);
-  console.log(TotalRecive);
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
@@ -170,7 +169,6 @@ const Dashboard = () => {
         localStorage.removeItem("accessToken");
         navigate("/");
       });
-    console.log(monthServiceFilter);
     axios
       .get(`https://shohoj-pay-server.herokuapp.com/getServices`, {
         headers: {

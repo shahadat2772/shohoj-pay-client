@@ -13,7 +13,6 @@ const AllTransaction = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
-  console.log(transactionData);
   useEffect(() => {
     axios
       .get(
@@ -54,9 +53,7 @@ const AllTransaction = () => {
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
       <div className=" px-2 lg:w-8/12 mx-auto">
-        <h3
-          className="font-bold text-xl border-b-4 border-black pb-2 w-48"
-        >
+        <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48">
           All Transaction
         </h3>
         <div className="mt-8">
