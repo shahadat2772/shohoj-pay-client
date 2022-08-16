@@ -46,20 +46,16 @@ const SignUp = () => {
   }, [userCreateError]);
   useEffect(() => {
 
-    if (user?.user?.displayName) {
-      const userInfo = {
-        type,
-        name: user.user.displayName,
-        email: user?.user?.email,
-        date,
-      };
+    if (user?.user?.displayName && Object.keys(formData).length !== 0) {
+      const name = formData.firstName + " " + formData.lastName;
+      const userData = { ...formData, name }
       const createAccount = async () => {
         fetch("http://localhost:5000/createAccount", {
           method: "POST",
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({ userInfo }),
+          body: JSON.stringify({ userData }),
         })
           .then((res) => res.json())
           .then((result) => console.log(result));
@@ -75,13 +71,14 @@ const SignUp = () => {
         navigate("/");
       }
     }
-  }, [user, navigate, user?.user?.displayName, date, type, token]);
+  }, [user, navigate, date, token, formData]);
   if (userCreatLoading) {
     return <Spinner />;
   }
   const onSubmit = async (data) => {
     console.log("submitted")
-    setType(data.type)
+    // setType(data.type);
+    setFormData(data);
     if (data.password !== data.ConfirmPassword) {
       return toast.error("Opps Password Not Match");
     }
@@ -107,23 +104,46 @@ const SignUp = () => {
 
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
-                  <span className="label-name">Name</span>
+                  <span className="label-name">First Name</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="Full Name"
+                  placeholder="First Name"
                   className="input input-bordered w-full max-w-xs lg:max-w-sm"
-                  {...register("name", {
+                  {...register("firstName", {
                     required: {
                       value: true,
-                      message: "Name is Required",
+                      message: "First Name is Required",
                     },
                   })}
                 />
                 <label className="label">
-                  {errors.name?.type === "required" && (
+                  {errors.firstName?.type === "required" && (
                     <span className="label-text-alt text-red-500">
-                      {errors.name.message}
+                      {errors.firstName.message}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-name">Last Name</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                  {...register("lastName", {
+                    required: {
+                      value: true,
+                      message: "Last Name is Required",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors.lastName?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.lastName.message}
                     </span>
                   )}
                 </label>
@@ -163,7 +183,7 @@ const SignUp = () => {
               </div>
               <button onClick={() => {
                 if (Object.keys(errors).length !== 0) {
-                  if (!errors.name && !errors.email) {
+                  if (!errors.firstName && !errors.lastName && !errors.email) {
                     setShowTypePart(true)
                     setShowNamePart(false)
                   }
