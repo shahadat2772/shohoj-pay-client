@@ -6,16 +6,24 @@ import auth from "../../../../firebase.init";
 import toast from "react-hot-toast";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import useToken from "../../Hooks/useToken";
+import useUser from "../../Hooks/useUser";
 
 const Login = () => {
   const [signInWithEmailAndPassword, user, signinLoading, signInError] =
     useSignInWithEmailAndPassword(auth);
   const [show, setShow] = useState(false);
   const [token] = useToken(user);
+  const [mongoUser] = useUser(user?.email)
   const passwordShowRef = useRef("");
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
+  if (mongoUser?.type === "admin") {
+    from = "/adminpanel";
+  }
+  else if (mongoUser?.type === "merchant") {
+    from = location.state?.from?.pathname || "/merchant";
+  }
   const {
     register,
     handleSubmit,
@@ -40,7 +48,7 @@ const Login = () => {
       toast.error(error);
     }
   }, [signInError]);
-  if (signinLoading) {
+  if (signinLoading || !mongoUser) {
     return <Spinner />;
   }
 

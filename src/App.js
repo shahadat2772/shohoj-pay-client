@@ -17,9 +17,13 @@ import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAu
 import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
-import MessengerCustomerChat from 'react-messenger-customer-chat';
+import MessengerCustomerChat from 'react-messenger-customer-chat'
 
 function App() {
+  // State for confirming the money request
+  const [requestForConfirm, setRequestForConfirm] = useState([]);
+  const [request, fetchRequests] = requestForConfirm;
+
   return (
     <div>
       <Navbar></Navbar>
@@ -30,7 +34,9 @@ function App() {
           path="/services"
           element={
             <RequireAuth>
-              <Services />
+              <RequirePersonal>
+                <Services />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -47,7 +53,9 @@ function App() {
           path="/services/addMoney"
           element={
             <RequireAuth>
-              <AddMoney />
+              <RequirePersonal>
+                <AddMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -55,7 +63,9 @@ function App() {
           path="/services/sendMoney"
           element={
             <RequireAuth>
-              <SendMoney />
+              <RequirePersonal>
+                <SendMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
@@ -63,19 +73,24 @@ function App() {
           path="/services/saveMoney"
           element={
             <RequireAuth>
-              <SaveMoney />
+              <RequirePersonal>
+                <SaveMoney />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
-        
+
         <Route
-          path="/services/requestMoney"
+          path="/moneyRequests"
           element={
             <RequireAuth>
-              <RequestMoney />
+              <RequirePersonal>
+                <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
+
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
@@ -84,21 +99,39 @@ function App() {
           path="/dashboard"
           element={
             <RequireAuth>
-              <Dashboard />
+              <RequirePersonal>
+                <Dashboard />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
+        <Route path="/adminpanel" exact={true}
+          element={<RequireAuth>
+            <RequireAdmin>
+              <AdminPanel />
+            </RequireAdmin>
+          </RequireAuth>
+          } >
+          <Route path='makeadmin' element={
+            <RequireAdmin>
+              <MakeAdmin />
+            </RequireAdmin>
+          } />
+        </Route>
         <Route
           path="/dashboard/allTransAction"
           element={
             <RequireAuth>
-              <AllTransaction />
+              <RequirePersonal>
+                <AllTransaction />
+              </RequirePersonal>
             </RequireAuth>
           }
         />
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+
       <MessengerCustomerChat
             pageId="107012672117270"
             appId="586701279704824"

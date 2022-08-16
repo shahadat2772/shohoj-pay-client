@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import "./Dashboard.css";
 import auth from "../../../firebase.init";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -8,6 +15,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { signOut } from "firebase/auth";
+<<<<<<< HEAD
 // USER TRANSACTION FAKE DATA
 const COLORS = ["#000", "#414CDA", "#23E792", "#FF8042"];
 // FAKE DATA
@@ -15,6 +23,30 @@ const data = [
   { name: "January", value: 7541, email: "ahsdf@gmail.com" },
   { name: "April", value: 6574, email: "ahsdf@gmail.com" },
   { name: "July", value: 5465, email: "ahsdf@gmail.com" },
+=======
+// SERVICE DATA
+const someServices = [
+  {
+    type: "Add",
+    icon: "fa-credit-card",
+    action: "/services/addMoney",
+  },
+  {
+    type: "Send",
+    icon: "fa-paper-plane",
+    action: "/services/sendMoney",
+  },
+  {
+    type: "Request",
+    icon: "fa-hand-holding-dollar",
+    action: "/services/requestMoney",
+  },
+  {
+    type: "More",
+    icon: "fa-ellipsis-vertical",
+    action: "/services",
+  },
+>>>>>>> 17bde2f89c4302c25984392138bef9fd93098303
 ];
 // SERVICE DATA
 const someServices = [
@@ -40,15 +72,32 @@ const someServices = [
   },
 ];
 // FIND TODAY DATE MONTH YEAR
+<<<<<<< HEAD
 let dateObj = new Date();
 let shortMonth = dateObj.toLocaleString("default", { month: "long" });
 let getDate =
   dateObj.getUTCDate() + " " + shortMonth + "," + dateObj.getUTCFullYear();
+=======
+const filterDate = new Date().toLocaleDateString("en-us", {
+  year: "numeric",
+  month: "short",
+});
+const getPreviousDate = (number) => {
+  const current = new Date();
+  current.setMonth(current.getMonth() - number);
+  return current.toLocaleString("default", {
+    year: "numeric",
+    month: "short",
+  });
+};
+>>>>>>> 17bde2f89c4302c25984392138bef9fd93098303
 const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [transactionData, setTransactionData] = useState([]);
+  const [monthService, setMonthService] = useState([]);
+  const [monthServiceFilter, serMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -57,6 +106,73 @@ const Dashboard = () => {
     transactionData.length - 4,
     transactionData.length
   );
+  const serviceType = (value) =>
+    monthService.filter((service) => service.type.includes(value));
+  serviceType("Receive Money");
+  serviceType("Add Money");
+  serviceType("Send Money");
+  serviceType("Request Money");
+
+  const totlaReceiveMoney = [
+    ...serviceType("Receive Money"),
+    ...serviceType("Add Money"),
+  ];
+  const totalLossMoney = [
+    ...serviceType("Send Money"),
+    ...serviceType("Request Money"),
+  ];
+  const reducerCount = (value) => {
+    return value.reduce(
+      (previousValue, currentValue) =>
+        Number(previousValue) + Number(currentValue?.amount),
+      0
+    );
+  };
+  const TotalRecive = reducerCount(totlaReceiveMoney);
+  console.log(TotalRecive);
+  const TotalCost = reducerCount(totalLossMoney);
+  const totalSavings = reducerCount(serviceType("Save Money"));
+  // PAICHART DATA
+  const COLORS = ["#066106", "#c30606", "#050566"];
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+  const data = [
+    {
+      name: "Receive",
+      value: TotalRecive ? TotalRecive : 1,
+      email: user.email,
+    },
+    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user.email },
+    {
+      name: "Savings",
+      value: totalSavings ? totalSavings : 1,
+      email: user.email,
+    },
+  ];
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
@@ -88,10 +204,21 @@ const Dashboard = () => {
         localStorage.removeItem("accessToken");
         navigate("/");
       });
+    console.log(monthServiceFilter);
+    axios
+      .get(`http://localhost:5000/getServices`, {
+        headers: {
+          "content-type": "application/json",
+          email: user.email,
+          monthServiceFilter,
+        },
+      })
+      .then((res) => setMonthService(res.data));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied, navigate]);
+  }, [user.email, shareLinkCopied, navigate, monthServiceFilter]);
+
   // COPY TEXT FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
@@ -161,6 +288,7 @@ const Dashboard = () => {
                 <ul className="mt-8">
                   {latestTransaction.slice(0, 4).map((transAction) => (
                     <li
+<<<<<<< HEAD
                       className={`flex items-center my-4 p-3 rounded-lg w-full ${
                         transAction.type === "Add Money" ||
                         transAction.type === "Receive Money"
@@ -179,6 +307,21 @@ const Dashboard = () => {
                       </div>
                       <div className="avatar">
                         <div className="w-16 rounded-full ">
+=======
+                      className={`flex items-center my-4 p-3 rounded-lg w-full shadow-sm`}
+                      key={transAction._id}
+                    >
+                      <div className="lg:mr-8 w-36">
+                        <h5 className="gray text-sm mb-1">
+                          {transAction.fullDate === todayDate
+                            ? "Today"
+                            : transAction.fullDate}
+                        </h5>
+                        <h6 className="gray text-sm">{transAction.time}</h6>
+                      </div>
+                      <div className="avatar">
+                        <div className="w-14 rounded-full ">
+>>>>>>> 17bde2f89c4302c25984392138bef9fd93098303
                           <img
                             src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                             alt="User Image"
@@ -188,6 +331,7 @@ const Dashboard = () => {
                       <div className="ml-5 flex items-center justify-between w-full">
                         <div>
                           <h5
+<<<<<<< HEAD
                             className={`font-bold text-lg ${
                               transAction.type === "Add Money" ||
                               transAction.type === "Receive Money"
@@ -209,12 +353,38 @@ const Dashboard = () => {
                               transAction.type === "Receive Money"
                                 ? "text-green-800"
                                 : "text-red-800"
+=======
+                            className={` font-medium text-lg mb-[2px]
+                            `}
+                          >
+                            {transAction.type}
+                          </h5>
+                          <h5 className="gray text-sm">
+                            {transAction?.userEmail}
+                          </h5>
+                        </div>
+                        <div className="" onClick={() => onShare(transAction)}>
+                          <i className="fa-solid fa-copy cursor-pointer gray"></i>
+                        </div>
+                        <div>
+                          <h3
+                            className={`text-2xl font-medium text-right ${
+                              transAction.type === "Add Money" &&
+                              "text-green-600"
+                            } ${
+                              transAction.type === "Receive Money" &&
+                              "text-green-600"
+>>>>>>> 17bde2f89c4302c25984392138bef9fd93098303
                             }`}
                           >
                             {transAction.type === "Add Money" ||
                             transAction.type === "Receive Money"
                               ? "+" + transAction.amount
+<<<<<<< HEAD
                               : "-" + transAction.amount}{" "}
+=======
+                              : "-" + transAction.amount}
+>>>>>>> 17bde2f89c4302c25984392138bef9fd93098303
                             $
                           </h3>
                         </div>
@@ -238,30 +408,36 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="divider divider-horizontal divide-black px-9 divider-hidden"></div>
-
-        <div>
-          <div className="">
-            <div className="px-2 w-full">
-              <h3 className="font-bold text-xl pb-2 border-b border-black">
-                Statistic
-              </h3>
-              <h5 className="font-bold text-right text-xl">{getDate}</h5>
-              <div className="">
-                {/* <h4 className="font-bold text-2xl">Expense</h4> */}
-                <div className=" flex justify-center h-22">
-                  <PieChart width={290} height={330}>
+        <div className="">
+          <div className="px-2 w-full">
+            <h3 className="font-bold text-xl pb-2 border-b border-black">
+              Statistic
+            </h3>
+            <div>
+              <select
+                name="option"
+                onChange={(e) => serMonthServiceFilter(e.target.value)}
+                className="select select-ghost w-full max-w-xs mb-50 text-xl"
+              >
+                <option defaultValue={filterDate}>{filterDate}</option>
+                <option value={getPreviousDate(1)}>{getPreviousDate(1)}</option>
+                <option value={getPreviousDate(2)}>{getPreviousDate(2)}</option>
+              </select>
+            </div>
+            <div className=" flex justify-center h-22 ">
+              <div className="w-full lg:w-96 h-72">
+                <ResponsiveContainer>
+                  <PieChart>
                     <Tooltip />
-                    <Legend style={{ width: "363px" }} />
+                    <Legend style={{ width: "333px" }} />
                     <Pie
-                      data={data}
-                      cx={120}
-                      cy={200}
-                      innerRadius={65}
-                      outerRadius={78}
-                      fill="#8884d8"
-                      paddingAngle={1}
                       dataKey="value"
+                      data={data}
+                      fill="#8884d8"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
                     >
+                      {" "}
                       {data.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
@@ -270,7 +446,7 @@ const Dashboard = () => {
                       ))}
                     </Pie>
                   </PieChart>
-                </div>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>

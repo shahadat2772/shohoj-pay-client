@@ -6,17 +6,15 @@ import SignUp from "./Sections/BottomSignUp/SignUp";
 import Banner from "./Sections/Header/Banner";
 // import SupportEngine from "../SupportEngine";
 
-
 const Home = () => {
   return (
     <div>
       <Banner />
       <UserFlow></UserFlow>
       <YouHavePower></YouHavePower>
-      <Countdown></Countdown>
+      {/* <Countdown></Countdown> */}
       <SignUp></SignUp>
       {/* <SupportEngine /> */}
-
     </div>
   );
 };
