@@ -1,13 +1,17 @@
 import React from "react";
 import "./style.css";
+// import { Parallax } from 'react-parallax';
 
 const Banner = () => {
   return (
-    <>
-      <div className=" min-h-screen bg-img1">
+<>
+<div className=" min-h-screen bg-img1 bg-fixed">
         <div className="hero-overlay bg-opacity-30"></div>
         <div className="hero-content text-center text-neutral-content">
-          <div className="max-w-lg">
+          <div className="max-w-lg"  data-aos="fade-zoom-in"
+     data-aos-easing="ease-out-cubic"
+     data-aos-delay="300"
+     data-aos-offset="0">
             <h1 className="mb-5 mt-48 text-black text-4xl lg:text-5xl leading-10 font-bold ">
               Empty Life Without <span className="block mt-4">Shohoj Pay</span>
             </h1>
@@ -16,13 +20,15 @@ const Banner = () => {
               services that is Finance. Use Shohoj Pay and kick out your
               problems.
             </p>
-            <button className="text-black bg-white font-bold text-2xl outline outline-4  outline-offset-2 outline-base-300 border-4 rounded-full border-base-300 px-8 py-2 mt-4 hover:bg-secondary hover:text-white">
+            <button className="text-black bg-white font-bold text-2xl outline
+             outline-4  outline-offset-2 outline-base-300 border-4 rounded-full 
+             border-base-300 px-8 py-2 mt-4 hover:bg-secondary hover:text-white">
               Get Free 25$
             </button>
           </div>
         </div>
       </div>
-    </>
+      </>
   );
 };
 

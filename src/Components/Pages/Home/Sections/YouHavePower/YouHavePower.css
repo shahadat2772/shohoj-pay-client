@@ -1,0 +1,24 @@
+.coreServicesContainer .card{
+    overflow: hidden;
+    z-index: 1;
+}
+
+.coreServicesContainer .card:hover{
+    color: #fff;
+}
+
+ .coreServicesContainer .card:before{
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: #1F456E;
+    transform: translate(-20.5em);
+    transition: 1s;
+    z-index: -1;
+}
+ .coreServicesContainer .card:hover:before{
+    transform: translateX(0);
+    transition: 0.5;
+}
+

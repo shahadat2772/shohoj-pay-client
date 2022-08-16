@@ -14,7 +14,11 @@ import { Doughnut } from "react-chartjs-2";
 import id from "date-fns/esm/locale/id/index.js";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
   const time = new Date().toLocaleTimeString();
 
   const [clientSecret, setClientSecret] = useState("");
@@ -126,11 +130,12 @@ const CardForm = ({ addAmount, setAmountErr }) => {
     } else {
       const id = paymentIntent?.id;
       const addMoneyInfo = {
-        type: "addMoney",
-        name: "Add Money",
-        email: user.email,
+        type: "Add Money",
+        email: user?.email,
+        name: user?.displayName,
         amount: addAmount,
         transactionId: id,
+        fullDate,
         date,
         time,
       };

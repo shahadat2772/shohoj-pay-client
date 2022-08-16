@@ -7,7 +7,11 @@ import auth from "../../../../firebase.init";
 import "./SendMoney.css";
 
 const SendMoney = () => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
 
@@ -37,6 +41,7 @@ const SendMoney = () => {
       amount: amount,
       from: user?.email,
       to: email,
+      fullDate,
       date,
       time,
     };
