@@ -13,9 +13,8 @@ const Banner = () => {
 <div className=" min-h-screen bg-img1 bg-fixed">
         <div className="hero-overlay bg-opacity-30"></div>
         <div className="hero-content mx-auto text-center text-neutral-content min-h-screen">
-          <div className="" data-aos="fade-up"
-     data-aos-duration="3000"
-     data-aos-anchor-placement="center-bottom">
+          <div data-aos="fade-up" data-aos-duration="3000"
+               data-aos-anchor-placement="center-bottom">
             <h1
               style={{
                 fontFamily: "Raleway, sans-ser",
@@ -46,6 +45,7 @@ const Banner = () => {
           </div>
         </div>
       </div>
+
       </>
   );
 };
