@@ -11,7 +11,6 @@ import {
 import toast from "react-hot-toast";
 import "./CardForm.css";
 import { Doughnut } from "react-chartjs-2";
-import id from "date-fns/esm/locale/id/index.js";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
   const fullDate = new Date().toLocaleDateString();
