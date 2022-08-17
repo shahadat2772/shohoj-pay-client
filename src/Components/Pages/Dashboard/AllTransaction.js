@@ -11,7 +11,6 @@ import "./AllTransaction.css";
 const AllTransaction = () => {
   const [transactionData, setTransactionData] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [date, setDate] = useState("");
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
@@ -45,29 +44,33 @@ const AllTransaction = () => {
   if (transactionData.length === 0) {
     return <Spinner />;
   }
-  const [year, month, day] = date.substring(0, 10).split("-");
-  let fullMonth;
-  if (month) {
-    const [none, value] = month.split("");
-    if (none == 0) {
-      fullMonth = value;
-    } else {
-      fullMonth = month;
-    }
-  }
-  const fulldate = fullMonth + "/" + day + "/" + year;
-  console.log(fulldate);
+
   // FILTER TRANSACTION DATA
-  const handleFilterData = (e) => {
+  const handleFilterMonth = (e) => {
     const getMonth = transactionData.filter((data) =>
       data.date.includes(e.target.value)
     );
-    // const getDate = getMonth.filter((data) => data.fullDate.includes(fulldate));
     setFilterData(getMonth);
-    // console.log(getDate);
   };
-  console.log(filterData);
-
+  const getFilterDate = (e) => {
+    const date = e.target.value;
+    const [year, month, day] = date.substring(0, 10).split("-");
+    let fullMonth;
+    if (month) {
+      const [none, value] = month.split("");
+      if (none == 0) {
+        fullMonth = value;
+      } else {
+        fullMonth = month;
+      }
+    }
+    const getdate = fullMonth + "/" + day + "/" + year;
+    const getMonth = transactionData.filter((data) =>
+      data.fullDate.includes(getdate)
+    );
+    setFilterData(getMonth);
+    console.log(getMonth);
+  };
   // GET FULL YEAR
   const getYear = new Date().toLocaleDateString("en-us", {
     year: "numeric",
@@ -91,6 +94,13 @@ const AllTransaction = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
+  const handledeletedata = (id) => {
+    fetch(`http://localhost:5000/delete/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
       <div className=" px-2 lg:w-8/12 mx-auto">
@@ -101,14 +111,9 @@ const AllTransaction = () => {
           >
             All Transaction
           </h2>
-          <input
-            type="date"
-            name=""
-            id=""
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <input type="date" name="" id="" onChange={getFilterDate} />
           <select
-            onChange={handleFilterData}
+            onChange={handleFilterMonth}
             name="option"
             className="select select-ghost max-w-xs mb-50 text-lg"
           >
@@ -166,6 +171,12 @@ const AllTransaction = () => {
                         {transAction.transactionId}
                       </h6>
                     )}
+                    <h6 className="gray md-trx-responsive">
+                      {transAction._id}
+                    </h6>
+                    <button onClick={() => handledeletedata(transAction._id)}>
+                      delete
+                    </button>
                     <h5 className="gray md-responsive">{transAction?.email}</h5>
                   </div>
                   <div className="" onClick={() => onShare(transAction)}>
