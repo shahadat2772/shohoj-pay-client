@@ -12,16 +12,17 @@ import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
-  const [type, setType] = useState('personal');
+  // const [type, setType] = useState('personal');
   const [showNamePart, setShowNamePart] = useState(true);
   const [showPasswordPart, setShowPasswordPart] = useState(false);
   const [showTypePart, setShowTypePart] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [formData, setFormData] = useState({});
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [userData, setUserData] = useState({});
+  const [avatarUrl, setAvatarUrl] = useState("")
 
   const date = new Date().toLocaleDateString();
-
+  const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
 
   const passwordShowRef = useRef("");
   const [
@@ -38,32 +39,52 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const createAccount = async (userData) => {
+
+    const file = userData.avatar[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
+
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success) {
+          const name = userData.firstName + " " + userData.lastName;
+          const userInfo = { ...userData, name, avatar: result.data.url, date };
+          delete userInfo.password;
+          delete userInfo.ConfirmPassword;
+          delete userInfo.firstName;
+          delete userInfo.lastName;
+          console.log(userInfo)
+          fetch("http://localhost:5000/createAccount", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({ userInfo }),
+          })
+            .then((res) => res.json())
+            .then((result) => console.log(result));
+        }
+      })
+
+  };
+
   useEffect(() => {
     if (userCreateError) {
       const error = userCreateError?.message.split(":")[1];
       toast.error(error);
     }
   }, [userCreateError]);
+
+
   useEffect(() => {
-
-    if (user?.user?.displayName && Object.keys(formData).length !== 0) {
-      const name = formData.firstName + " " + formData.lastName;
-      const userData = { ...formData, name }
-      const createAccount = async () => {
-        fetch("http://localhost:5000/createAccount", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({ userData }),
-        })
-          .then((res) => res.json())
-          .then((result) => console.log(result));
-      };
-
-      // dispatch(setUser(userInfo))
-      createAccount();
-
+    if (user?.user?.displayName) {
       if (token) {
         setTimeout(() => {
           toast.success("Create Account SuccessFully");
@@ -71,22 +92,19 @@ const SignUp = () => {
         navigate("/");
       }
     }
-  }, [user, navigate, date, token, formData]);
+  }, [user, navigate, token]);
   if (userCreatLoading) {
     return <Spinner />;
   }
   const onSubmit = async (data) => {
-    console.log("submitted")
-    // setType(data.type);
-    setFormData(data);
-    if (data.password !== data.ConfirmPassword) {
-      return toast.error("Opps Password Not Match");
+    if (Object.keys(data).length !== 0) {
+      if (data.password !== data.ConfirmPassword) {
+        return toast.error("Opps Password Not Match");
+      }
+      await createUserWithEmailAndPassword(data?.email, data?.password);
+      await updateProfile({ displayName: data.name });
+      createAccount(data);
     }
-
-    // console.log(data)
-
-    await createUserWithEmailAndPassword(data?.email, data?.password);
-    await updateProfile({ displayName: data.name });
   };
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
@@ -153,7 +171,7 @@ const SignUp = () => {
                   <span className="label-email">Email</span>
                 </label>
                 <input
-                  onChange={(e) => setEmail(e.target.value)}
+                  // onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   placeholder="Email"
                   className="input input-bordered w-full max-w-xs"
@@ -181,14 +199,41 @@ const SignUp = () => {
                   )}
                 </label>
               </div>
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-name">Phone</span>
+                </label>
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                  {...register("phone", {
+                    required: {
+                      value: true,
+                      message: "Phone Number is Required",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors.phone?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.phone.message}
+                    </span>
+                  )}
+                </label>
+              </div>
               <button onClick={() => {
                 if (Object.keys(errors).length !== 0) {
-                  if (!errors.firstName && !errors.lastName && !errors.email) {
+                  if (!errors.firstName &&
+                    !errors.lastName &&
+                    !errors.email &&
+                    !errors.phone
+                  ) {
                     setShowTypePart(true)
                     setShowNamePart(false)
                   }
                 }
-              }} className="btn w-full" > Next</button>
+              }} className="btn w-full" >Next</button>
             </div>
             {/* --------------------------- */}
 

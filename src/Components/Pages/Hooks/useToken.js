@@ -7,11 +7,11 @@ const useToken = (user) => {
     const currentUser = { email: email };
     if (email) {
       fetch(`http://localhost:5000/jwtUser/${email}`, {
-        method: "PUT",
+        method: "GET",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify(currentUser),
+        // body: JSON.stringify(currentUser),
       })
         .then((res) => res.json())
         .then((data) => {
