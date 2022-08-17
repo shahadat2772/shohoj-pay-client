@@ -14,7 +14,7 @@
     height: 100%;
     background-color: #002855;
     transform: translateX(-45.5em);
-    transition: 1s;
+    transition: 2s;
     z-index: -1;
 }
  .coreServicesContainer .card:hover:before{

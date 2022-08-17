@@ -23,13 +23,13 @@ const Banner = () => {
               }}
               className="mb-5 text-secondary md:text-6xl lg:text-6xl text-5xl font-bold"
             >
-              EMPTY LIFE WITHOUT <br /> SHOHOJ PAY
+              QUICK AND SECURE <br/> PAYMENTS STARTS WITH <br /> SHOHOJ PAY
             </h1>
             <p
               style={{ fontFamily: "Raleway, sans-ser" }}
               className=" mt-4 mb-4 text-color font-medium md:text-lg lg:text-lg max-w-[40rem]"
             >
-              We make your life easy by probiding you one of the most important
+              We make your life easy by providing you one of the most important
               services that is Finance. Use Shohoj Pay and kick out your
               problems.
             </p>
