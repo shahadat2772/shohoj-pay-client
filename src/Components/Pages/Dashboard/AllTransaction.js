@@ -51,6 +51,7 @@ const AllTransaction = () => {
   // };
   useEffect(() => {
     axios
+
       .get(
         `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
         {
