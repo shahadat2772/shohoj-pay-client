@@ -6,7 +6,7 @@ const useToken = (user) => {
     const email = user?.user?.email;
     const currentUser = { email: email };
     if (email) {
-      fetch(`https://shohoj-pay-server.herokuapp.com/jwtUser/${email}`, {
+      fetch(`http://localhost:5000/jwtUser/${email}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
