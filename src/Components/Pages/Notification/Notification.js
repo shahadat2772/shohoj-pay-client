@@ -13,7 +13,7 @@ const Notification = () => {
     },
     {
       message: "Shahadat hossain requested for $15.",
-      status: "seen",
+      status: "unseen",
       date: "01/01/1200",
       time: "12:10 AM",
     },
