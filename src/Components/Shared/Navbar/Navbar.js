@@ -15,7 +15,7 @@ const Navbar = () => {
   const [user, loading] = useAuthState(auth);
   const link = [{ name: "Home", link: "/" }];
 
-  const restrictedLinks = [
+  const PersonalUserLinks = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
     { name: "Request", link: "/moneyRequests" },
@@ -103,7 +103,7 @@ const Navbar = () => {
                     ))}
                   {/* Routes for authenticated users [personal users only]  */}
                   {mongoUser?.type === "personal" &&
-                    restrictedLinks.map((item) => (
+                    PersonalUserLinks.map((item) => (
                       <li key={item.name} className="block text-center">
                         <NavLink to={item.link}>{item.name}</NavLink>
                       </li>
