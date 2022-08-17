@@ -1,41 +1,38 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import toast from "react-hot-toast";
+import auth from "../../../firebase.init";
 import EachNotification from "./EachNotification";
 import "./Notification.css";
 
 const Notification = () => {
-  const fakeNotifications = [
-    {
-      message:
-        "Received $15 from Shahadat hossainReceived $15 from Shahadat hossain Rece",
-      status: "seen",
-      date: "01/01/1200",
-      time: "12:10 AM",
-    },
-    {
-      message: "Shahadat hossain requested for $15.",
-      status: "unseen",
-      date: "01/01/1200",
-      time: "12:10 AM",
-    },
-    {
-      message: "Shahadat hossain sended $15",
-      status: "seen",
-      date: "01/01/1200",
-      time: "12:10 AM",
-    },
-    {
-      message: "Shahadat hossain sended $15",
-      status: "seen",
-      date: "01/01/1200",
-      time: "12:10 AM",
-    },
-    {
-      message: "Shahadat hossain sended $15",
-      status: "seen",
-      date: "01/01/1200",
-      time: "12:10 AM",
-    },
-  ];
+  const [user, loading] = useAuthState(auth);
+  const [notifications, setNotifications] = useState([]);
+
+  const fetchNotification = (email) => {
+    try {
+      axios
+        .get("http://localhost:5000/getNotification", {
+          headers: {
+            email: email,
+          },
+        })
+        .then((res) => {
+          setNotifications(res?.data);
+        });
+    } catch (error) {
+      toast.error(error?.message);
+    }
+  };
+
+  useEffect(() => {
+    const email = user.email;
+    if (email) {
+      fetchNotification(email);
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen">
@@ -44,8 +41,11 @@ const Notification = () => {
           Notifications
         </h2>
         <div className="notificationsContainer">
-          {fakeNotifications.map((notification) => (
-            <EachNotification notification={notification}></EachNotification>
+          {notifications?.map((notification) => (
+            <EachNotification
+              key={notification._id}
+              notification={notification}
+            ></EachNotification>
           ))}
         </div>
       </div>

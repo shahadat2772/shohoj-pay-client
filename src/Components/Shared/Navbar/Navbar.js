@@ -93,7 +93,7 @@ const Navbar = () => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
+                  className={`lg:flex w-100 h-fit lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
                     open ? "left-[-10px] top-16" : "left-[-1080px]"
                   }`}
                 >
@@ -105,9 +105,21 @@ const Navbar = () => {
                   {/* Routes for authenticated users   */}
                   {user &&
                     restrictedLinks.map((item) => (
-                      <li key={item.name} className="block text-center">
-                        <NavLink to={item.link}>{item.name}</NavLink>
-                      </li>
+                      <>
+                        {item.name === "Notification" ? (
+                          <li
+                            className={`block text-center relative`}
+                            key={item.name}
+                          >
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                            <p className="notificationCounter">12</p>
+                          </li>
+                        ) : (
+                          <li className={`block text-center`} key={item.name}>
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                          </li>
+                        )}
+                      </>
                     ))}
                   {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                   <div className=" flex items-center justify-center lg:hidden">
