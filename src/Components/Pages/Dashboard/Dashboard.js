@@ -57,7 +57,7 @@ const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
-  const [monthServiceFilter, serMonthServiceFilter] = useState(filterDate);
+  const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -354,7 +354,7 @@ const Dashboard = () => {
             <div>
               <select
                 name="option"
-                onChange={(e) => serMonthServiceFilter(e.target.value)}
+                onChange={(e) => setMonthServiceFilter(e.target.value)}
                 className="select select-ghost w-full max-w-xs mb-50 text-xl"
               >
                 <option defaultValue={filterDate}>{filterDate}</option>

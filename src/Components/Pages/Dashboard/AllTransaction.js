@@ -10,13 +10,14 @@ import "./AllTransaction.css";
 
 const AllTransaction = () => {
   const [transactionData, setTransactionData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
+  const [date, setDate] = useState("");
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
   // REVERSE TRANSACTION DATA
-  const reverseData = [...transactionData].reverse();
-  console.log(reverseData);
+  const reverseData = [...filterData].reverse();
   useEffect(() => {
     axios
       .get(
@@ -27,7 +28,10 @@ const AllTransaction = () => {
           },
         }
       )
-      .then((res) => setTransactionData(res.data))
+      .then((res) => {
+        setTransactionData(res.data);
+        setFilterData(res.data);
+      })
       .catch((error) => {
         localStorage.removeItem("accessToken");
         signOut(auth);
@@ -41,6 +45,34 @@ const AllTransaction = () => {
   if (transactionData.length === 0) {
     return <Spinner />;
   }
+  const [year, month, day] = date.substring(0, 10).split("-");
+  let fullMonth;
+  if (month) {
+    const [none, value] = month.split("");
+    if (none == 0) {
+      fullMonth = value;
+    } else {
+      fullMonth = month;
+    }
+  }
+  const fulldate = fullMonth + "/" + day + "/" + year;
+  console.log(fulldate);
+  // FILTER TRANSACTION DATA
+  const handleFilterData = (e) => {
+    const getMonth = transactionData.filter((data) =>
+      data.date.includes(e.target.value)
+    );
+    // const getDate = getMonth.filter((data) => data.fullDate.includes(fulldate));
+    setFilterData(getMonth);
+    // console.log(getDate);
+  };
+  console.log(filterData);
+
+  // GET FULL YEAR
+  const getYear = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+  });
+
   //   COPY TRANSACTION DATA FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
@@ -62,12 +94,39 @@ const AllTransaction = () => {
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
       <div className=" px-2 lg:w-8/12 mx-auto">
-        <h2
-          data-testid="transaction-heading"
-          className="font-bold text-xl border-b-4 border-black pb-2 w-48"
-        >
-          All Transaction
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2
+            data-testid="transaction-heading"
+            className="font-bold text-xl border-b-4 border-black pb-2 w-48"
+          >
+            All Transaction
+          </h2>
+          <input
+            type="date"
+            name=""
+            id=""
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <select
+            onChange={handleFilterData}
+            name="option"
+            className="select select-ghost max-w-xs mb-50 text-lg"
+          >
+            <option value="">Select Month</option>
+            <option value={`Jan ${getYear}`}>January {getYear}</option>
+            <option value={`Feb ${getYear}`}>February {getYear}</option>
+            <option value={`Mar ${getYear}`}>March {getYear}</option>
+            <option value={`Apr ${getYear}`}>April {getYear}</option>
+            <option value={`may ${getYear}`}>May {getYear}</option>
+            <option value={`Jun ${getYear}`}>June {getYear}</option>
+            <option value={`jul ${getYear}`}>July {getYear}</option>
+            <option value={`Aug ${getYear}`}>August {getYear}</option>
+            <option value={`Sep ${getYear}`}>September {getYear}</option>
+            <option value={`Oct ${getYear}`}>October {getYear}</option>
+            <option value={`Nov ${getYear}`}>November {getYear}</option>
+            <option value={`Dec ${getYear}`}>December {getYear}</option>
+          </select>
+        </div>
         <div className="mt-8">
           <ul>
             {reverseData.map((transAction) => (
@@ -76,11 +135,7 @@ const AllTransaction = () => {
                 key={transAction._id}
               >
                 <div className="lg:mr-8 w-36">
-                  <h5 className="gray md-responsive">
-                    {transAction.fullDate === todayDate
-                      ? "Today"
-                      : transAction.fullDate}
-                  </h5>
+                  <h5 className="gray md-responsive">{transAction.fullDate}</h5>
                   <h6 className="gray md-responsive">{transAction.time}</h6>
                 </div>
                 <div className="avatar">
@@ -112,11 +167,6 @@ const AllTransaction = () => {
                       </h6>
                     )}
                     <h5 className="gray md-responsive">{transAction?.email}</h5>
-                    {transAction.type === "Save Money" && (
-                      <h6 className="gray md-responsive">
-                        {transAction.email}
-                      </h6>
-                    )}
                   </div>
                   <div className="" onClick={() => onShare(transAction)}>
                     <i className="fa-solid fa-copy cursor-pointer"></i>
