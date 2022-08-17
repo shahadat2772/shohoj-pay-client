@@ -261,7 +261,7 @@ const Dashboard = () => {
                         <h6 className="gray text-sm">{transAction.time}</h6>
                       </div>
                       <div className="avatar">
-                        <div className="w-14 rounded-full ">
+                        <div className="w-14 rounded-full">
                           <img
                             src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                             alt="User Image"
