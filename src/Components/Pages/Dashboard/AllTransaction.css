@@ -1,0 +1,17 @@
+@media only screen and (max-width: 480px) {
+  .md-responsive {
+    font-size: 10px;
+  }
+  .md-amount-responsive {
+    font-size: 14px;
+  }
+  .md-img-responsive {
+    width: 40px;
+  }
+  .md-trx-responsive {
+    font-size: 8px;
+  }
+  .md-type-responsive {
+    font-size: 14px;
+  }
+}
