@@ -18,6 +18,7 @@ import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
+import Notification from "./Components/Pages/Notification/Notification";
 
 import MessengerCustomerChat from "react-messenger-customer-chat";
 
@@ -53,6 +54,15 @@ function App() {
           element={
             <RequireAuth>
               <Settings />
+            </RequireAuth>
+          }
+        />
+        {/* Notification */}
+        <Route
+          path="/notification"
+          element={
+            <RequireAuth>
+              <Notification />
             </RequireAuth>
           }
         />
@@ -121,18 +131,25 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/adminpanel" exact={true}
-          element={<RequireAuth>
-            <RequireAdmin>
-              <AdminPanel />
-            </RequireAdmin>
-          </RequireAuth>
-          } >
-          <Route path='makeadmin' element={
-            <RequireAdmin>
-              <MakeAdmin />
-            </RequireAdmin>
-          } />
+        <Route
+          path="/adminpanel"
+          exact={true}
+          element={
+            <RequireAuth>
+              <RequireAdmin>
+                <AdminPanel />
+              </RequireAdmin>
+            </RequireAuth>
+          }
+        >
+          <Route
+            path="makeadmin"
+            element={
+              <RequireAdmin>
+                <MakeAdmin />
+              </RequireAdmin>
+            }
+          />
         </Route>
         <Route
           path="/dashboard/allTransAction"

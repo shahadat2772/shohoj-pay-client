@@ -1,0 +1,9 @@
+.notificationContainer {
+  min-width: 80vw;
+  margin: auto 20px;
+  padding-top: 90px;
+}
+
+.notificationHeader {
+  color: gray;
+}
