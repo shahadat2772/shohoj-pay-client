@@ -12,15 +12,10 @@ import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
-  // const [type, setType] = useState('personal');
   const [showNamePart, setShowNamePart] = useState(true);
   const [showPasswordPart, setShowPasswordPart] = useState(false);
   const [showTypePart, setShowTypePart] = useState(false);
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [userData, setUserData] = useState({});
-  const [avatarUrl, setAvatarUrl] = useState("")
-
+  const [progress, setProgress] = useState(1);
   const date = new Date().toLocaleDateString();
   const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
 
@@ -113,7 +108,13 @@ const SignUp = () => {
 
   return (
     <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
+
       <div className="card w-96 bg-base-100 shadow-xl">
+        <ul class="steps steps-horizontal">
+          <li className={`step step-primary`}></li>
+          <li className={`step ${progress > 1 && "step-primary"}`}></li>
+          <li className={`step ${progress > 2 && "step-primary"}`}></li>
+        </ul>
         <div className="card-body">
           <h2 className="text-center font-bold text-xl">Sign Up</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -229,6 +230,7 @@ const SignUp = () => {
                     !errors.email &&
                     !errors.phone
                   ) {
+                    setProgress(2)
                     setShowTypePart(true)
                     setShowNamePart(false)
                   }
@@ -350,6 +352,7 @@ const SignUp = () => {
                 }} className="btn btn-outline lg:w-5/12" >Back</button>
                 <button onClick={() => {
                   if (!errors?.address && !errors?.zip && !errors?.avatar) {
+                    setProgress(3)
                     setShowPasswordPart(true)
                     setShowTypePart(false)
                   }
