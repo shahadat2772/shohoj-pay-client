@@ -1,22 +1,54 @@
 import axios from "axios";
 import { signOut } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useInsertionEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
+// import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
 
 const AllTransaction = () => {
+  // askdfkasdf
+  // const [currentItems, setCurrentItems] = useState(null);
   const [transactionData, setTransactionData] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  // const [pageCount, setPageCount] = useState(0);
+  // const [itemOffset, setItemOffset] = useState(0);
+  // const [reverse, setReverse] = useState([]);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
   // REVERSE TRANSACTION DATA
   const reverseData = [...filterData].reverse();
+  // const items = [
+  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  //   10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3,
+  //   4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  //   13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7,
+  //   8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1,
+  //   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  //   11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4,
+  //   5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  //   13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7,
+  //   8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1,
+  //   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  //   11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+  // ];
+  // const itemsPerPage = 4;
+  // useInsertionEffect(() => {
+  //   // Fetch items from another resources.
+  //   const endOffset = itemOffset + itemsPerPage;
+  //   setCurrentItems(items.slice(itemOffset, endOffset));
+  //   setPageCount(Math.ceil(items.length / itemsPerPage));
+  // }, [itemOffset, itemsPerPage]);
+  // // Invoke when user click to request another page.
+  // const handlePageClick = (event) => {
+  //   const newOffset = (event.selected * itemsPerPage) % items.length;
+  //   setItemOffset(newOffset);
+  // };
   useEffect(() => {
     axios
       .get(
@@ -101,17 +133,29 @@ const AllTransaction = () => {
       .then((res) => res.json())
       .then((data) => console.log(data));
   };
+
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
       <div className=" px-2 lg:w-8/12 mx-auto">
         <div className="flex items-center justify-between">
-          <h2
-            data-testid="transaction-heading"
-            className="font-bold text-xl border-b-4 border-black pb-2 w-48"
-          >
-            All Transaction
-          </h2>
-          <input type="date" name="" id="" onChange={getFilterDate} />
+          <div>
+            <h2
+              data-testid="transaction-heading"
+              className="font-bold text-xl border-b-4 border-black pb-2 w-48 mb-3"
+            >
+              All Transaction
+            </h2>
+            <label htmlFor="input-date" className="text-lg font-bold">
+              Select Date:
+            </label>
+            <input
+              type="date"
+              name=""
+              id="input-date"
+              onChange={getFilterDate}
+              className="bg-transparent	ml-3"
+            />
+          </div>
           <select
             onChange={handleFilterMonth}
             name="option"
@@ -140,7 +184,11 @@ const AllTransaction = () => {
                 key={transAction._id}
               >
                 <div className="lg:mr-8 w-36">
-                  <h5 className="gray md-responsive">{transAction.fullDate}</h5>
+                  <h5 className="gray text-sm mb-1 md-responsive">
+                    {transAction.fullDate === todayDate
+                      ? "Today"
+                      : transAction.fullDate}
+                  </h5>
                   <h6 className="gray md-responsive">{transAction.time}</h6>
                 </div>
                 <div className="avatar">
@@ -171,9 +219,6 @@ const AllTransaction = () => {
                         {transAction.transactionId}
                       </h6>
                     )}
-                    <h6 className="gray md-trx-responsive">
-                      {transAction._id}
-                    </h6>
                     <button onClick={() => handledeletedata(transAction._id)}>
                       delete
                     </button>
@@ -202,7 +247,22 @@ const AllTransaction = () => {
               </li>
             ))}
           </ul>
+          {/* <Items currentItems={currentItems} /> */}
         </div>
+        {/* <ReactPaginate
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          containerClassName="pagination"
+          pageLinkClassName="page-name"
+          previousLinkClassName="page-num"
+          nextLinkClassName="page-num"
+          activeLinkClassName="active"
+        /> */}
       </div>
     </div>
   );
