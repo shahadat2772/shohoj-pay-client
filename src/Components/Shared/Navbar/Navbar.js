@@ -13,7 +13,6 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
   const [user, loading] = useAuthState(auth);
-  const [routes, setRoutes] = useState([]);
 
   const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
 
@@ -21,12 +20,17 @@ const Navbar = () => {
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
     { name: "Requests", link: "/moneyRequests" },
-    { name: "Settings", link: "/settings" },
   ];
+
   const merchantUserRoutes = [
     { name: "Dashboard", link: "/merchant/dashboard" },
     { name: "Services", link: "/merchant/services" },
     { name: "Requests", link: "/merchant/money-requests" },
+  ];
+
+  const commonRoutes = [
+    { name: "Notification", link: "/notification" },
+    { name: "Settings", link: "/settings" },
   ];
 
   const [mongoUser] = useUser(user?.email);
@@ -120,6 +124,12 @@ const Navbar = () => {
                   {user &&
                     mongoUser?.type === "merchant" &&
                     merchantUserRoutes.map((item) => (
+                      <li key={item.name} className="block text-center">
+                        <NavLink to={item.link}>{item.name}</NavLink>
+                      </li>
+                    ))}
+                  {user &&
+                    commonRoutes.map((item) => (
                       <li key={item.name} className="block text-center">
                         <NavLink to={item.link}>{item.name}</NavLink>
                       </li>
