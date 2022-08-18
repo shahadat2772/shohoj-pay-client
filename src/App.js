@@ -77,7 +77,7 @@ function App() {
 
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar unseenNotification={unseenNotification}></Navbar>
       <Routes>
         <Route
           path="/"
