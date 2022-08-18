@@ -57,7 +57,7 @@ const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
-  const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
+  const [monthServiceFilter, serMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -66,8 +66,6 @@ const Dashboard = () => {
     transactionData.length - 4,
     transactionData.length
   );
-  // REVERSE TRANSACTION DATA
-  const reverseData = [...latestTransaction].reverse();
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
   serviceType("Receive Money");
@@ -182,15 +180,10 @@ const Dashboard = () => {
   // COPY TEXT FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
-    Amount: ${data.amount}$
+    Date: ${data.date}
     Email: ${data.email}
-    Name: ${data.userName ? data.userName : data.name}
-    TRX ID: ${
-      data.transactionId ? data.transactionId : "Transaction Id Not Available"
-    }
-    Date: ${data.fullDate}
-    Time: ${data.time}
     Type: ${data.type}
+    Amount: ${data.amount}$
     `);
     setShareLinkCopied(true);
     setTimeout(() => {
@@ -254,23 +247,21 @@ const Dashboard = () => {
                   Last Transaction
                 </h3>
                 <ul className="mt-8">
-                  {reverseData.slice(0, 4).map((transAction) => (
+                  {latestTransaction.slice(0, 4).map((transAction) => (
                     <li
                       className={`flex items-center my-4 p-3 rounded-lg w-full shadow-sm`}
                       key={transAction._id}
                     >
                       <div className="lg:mr-8 w-36">
-                        <h5 className="gray text-sm mb-1 md-responsive">
+                        <h5 className="gray text-sm mb-1">
                           {transAction.fullDate === todayDate
                             ? "Today"
                             : transAction.fullDate}
                         </h5>
-                        <h6 className="gray text-sm md-responsive">
-                          {transAction.time}
-                        </h6>
+                        <h6 className="gray text-sm">{transAction.time}</h6>
                       </div>
                       <div className="avatar">
-                        <div className="w-14 rounded-full md-img-responsive">
+                        <div className="w-14 rounded-full">
                           <img
                             src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                             alt="User Image"
@@ -280,33 +271,21 @@ const Dashboard = () => {
                       <div className="ml-5 flex items-center justify-between w-full">
                         <div>
                           <h5
-                            className={` font-medium text-lg mb-[2px] md-type-responsive
+                            className={` font-medium text-lg mb-[2px]
                             `}
                           >
                             {transAction.type}
                           </h5>
-                          <h5 className="gray text-sm md-responsive">
-                            {transAction?.userName
-                              ? transAction.userName
-                              : transAction.name}
+                          <h5 className="gray text-sm">
+                            {transAction?.userEmail}
                           </h5>
-                          {transAction.transactionId && (
-                            <h6 className="gray md-trx-responsive">
-                              {transAction.transactionId}
-                            </h6>
-                          )}
-                          {transAction.type === "Save Money" && (
-                            <h6 className="gray md-responsive">
-                              {transAction.email}
-                            </h6>
-                          )}
                         </div>
                         <div className="" onClick={() => onShare(transAction)}>
                           <i className="fa-solid fa-copy cursor-pointer gray"></i>
                         </div>
                         <div>
                           <h3
-                            className={`text-2xl font-medium text-right md-amount-responsive ${
+                            className={`text-2xl font-medium text-right ${
                               transAction.type === "Add Money" ||
                               transAction.type === "Receive Money"
                                 ? "text-green-600"
@@ -348,7 +327,7 @@ const Dashboard = () => {
             <div>
               <select
                 name="option"
-                onChange={(e) => setMonthServiceFilter(e.target.value)}
+                onChange={(e) => serMonthServiceFilter(e.target.value)}
                 className="select select-ghost w-full max-w-xs mb-50 text-xl"
               >
                 <option defaultValue={filterDate}>{filterDate}</option>

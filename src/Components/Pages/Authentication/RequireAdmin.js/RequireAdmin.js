@@ -4,17 +4,19 @@ import { Navigate } from 'react-router-dom';
 import auth from '../../../../firebase.init';
 import Spinner from '../../../Shared/Spinner/Spinner';
 import useUser from '../../Hooks/useUser';
-const RequireMerchant = ({ children }) => {
+
+
+const RequireAdmin = ({ children }) => {
     const [firebaseUser, loading] = useAuthState(auth);
     const [mongoUser] = useUser(firebaseUser?.email);
 
     if (!mongoUser?.type || loading) {
         return <Spinner />
     }
-    if (mongoUser.type !== 'merchant') {
-        return <Navigate to='/' />
+    if (mongoUser.type !== 'admin') {
+        return <Navigate to='/dashboard' />
     }
     return children
 };
 
-export default RequireMerchant;
+export default RequireAdmin;

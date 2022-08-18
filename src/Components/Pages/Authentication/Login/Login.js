@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import toast from "react-hot-toast";
@@ -12,10 +12,17 @@ const Login = () => {
   const [signInWithEmailAndPassword, user, signinLoading, signInError] =
     useSignInWithEmailAndPassword(auth);
   const [show, setShow] = useState(false);
-  const [token] = useToken(user?.user?.email);
-  const [mongoUser] = useUser(user?.email)
+  const [token] = useToken(user);
+  const [mongoUser] = useUser(user?.email);
   const passwordShowRef = useRef("");
   let navigate = useNavigate();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
+  if (mongoUser?.type === "admin") {
+    from = "/adminpanel";
+  } else if (mongoUser?.type === "merchant") {
+    from = location.state?.from?.pathname || "/merchant";
+  }
   const {
     register,
     handleSubmit,
@@ -28,19 +35,11 @@ const Login = () => {
     setShow(passShow);
   };
   useEffect(() => {
-    if (token && mongoUser) {
+    if (token) {
+      navigate(from, { replace: true });
       toast.success("User Login SuccessFull");
-      if (mongoUser.type === "admin") {
-        navigate('/adminpanel')
-      }
-      else if (mongoUser?.type === "merchant") {
-        navigate("/merchant/services")
-      }
-      else if (mongoUser.type === "personal") {
-        navigate("/dashboard");
-      }
     }
-  }, [navigate, token, mongoUser]);
+  }, [from, navigate, token]);
 
   useEffect(() => {
     if (signInError) {
