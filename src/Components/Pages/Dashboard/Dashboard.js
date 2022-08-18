@@ -57,7 +57,7 @@ const Dashboard = () => {
   const [balance, setBalance] = useState(0);
   const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
-  const [monthServiceFilter, serMonthServiceFilter] = useState(filterDate);
+  const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -66,6 +66,8 @@ const Dashboard = () => {
     transactionData.length - 4,
     transactionData.length
   );
+  // REVERSE TRANSACTION DATA
+  const reverseData = [...latestTransaction].reverse();
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
   serviceType("Receive Money");
@@ -89,7 +91,6 @@ const Dashboard = () => {
     );
   };
   const TotalRecive = reducerCount(totlaReceiveMoney);
-  console.log(TotalRecive);
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
@@ -124,19 +125,19 @@ const Dashboard = () => {
     {
       name: "Receive",
       value: TotalRecive ? TotalRecive : 1,
-      email: user.email,
+      email: user?.email,
     },
-    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user.email },
+    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user?.email },
     {
       name: "Savings",
       value: totalSavings ? totalSavings : 1,
-      email: user.email,
+      email: user?.email,
     },
   ];
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
-      .get(`http://localhost:5000/getUserBalances/${user.email}`, {
+      .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -164,7 +165,6 @@ const Dashboard = () => {
         localStorage.removeItem("accessToken");
         navigate("/");
       });
-    console.log(monthServiceFilter);
     axios
       .get(`http://localhost:5000/getServices`, {
         headers: {
@@ -177,15 +177,20 @@ const Dashboard = () => {
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user.email, shareLinkCopied, navigate, monthServiceFilter]);
+  }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
-    Date: ${data.date}
-    Email: ${data.email}
-    Type: ${data.type}
     Amount: ${data.amount}$
+    Email: ${data.email}
+    Name: ${data.userName ? data.userName : data.name}
+    TRX ID: ${
+      data.transactionId ? data.transactionId : "Transaction Id Not Available"
+    }
+    Date: ${data.fullDate}
+    Time: ${data.time}
+    Type: ${data.type}
     `);
     setShareLinkCopied(true);
     setTimeout(() => {
@@ -203,7 +208,10 @@ const Dashboard = () => {
         <div className="w-full mt-10 lg:mt-0">
           <div className="md:mx-10 lg:mx-0 card  rounded ">
             <div className="card-body py-0">
-              <h1 className="text-left text-3xl font-bold mb-3">
+              <h1
+                data-testid="user-name"
+                className="text-left text-3xl font-bold mb-3"
+              >
                 Hi, {user?.displayName}
               </h1>
               <div className="text-left">
@@ -246,21 +254,23 @@ const Dashboard = () => {
                   Last Transaction
                 </h3>
                 <ul className="mt-8">
-                  {latestTransaction.slice(0, 4).map((transAction) => (
+                  {reverseData.slice(0, 4).map((transAction) => (
                     <li
                       className={`flex items-center my-4 p-3 rounded-lg w-full shadow-sm`}
                       key={transAction._id}
                     >
                       <div className="lg:mr-8 w-36">
-                        <h5 className="gray text-sm mb-1">
+                        <h5 className="gray text-sm mb-1 md-responsive">
                           {transAction.fullDate === todayDate
                             ? "Today"
                             : transAction.fullDate}
                         </h5>
-                        <h6 className="gray text-sm">{transAction.time}</h6>
+                        <h6 className="gray text-sm md-responsive">
+                          {transAction.time}
+                        </h6>
                       </div>
                       <div className="avatar">
-                        <div className="w-14 rounded-full ">
+                        <div className="w-14 rounded-full md-img-responsive">
                           <img
                             src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                             alt="User Image"
@@ -270,26 +280,37 @@ const Dashboard = () => {
                       <div className="ml-5 flex items-center justify-between w-full">
                         <div>
                           <h5
-                            className={` font-medium text-lg mb-[2px]
+                            className={` font-medium text-lg mb-[2px] md-type-responsive
                             `}
                           >
                             {transAction.type}
                           </h5>
-                          <h5 className="gray text-sm">
-                            {transAction?.userEmail}
+                          <h5 className="gray text-sm md-responsive">
+                            {transAction?.userName
+                              ? transAction.userName
+                              : transAction.name}
                           </h5>
+                          {transAction.transactionId && (
+                            <h6 className="gray md-trx-responsive">
+                              {transAction.transactionId}
+                            </h6>
+                          )}
+                          {transAction.type === "Save Money" && (
+                            <h6 className="gray md-responsive">
+                              {transAction.email}
+                            </h6>
+                          )}
                         </div>
                         <div className="" onClick={() => onShare(transAction)}>
                           <i className="fa-solid fa-copy cursor-pointer gray"></i>
                         </div>
                         <div>
                           <h3
-                            className={`text-2xl font-medium text-right ${
-                              transAction.type === "Add Money" &&
-                              "text-green-600"
-                            } ${
-                              transAction.type === "Receive Money" &&
-                              "text-green-600"
+                            className={`text-2xl font-medium text-right md-amount-responsive ${
+                              transAction.type === "Add Money" ||
+                              transAction.type === "Receive Money"
+                                ? "text-green-600"
+                                : "text-red-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||
@@ -327,7 +348,7 @@ const Dashboard = () => {
             <div>
               <select
                 name="option"
-                onChange={(e) => serMonthServiceFilter(e.target.value)}
+                onChange={(e) => setMonthServiceFilter(e.target.value)}
                 className="select select-ghost w-full max-w-xs mb-50 text-xl"
               >
                 <option defaultValue={filterDate}>{filterDate}</option>

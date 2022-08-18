@@ -116,7 +116,12 @@ const SignUp = () => {
           <li className={`step ${progress > 2 && "step-primary"}`}></li>
         </ul>
         <div className="card-body">
-          <h2 className="text-center font-bold text-xl">Sign Up</h2>
+          <h2
+            data-testid="signUp-heading"
+            className="text-center font-bold text-xl"
+          >
+            Sign Up
+          </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Name and Email part  */}
             <div className={`${showNamePart ? "block" : "hidden"}`}>
@@ -287,7 +292,6 @@ const SignUp = () => {
                   )}
                 </label>
               </div>
-
 
               <label className="label ">
                 Account Type
