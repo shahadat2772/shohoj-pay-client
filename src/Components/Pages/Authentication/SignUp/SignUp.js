@@ -17,6 +17,8 @@ const SignUp = () => {
   const [showPasswordPart, setShowPasswordPart] = useState(false);
   const [showTypePart, setShowTypePart] = useState(false);
   const [progress, setProgress] = useState(1);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [emailExistsError, setEmailExistsError] = useState(false);
   const date = new Date().toLocaleDateString();
   const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
 
@@ -77,6 +79,23 @@ const SignUp = () => {
       toast.error(error);
     }
   }, [userCreateError]);
+
+  useEffect(() => {
+    console.log(emailAddress)
+    if (emailAddress) {
+      fetch(`http://localhost:5000/checkemailexists/${emailAddress}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.error) {
+            setEmailExistsError(result.error);
+            toast.error(result.error)
+          }
+          else {
+            setEmailExistsError(false)
+          }
+        })
+    }
+  }, [emailAddress])
 
 
   useEffect(() => {
@@ -186,7 +205,7 @@ const SignUp = () => {
                   <span className="label-email">Email</span>
                 </label>
                 <input
-                  // onChange={(e) => setEmail(e.target.value)}
+                  onKeyUp={(e) => setEmailAddress(e.target.value)}
                   type="email"
                   placeholder="Email"
                   className="input input-bordered w-full max-w-xs"
@@ -212,6 +231,13 @@ const SignUp = () => {
                       {errors.email.message}
                     </span>
                   )}
+                  {
+                    emailExistsError && (
+                      <span className="label-text-alt text-red-500">
+                        {emailExistsError}
+                      </span>
+                    )
+                  }
                 </label>
               </div>
               <div className="form-control w-full max-w-xs ">
@@ -242,6 +268,7 @@ const SignUp = () => {
                   if (!errors.firstName &&
                     !errors.lastName &&
                     !errors.email &&
+                    !emailExistsError &&
                     !errors.phone
                   ) {
                     setProgress(2)
