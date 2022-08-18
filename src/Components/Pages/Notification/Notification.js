@@ -1,38 +1,43 @@
-import axios from "axios";
 import React, { useEffect } from "react";
+import axios from "axios";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 import auth from "../../../firebase.init";
 import EachNotification from "./EachNotification";
 import "./Notification.css";
 
-const Notification = () => {
+const Notification = ({
+  fetchNotification,
+  allNotification,
+  unseenNotification,
+  setUnseenNotification,
+}) => {
   const [user, loading] = useAuthState(auth);
-  const [notifications, setNotifications] = useState([]);
-
-  const fetchNotification = (email) => {
-    try {
-      axios
-        .get("http://localhost:5000/getNotification", {
-          headers: {
-            email: email,
-          },
-        })
-        .then((res) => {
-          setNotifications(res?.data);
-        });
-    } catch (error) {
-      toast.error(error?.message);
-    }
-  };
+  const location = useLocation();
+  const pathName = location?.pathname;
 
   useEffect(() => {
-    const email = user.email;
-    if (email) {
-      fetchNotification(email);
+    if (pathName === "/notification" && unseenNotification.length > 0) {
+      fetch("http://localhost:5000/updateNotificationStatus", {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ unseenNotification }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.modifiedCount > 0) {
+            setUnseenNotification([]);
+            setTimeout(() => {
+              fetchNotification();
+            }, 5000);
+          }
+        });
     }
-  }, [user]);
+  }, [pathName]);
 
   return (
     <div className="min-h-screen">
@@ -41,7 +46,7 @@ const Notification = () => {
           Notifications
         </h2>
         <div className="notificationsContainer">
-          {notifications?.map((notification) => (
+          {allNotification?.map((notification) => (
             <EachNotification
               key={notification._id}
               notification={notification}

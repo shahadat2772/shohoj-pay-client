@@ -31,10 +31,15 @@
   padding: 4px;
   font-size: 14px;
   top: -15px;
-  right: 0px;
-  border-radius: 50%;
+  right: -5px;
+  border-radius: 25%;
   text-align: center;
   display: flex;
+  display: none;
+}
+
+.notificationCounterShow {
+  display: block;
 }
 
 /* .navbar a {

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 import useUser from "../../Pages/Hooks/useUser";
 
-const Navbar = () => {
+const Navbar = ({ unseenNotification }) => {
+  const location = useLocation();
+  const pathName = location?.pathname;
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
@@ -112,7 +114,15 @@ const Navbar = () => {
                             key={item.name}
                           >
                             <NavLink to={item.link}>{item.name}</NavLink>
-                            <p className="notificationCounter">12</p>
+                            <p
+                              className={`notificationCounter ${
+                                unseenNotification?.length !== 0 &&
+                                pathName !== "/notification" &&
+                                "notificationCounterShow"
+                              }`}
+                            >
+                              {unseenNotification?.length}
+                            </p>
                           </li>
                         ) : (
                           <li className={`block text-center`} key={item.name}>
