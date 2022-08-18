@@ -6,7 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./Components/Pages/Authentication/Login/Login";
 import NotFound from "./Components/Shared/NotFound/NotFound";
 import SignUp from "./Components/Pages/Authentication/SignUp/SignUp";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
 import Services from "./Components/Pages/Services/Services/Services";
 import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
@@ -18,26 +18,75 @@ import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
-
 import MessengerCustomerChat from "react-messenger-customer-chat";
-
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
-import { useState } from "react";
-import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
+import { useEffect, useState } from "react";
+import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin/RequireAdmin";
 import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
 import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
 import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
-
+import RequireMerchant from "./Components/Pages/Authentication/RequireMerchant/RequireMerchant";
+import useUser from "./Components/Pages/Hooks/useUser";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "./firebase.init";
+import Spinner from "./Components/Shared/Spinner/Spinner";
+import RestrictAuth from "./Components/Pages/Authentication/RestrictAuth/RestrictAuth";
+import axios from "axios";
+import Notification from "./Components/Pages/Notificaion/Notification";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
   const [request, fetchRequests] = requestForConfirm;
+  const [firebaseUser, loading] = useAuthState(auth);
+  const [user] = useUser(firebaseUser?.email);
+
+  // Notification
+  const [allNotification, setAllNotification] = useState([]);
+  const [unseenNotification, setUnseenNotification] = useState([]);
+  const fetchNotification = () => {
+    const email = user.email;
+    if (!email) {
+      return;
+    }
+    try {
+      axios
+        .get("http://localhost:5000/getNotification", {
+          headers: {
+            email: email,
+          },
+        })
+        .then((res) => {
+          const [all, unseen] = res.data;
+          setAllNotification(all.reverse());
+          setUnseenNotification(unseen);
+        });
+    } catch (error) {
+      toast.error(error?.message);
+    }
+  };
+  useEffect(() => {
+    const email = user?.email;
+    if (email) {
+      fetchNotification();
+    }
+  }, [user]);
+
+  if (loading || !user) {
+    return <Spinner />;
+  }
 
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar unseenNotification={unseenNotification}></Navbar>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <RestrictAuth>
+              <Home />
+            </RestrictAuth>
+          }
+        />
         <Route
           path="/services"
           element={
@@ -53,6 +102,19 @@ function App() {
           element={
             <RequireAuth>
               <Settings />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/notification"
+          element={
+            <RequireAuth>
+              <Notification
+                fetchNotification={fetchNotification}
+                allNotification={allNotification}
+                unseenNotification={unseenNotification}
+                setUnseenNotification={setUnseenNotification}
+              />
             </RequireAuth>
           }
         />
@@ -87,6 +149,7 @@ function App() {
             </RequireAuth>
           }
         />
+
         <Route
           path="/moneyRequests"
           element={
@@ -108,9 +171,25 @@ function App() {
           }
         />
         {/* Authentication Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<SignUp />} />
+        <Route
+          path="/login"
+          element={
+            <RestrictAuth>
+              <Login />
+            </RestrictAuth>
+          }
+        />
+        <Route
+          path="/signUp"
+          element={
+            <RestrictAuth>
+              <SignUp />
+            </RestrictAuth>
+          }
+        />
         <Route path="/resetPassword" element={<ResetPassword />} />
+
+        {/* Dashboard related routes  */}
         <Route
           path="/dashboard"
           element={
@@ -121,18 +200,25 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/adminpanel" exact={true}
-          element={<RequireAuth>
-            <RequireAdmin>
-              <AdminPanel />
-            </RequireAdmin>
-          </RequireAuth>
-          } >
-          <Route path='makeadmin' element={
-            <RequireAdmin>
-              <MakeAdmin />
-            </RequireAdmin>
-          } />
+        <Route
+          path="/adminpanel"
+          exact={true}
+          element={
+            <RequireAuth>
+              <RequireAdmin>
+                <AdminPanel />
+              </RequireAdmin>
+            </RequireAuth>
+          }
+        >
+          <Route
+            path="makeadmin"
+            element={
+              <RequireAdmin>
+                <MakeAdmin />
+              </RequireAdmin>
+            }
+          />
         </Route>
         <Route
           path="/dashboard/allTransAction"
@@ -144,6 +230,38 @@ function App() {
             </RequireAuth>
           }
         />
+        {/* Routes for Merchant */}
+        <Route
+          path="/merchant/money-requests"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MoneyRequests />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
+          path="/merchant/services"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <Services />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
+          path="/merchant/dashboard"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <Dashboard />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
+
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>

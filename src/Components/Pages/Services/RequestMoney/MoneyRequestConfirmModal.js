@@ -10,7 +10,7 @@ const MoneyRequestConfirmModal = ({
     toast.loading("Request is being confirmed.", {
       id: "moneyRequestLoadingToast",
     });
-    fetch("https://shohoj-pay-server.herokuapp.com/approveRequestMoney", {
+    fetch("http://localhost:5000/approveRequestMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -44,7 +44,7 @@ const RequestMoney = () => {
       time,
     };
 
-    fetch("https://shohoj-pay-server.herokuapp.com/requestMoney", {
+    fetch("http://localhost:5000/requestMoney", {
       method: "POST",
       headers: {
         "content-type": "application/json",
