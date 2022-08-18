@@ -24,6 +24,24 @@
   z-index: 100;
 }
 
+.notificationCounter {
+  position: absolute;
+  background: rgb(184, 13, 13);
+  line-height: 100%;
+  padding: 4px;
+  font-size: 14px;
+  top: -15px;
+  right: -5px;
+  border-radius: 25%;
+  text-align: center;
+  display: flex;
+  display: none;
+}
+
+.notificationCounterShow {
+  display: block;
+}
+
 /* .navbar a {
     color: black;
   } */
@@ -32,5 +50,35 @@
 @media only screen and (max-width: 768px) {
   .navbar li {
     margin: 18px 15px;
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .navbar li {
+    margin: 18px 15px;
+  }
+  .notificationCounter {
+    top: -15px;
+    right: 425px;
+  }
+}
+
+@media only screen and (max-width: 822px) {
+  .notificationCounter {
+    top: -15px;
+    right: 320px;
+  }
+}
+
+@media only screen and (max-width: 610px) {
+  .notificationCounter {
+    top: -15px;
+    right: 220px;
+  }
+}
+
+@media only screen and (max-width: 409px) {
+  .notificationCounter {
+    top: -15px;
+    right: 125px;
   }
 }
