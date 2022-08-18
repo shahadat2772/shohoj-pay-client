@@ -1,0 +1,41 @@
+/* PAGINATION STYLE */
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5rem;
+  font-size: 1.2rem;
+  gap: 5px;
+}
+.pagination .page-name {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+}
+.pagination .page-name:hover {
+  background-color: brown;
+  color: #fff;
+}
+.pagination .active {
+  background-color: brown;
+}
+
+@media only screen and (max-width: 480px) {
+  .md-responsive {
+    font-size: 10px;
+  }
+  .md-amount-responsive {
+    font-size: 14px;
+  }
+  .md-img-responsive {
+    width: 40px;
+  }
+  .md-trx-responsive {
+    font-size: 8px;
+  }
+  .md-type-responsive {
+    font-size: 14px;
+  }
+}
