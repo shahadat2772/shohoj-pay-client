@@ -17,7 +17,7 @@ const RequirePersonal = ({ children }) => {
             return <Navigate to='/adminpanel' />
         }
         else if (mongoUser.type === 'merchant') {
-            return <Navigate to='/' />
+            return <Navigate to='/merchant/dashboard' />
         }
     }
     return children

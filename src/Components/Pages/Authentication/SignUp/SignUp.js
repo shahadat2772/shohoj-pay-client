@@ -67,7 +67,7 @@ const SignUp = () => {
             body: JSON.stringify({ userInfo }),
           })
             .then((res) => res.json())
-            .then((result) => console.log(result));
+          // .then((result) => console.log(result));
         }
       })
 
@@ -81,7 +81,6 @@ const SignUp = () => {
   }, [userCreateError]);
 
   useEffect(() => {
-    console.log(emailAddress)
     if (emailAddress) {
       fetch(`http://localhost:5000/checkemailexists/${emailAddress}`)
         .then(res => res.json())
@@ -99,7 +98,7 @@ const SignUp = () => {
 
 
   useEffect(() => {
-    if (user?.user?.email) {
+    if (user?.user.email) {
       if (token && mongoUser) {
         setTimeout(() => {
           toast.success("Create Account SuccessFully");
@@ -125,7 +124,7 @@ const SignUp = () => {
         return toast.error("Opps Password Not Match");
       }
       await createUserWithEmailAndPassword(data?.email, data?.password);
-      await updateProfile({ displayName: data.name });
+      await updateProfile({ displayName: data.firstName + data.lastName });
       createAccount(data);
     }
   };
