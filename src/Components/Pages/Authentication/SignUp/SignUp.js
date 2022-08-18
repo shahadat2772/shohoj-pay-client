@@ -12,6 +12,12 @@ import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
+  const [showNamePart, setShowNamePart] = useState(true);
+  const [showPasswordPart, setShowPasswordPart] = useState(false);
+  const [showTypePart, setShowTypePart] = useState(false);
+  const [progress, setProgress] = useState(1);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [emailExistsError, setEmailExistsError] = useState(false)
   const date = new Date().toLocaleDateString();
 
   const passwordShowRef = useRef("");
@@ -37,6 +43,24 @@ const SignUp = () => {
       toast.error(error);
     }
   }, [userCreateError]);
+  useEffect(() => {
+    console.log(emailAddress)
+    if (emailAddress) {
+      fetch(`http://localhost:5000/checkemailexists/${emailAddress}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.error) {
+            setEmailExistsError(result.error);
+            toast.error(result.error)
+          }
+          else {
+            setEmailExistsError(false)
+          }
+        })
+    }
+  }, [emailAddress])
+
+
   useEffect(() => {
     if (user?.user?.displayName) {
       const userInfo = {
@@ -93,29 +117,133 @@ const SignUp = () => {
             Sign Up
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control w-full max-w-xs ">
-              <label htmlFor="inputName" className="label">
-                Name
-              </label>
-              <input
-                id="inputName"
-                type="text"
-                placeholder="Name"
-                className="input input-bordered w-full max-w-xs"
-                {...register("name", {
-                  required: {
-                    value: true,
-                    message: "Name Is Required",
-                  },
-                })}
-              />
-              <label className="label">
-                {errors.name?.type === "required" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.name.message}
-                  </span>
-                )}
-              </label>
+            {/* Name and Email part  */}
+            <div className={`${showNamePart ? "block" : "hidden"}`}>
+
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-name">First Name</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                  {...register("firstName", {
+                    required: {
+                      value: true,
+                      message: "First Name is Required",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors.firstName?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.firstName.message}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-name">Last Name</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                  {...register("lastName", {
+                    required: {
+                      value: true,
+                      message: "Last Name is Required",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors.lastName?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.lastName.message}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-email">Email</span>
+                </label>
+                <input
+                  onKeyUp={(e) => setEmailAddress(e.target.value)}
+                  type="email"
+                  placeholder="Email"
+                  className="input input-bordered w-full max-w-xs"
+                  {...register("email", {
+                    required: {
+                      value: true,
+                      message: "Email Is Required",
+                    },
+                    pattern: {
+                      value: /[a-z0-9]+@.[a-z]{3}/,
+                      message: "Your Email Have Must Be A Special characters",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors?.email?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.email.message}
+                    </span>
+                  )}
+                  {errors?.email?.type === "pattern" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.email.message}
+                    </span>
+                  )}
+                  {
+                    emailExistsError && (
+                      <span className="label-text-alt text-red-500">
+                        {emailExistsError}
+                      </span>
+                    )
+                  }
+                </label>
+              </div>
+              <div className="form-control w-full max-w-xs ">
+                <label className="label">
+                  <span className="label-name">Phone</span>
+                </label>
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                  {...register("phone", {
+                    required: {
+                      value: true,
+                      message: "Phone Number is Required",
+                    },
+                  })}
+                />
+                <label className="label">
+                  {errors.phone?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                      {errors.phone.message}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <button onClick={() => {
+                if (Object.keys(errors).length !== 0) {
+                  if (!errors.firstName &&
+                    !errors.lastName &&
+                    !errors.email &&
+                    !emailExistsError &&
+                    !errors.phone
+                  ) {
+                    setProgress(2)
+                    setShowTypePart(true)
+                    setShowNamePart(false)
+                  }
+                }
+              }} className="btn w-full" >Next</button>
+
             </div>
             <div className="form-control w-full max-w-xs ">
               <label htmlFor="inputEmail" className="label">
