@@ -23,21 +23,33 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useState } from "react";
-import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin.js/RequireAdmin";
+import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin/RequireAdmin"
 import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
 import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
 import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
-
+import RequireMerchant from "./Components/Pages/Authentication/RequireMerchant/RequireMerchant";
+import useUser from "./Components/Pages/Hooks/useUser";
+import { useAuthState } from "react-firebase-hooks/auth"
+import auth from "./firebase.init";
+import Spinner from "./Components/Shared/Spinner/Spinner";
+import RestrictAuth from "./Components/Pages/Authentication/RestrictAuth/RestrictAuth";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
   const [request, fetchRequests] = requestForConfirm;
+  const [firebaseUser, loading] = useAuthState(auth)
+  const [user] = useUser(firebaseUser?.email);
+  if (loading || !user) {
+    return <Spinner />
+  }
 
   return (
     <div>
       <Navbar></Navbar>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<RestrictAuth>
+          <Home />
+        </RestrictAuth>} />
         <Route
           path="/services"
           element={
@@ -108,9 +120,14 @@ function App() {
           }
         />
         {/* Authentication Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/login" element={<RestrictAuth>
+          <Login />
+        </RestrictAuth>} />
+        <Route path="/signUp" element={<RestrictAuth>
+          <SignUp />
+        </RestrictAuth>} />
         <Route path="/resetPassword" element={<ResetPassword />} />
+        {/* Dashboard related routes  */}
         <Route
           path="/dashboard"
           element={
@@ -144,6 +161,38 @@ function App() {
             </RequireAuth>
           }
         />
+        {/* Routes for Merchant */}
+        <Route
+          path="/merchant/money-requests"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MoneyRequests />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
+          path="/merchant/services"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <Services />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
+          path="/merchant/dashboard"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <Dashboard />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
+
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>

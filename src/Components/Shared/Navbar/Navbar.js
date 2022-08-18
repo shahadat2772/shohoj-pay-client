@@ -15,12 +15,18 @@ const Navbar = () => {
   const [user, loading] = useAuthState(auth);
   const link = [{ name: "Home", link: "/" }];
 
-  const restrictedLinks = [
+  const PersonalUserLinks = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
-    { name: "Request", link: "/moneyRequests" },
+    { name: "Requests", link: "/moneyRequests" },
     { name: "Settings", link: "/settings" },
   ];
+  const merchantUserLinks = [
+    { name: "Dashboard", link: "/merchant/dashboard" },
+    { name: "Services", link: "/merchant/services" },
+    { name: "Requests", link: "/merchant/money-requests" },
+
+  ]
 
   const [mongoUser] = useUser(user?.email);
 
@@ -48,7 +54,7 @@ const Navbar = () => {
         window.removeEventListener("scroll", controlNavbar);
       };
     }
-  }, [lastScrollY]);
+  }, [lastScrollY, user]);
 
   // RESPONSIVE TOGGLER BTN STATE
   const [open, setOpen] = useState(false);
@@ -91,14 +97,21 @@ const Navbar = () => {
                   className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
                     }`}
                 >
-                  {link.map((item) => (
-                    <li key={item.name} className="block text-center">
-                      <NavLink to={item.link}>{item.name}</NavLink>
-                    </li>
-                  ))}
-                  {/* Routes for authenticated users   */}
-                  {user &&
-                    restrictedLinks.map((item) => (
+                  {!user &&
+                    link.map((item) => (
+                      <li key={item.name} className="block text-center">
+                        <NavLink to={item.link}>{item.name}</NavLink>
+                      </li>
+                    ))}
+                  {/* Routes for authenticated users [personal users only]  */}
+                  {mongoUser?.type === "personal" &&
+                    PersonalUserLinks.map((item) => (
+                      <li key={item.name} className="block text-center">
+                        <NavLink to={item.link}>{item.name}</NavLink>
+                      </li>
+                    ))}
+                  {mongoUser?.type === "merchant" &&
+                    merchantUserLinks.map((item) => (
                       <li key={item.name} className="block text-center">
                         <NavLink to={item.link}>{item.name}</NavLink>
                       </li>
