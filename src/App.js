@@ -18,9 +18,7 @@ import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
 import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
-
 import MessengerCustomerChat from "react-messenger-customer-chat";
-
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin/RequireAdmin"
@@ -99,6 +97,7 @@ function App() {
             </RequireAuth>
           }
         />
+        
         <Route
           path="/moneyRequests"
           element={
@@ -127,8 +126,9 @@ function App() {
           <SignUp />
         </RestrictAuth>} />
         <Route path="/resetPassword" element={<ResetPassword />} />
+
         {/* Dashboard related routes  */}
-        <Route
+         <Route
           path="/dashboard"
           element={
             <RequireAuth>
@@ -138,18 +138,25 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/adminpanel" exact={true}
-          element={<RequireAuth>
-            <RequireAdmin>
-              <AdminPanel />
-            </RequireAdmin>
-          </RequireAuth>
-          } >
-          <Route path='makeadmin' element={
-            <RequireAdmin>
-              <MakeAdmin />
-            </RequireAdmin>
-          } />
+        <Route
+          path="/adminpanel"
+          exact={true}
+          element={
+            <RequireAuth>
+              <RequireAdmin>
+                <AdminPanel />
+              </RequireAdmin>
+            </RequireAuth>
+          }
+        >
+          <Route
+            path="makeadmin"
+            element={
+              <RequireAdmin>
+                <MakeAdmin />
+              </RequireAdmin>
+            }
+          />
         </Route>
         <Route
           path="/dashboard/allTransAction"
@@ -196,8 +203,10 @@ function App() {
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <MessengerCustomerChat pageId="107012672117270" appId="586701279704824" />
-      ,
+      <MessengerCustomerChat
+            pageId="107012672117270"
+            appId="586701279704824"
+      />,
       <Footer />
       <Toaster />
       {request && (
