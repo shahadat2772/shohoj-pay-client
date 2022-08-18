@@ -9,6 +9,7 @@ import {
 } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import Spinner from "../../../Shared/Spinner/Spinner";
+import useUser from "../../Hooks/useUser";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
@@ -27,6 +28,7 @@ const SignUp = () => {
     userCreateError,
   ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
   const [token] = useToken(user?.user?.email);
+  const [mongoUser] = useUser(user?.email)
   const navigate = useNavigate();
   const [updateProfile] = useUpdateProfile(auth);
   const {
@@ -55,7 +57,6 @@ const SignUp = () => {
           delete userInfo.ConfirmPassword;
           delete userInfo.firstName;
           delete userInfo.lastName;
-          console.log(userInfo)
           fetch("http://localhost:5000/createAccount", {
             method: "POST",
             headers: {
@@ -79,16 +80,24 @@ const SignUp = () => {
 
 
   useEffect(() => {
-    if (user?.user?.displayName) {
-      if (token) {
+    if (user?.user?.email) {
+      if (token && mongoUser) {
         setTimeout(() => {
           toast.success("Create Account SuccessFully");
         }, 1000);
-        navigate("/");
+        if (mongoUser.type === "admin") {
+          navigate('/adminpanel')
+        }
+        else if (mongoUser?.type === "merchant") {
+          navigate("/merchant/services")
+        }
+        else if (mongoUser.type === "personal") {
+          navigate("/dashboard");
+        }
       }
     }
-  }, [user, navigate, token]);
-  if (userCreatLoading) {
+  }, [user, navigate, token, mongoUser]);
+  if (userCreatLoading || !mongoUser) {
     return <Spinner />;
   }
   const onSubmit = async (data) => {
