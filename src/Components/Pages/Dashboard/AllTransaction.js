@@ -1,57 +1,50 @@
 import axios from "axios";
 import { signOut } from "firebase/auth";
-import React, { useEffect, useInsertionEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
-// import ReactPaginate from "react-paginate";
+import ReactPaginate from "react-paginate";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
 
 const AllTransaction = () => {
-  // askdfkasdf
-  // const [currentItems, setCurrentItems] = useState(null);
   const [transactionData, setTransactionData] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [itemOffset, setItemOffset] = useState(0);
-  // const [reverse, setReverse] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
   // REVERSE TRANSACTION DATA
   const reverseData = [...filterData].reverse();
-  // const items = [
-  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-  //   10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3,
-  //   4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  //   13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7,
-  //   8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1,
-  //   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  //   11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4,
-  //   5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  //   13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7,
-  //   8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1,
-  //   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  //   11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-  // ];
-  // const itemsPerPage = 4;
-  // useInsertionEffect(() => {
-  //   // Fetch items from another resources.
-  //   const endOffset = itemOffset + itemsPerPage;
-  //   setCurrentItems(items.slice(itemOffset, endOffset));
-  //   setPageCount(Math.ceil(items.length / itemsPerPage));
-  // }, [itemOffset, itemsPerPage]);
-  // // Invoke when user click to request another page.
-  // const handlePageClick = (event) => {
-  //   const newOffset = (event.selected * itemsPerPage) % items.length;
-  //   setItemOffset(newOffset);
-  // };
+  const itemsPerPage = 10;
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % filterData.length;
+    setItemOffset(newOffset);
+  };
+  console.log(reverseData.length);
+  const count = Math.ceil(filterData.length / itemsPerPage);
+  console.log(count);
   useEffect(() => {
+    const endOffset = itemOffset + itemsPerPage;
+    setFilterData(filterData.slice(itemOffset, endOffset));
+    setPageCount(count);
+  }, [itemsPerPage, itemOffset]);
+  const { isLoading, allTransactionData, error } = useSelector(
+    (state) => state.allTransaction
+  );
+  const data = useSelector((state) => state);
+  const dispatch = useDispatch();
+  console.log(allTransactionData, error, data);
+  useEffect(() => {
+    dispatch(fetchAllTransaction());
     axios
-
       .get(
         `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
         {
@@ -74,7 +67,7 @@ const AllTransaction = () => {
       toast.success("Copied Transaction Information");
     }
   }, [user?.email, shareLinkCopied, navigate]);
-  if (transactionData.length === 0) {
+  if (transactionData.length === 0 || isLoading) {
     return <Spinner />;
   }
 
@@ -248,14 +241,13 @@ const AllTransaction = () => {
               </li>
             ))}
           </ul>
-          {/* <Items currentItems={currentItems} /> */}
         </div>
-        {/* <ReactPaginate
+        <ReactPaginate
+          pageCount={pageCount}
           breakLabel="..."
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={3}
-          pageCount={pageCount}
           previousLabel="< previous"
           renderOnZeroPageCount={null}
           containerClassName="pagination"
@@ -263,7 +255,7 @@ const AllTransaction = () => {
           previousLinkClassName="page-num"
           nextLinkClassName="page-num"
           activeLinkClassName="active"
-        /> */}
+        />
       </div>
     </div>
   );
