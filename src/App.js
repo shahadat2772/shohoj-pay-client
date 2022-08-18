@@ -10,13 +10,14 @@ import toast, { Toaster } from "react-hot-toast";
 import ResetPassword from "./Components/Pages/Authentication/ResetPassword/ResetPassword";
 import Services from "./Components/Pages/Services/Services/Services";
 import AddMoney from "./Components/Pages/Services/AddMoney/AddMoney";
-import Settings from "./Components/Pages/Settings/Settings";
+// import Settings from "./Components/Pages/Settings/Settings";
 import SendMoney from "./Components/Pages/Services/SendMoney/SendMoney";
 import SaveMoney from "./Components/Pages/Services/SaveMoney/SaveMoney";
 import RequireAuth from "./Components/Pages/Authentication/RequireAuth/RequireAuth";
-import Dashboard from "./Components/Pages/Dashboard/Dashboard";
+// import Dashboard from "./Components/Pages/Dashboard/Dashboard";
 import RequestMoney from "./Components/Pages/Services/RequestMoney/RequestMoney";
 import AllTransaction from "./Components/Pages/Dashboard/AllTransaction";
+
 import MoneyRequests from "./Components/Pages/Services/MoneyRequests/MoneyRequests";
 import Notification from "./Components/Pages/Notification/Notification";
 
@@ -71,7 +72,7 @@ function App() {
 
   return (
     <div>
-      <Navbar unseenNotification={unseenNotification}></Navbar>
+      <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -84,7 +85,7 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route
+        {/* <Route
           path="/settings"
           element={
             <RequireAuth>
@@ -137,6 +138,7 @@ function App() {
             </RequireAuth>
           }
         />
+        
         <Route
           path="/moneyRequests"
           element={
@@ -161,7 +163,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <RequireAuth>
@@ -170,7 +172,7 @@ function App() {
               </RequirePersonal>
             </RequireAuth>
           }
-        />
+        /> */}
         <Route
           path="/adminpanel"
           exact={true}
@@ -204,8 +206,10 @@ function App() {
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <MessengerCustomerChat pageId="107012672117270" appId="586701279704824" />
-      ,
+      <MessengerCustomerChat
+            pageId="107012672117270"
+            appId="586701279704824"
+      />,
       <Footer />
       <Toaster />
       {request && (

@@ -67,6 +67,7 @@ const Navbar = ({ unseenNotification }) => {
     toast.success("Sign Out Successfully");
   };
   if (loading || !mongoUser) {
+
     return;
   }
 
@@ -95,9 +96,10 @@ const Navbar = ({ unseenNotification }) => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-fit lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
-                    open ? "left-[-10px] top-16" : "left-[-1080px]"
-                  }`}
+
+                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
+                    }`}
+
                 >
                   {link.map((item) => (
                     <li key={item.name} className="block text-center">

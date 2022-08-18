@@ -13,14 +13,16 @@ const Login = () => {
     useSignInWithEmailAndPassword(auth);
   const [show, setShow] = useState(false);
   const [token] = useToken(user);
-  const [mongoUser] = useUser(user?.email);
+  const [mongoUser] = useUser(user?.email)
   const passwordShowRef = useRef("");
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
   if (mongoUser?.type === "admin") {
     from = "/adminpanel";
-  } else if (mongoUser?.type === "merchant") {
+  }
+  else if (mongoUser?.type === "merchant") {
+
     from = location.state?.from?.pathname || "/merchant";
   }
   const {
