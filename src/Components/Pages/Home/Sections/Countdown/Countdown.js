@@ -21,6 +21,7 @@ const Countdown = () => {
       <div>
         <h1 className="text-3xl lg:text-5xl m-10 lg:m-16 p-2 font-semibold">
           Real People,Real Relationships.
+
         </h1>
         {/* stats count div */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 lg:mb-20">

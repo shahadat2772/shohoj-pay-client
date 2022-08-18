@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 import useUser from "../../Pages/Hooks/useUser";
 
-const Navbar = () => {
+const Navbar = ({ unseenNotification }) => {
+  const location = useLocation();
+  const pathName = location?.pathname;
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const Navbar = () => {
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
     { name: "Request", link: "/moneyRequests" },
+    { name: "Notification", link: "/notification" },
     { name: "Settings", link: "/settings" },
   ];
 
@@ -64,11 +67,16 @@ const Navbar = () => {
     toast.success("Sign Out Successfully");
   };
   if (loading || !mongoUser) {
-    return
+
+    return;
   }
 
   return (
-    <nav className={`active ${(show || mongoUser.type === "admin") ? "hidden" : "block"}`}>
+    <nav
+      className={`active ${
+        show || mongoUser.type === "admin" ? "hidden" : "block"
+      }`}
+    >
       <div className="fixed top-0 w-[100%] z-50">
         <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
           <div className="p-1 lg:px-8 md:px-4">
@@ -88,8 +96,10 @@ const Navbar = () => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
+
                   className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
                     }`}
+
                 >
                   {link.map((item) => (
                     <li key={item.name} className="block text-center">
@@ -99,9 +109,29 @@ const Navbar = () => {
                   {/* Routes for authenticated users   */}
                   {user &&
                     restrictedLinks.map((item) => (
-                      <li key={item.name} className="block text-center">
-                        <NavLink to={item.link}>{item.name}</NavLink>
-                      </li>
+                      <>
+                        {item.name === "Notification" ? (
+                          <li
+                            className={`block text-center relative`}
+                            key={item.name}
+                          >
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                            <p
+                              className={`notificationCounter ${
+                                unseenNotification?.length !== 0 &&
+                                pathName !== "/notification" &&
+                                "notificationCounterShow"
+                              }`}
+                            >
+                              {unseenNotification?.length}
+                            </p>
+                          </li>
+                        ) : (
+                          <li className={`block text-center`} key={item.name}>
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                          </li>
+                        )}
+                      </>
                     ))}
                   {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                   <div className=" flex items-center justify-center lg:hidden">

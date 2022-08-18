@@ -29,6 +29,7 @@ const coreFeatures = () => {
         <div className="card text-center shadow rounded-xl p-5 m-5 lg:m-0 md:m-0">
           <figure className="service w-24 h-24 mx-auto bg-[#F7FAFC] rounded-full flex justify-center items-center">
 
+
             <FontAwesomeIcon
               className="mx-auto text-5xl text-primary"
               icon={faMoneyBillTransfer}
@@ -94,6 +95,7 @@ const coreFeatures = () => {
           </figure>
 
           <p className="text-xl mt-4 mb-[6px]">Fast payment method</p>
+
           <p className="">
             Your time is more valuable to Shohoj Pay.
           </p>

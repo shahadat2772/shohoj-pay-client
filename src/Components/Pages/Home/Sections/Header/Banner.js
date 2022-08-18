@@ -5,16 +5,16 @@ import React from "react";
 import "./Banner.css";
 import { useNavigate } from "react-router-dom";
 
-
 const Banner = () => {
   const navigate = useNavigate();
   return (
-<>
-<div className=" min-h-screen bg-img1 bg-fixed">
+    <>
+      <div className=" min-h-screen bg-img1 bg-fixed">
         <div className="hero-overlay bg-opacity-30"></div>
-        <div className="hero-content mx-auto text-center text-neutral-content min-h-screen">
-          <div data-aos="fade-up" data-aos-duration="3000"
+          <div className="hero-content mx-auto text-center text-neutral-content min-h-screen">
+            <div data-aos="fade-up" data-aos-duration="3000"
                data-aos-anchor-placement="center-bottom">
+
             <h1
               style={{
                 fontFamily: "Raleway, sans-ser",
@@ -24,12 +24,14 @@ const Banner = () => {
               className="mb-5 text-secondary md:text-6xl lg:text-6xl text-5xl font-bold"
             >
               QUICK AND SECURE <br/> PAYMENTS STARTS WITH <br /> SHOHOJ PAY
+              
             </h1>
             <p
               style={{ fontFamily: "Raleway, sans-ser" }}
               className=" mt-4 mb-4 text-color font-medium md:text-lg lg:text-lg max-w-[40rem]"
             >
               We make your life easy by providing you one of the most important
+
               services that is Finance. Use Shohoj Pay and kick out your
               problems.
             </p>
@@ -40,14 +42,13 @@ const Banner = () => {
             >
               GET YOUR FREE{" "}
               <span style={{ fontFamily: "Roboto, sans-ser" }}>25</span>$ NOW!
-
             </button>
           </div>
         </div>
       </div>
 
       </>
-  );
+      );
 };
 
 export default Banner;
