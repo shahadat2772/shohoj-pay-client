@@ -76,8 +76,8 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`active ${
-        show || mongoUser.type === "admin" ? "hidden" : "block"
+      className={`active ${show && "hidden"} ${
+        user && mongoUser.type === "admin" && "hidden"
       }`}
     >
       <div className="fixed top-0 w-[100%] z-50">
