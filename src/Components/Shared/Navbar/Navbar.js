@@ -18,12 +18,14 @@ const Navbar = () => {
   const PersonalUserLinks = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
-    { name: "Request", link: "/moneyRequests" },
+    { name: "Requests", link: "/moneyRequests" },
     { name: "Settings", link: "/settings" },
   ];
   const merchantUserLinks = [
+    { name: "Dashboard", link: "/merchant/dashboard" },
     { name: "Services", link: "/merchant/services" },
-    { name: "Request", link: "/merchant/money-requests" }
+    { name: "Requests", link: "/merchant/money-requests" },
+
   ]
 
   const [mongoUser] = useUser(user?.email);
@@ -52,7 +54,7 @@ const Navbar = () => {
         window.removeEventListener("scroll", controlNavbar);
       };
     }
-  }, [lastScrollY]);
+  }, [lastScrollY, user]);
 
   // RESPONSIVE TOGGLER BTN STATE
   const [open, setOpen] = useState(false);

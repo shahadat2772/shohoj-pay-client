@@ -26,7 +26,7 @@ const SignUp = () => {
     userCreatLoading,
     userCreateError,
   ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
-  const [token] = useToken(user);
+  const [token] = useToken(user?.user?.email);
   const navigate = useNavigate();
   const [updateProfile] = useUpdateProfile(auth);
   const {

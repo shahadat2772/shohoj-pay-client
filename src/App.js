@@ -182,6 +182,16 @@ function App() {
             </RequireAuth>
           }
         ></Route>
+        <Route
+          path="/merchant/dashboard"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <Dashboard />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        ></Route>
 
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
