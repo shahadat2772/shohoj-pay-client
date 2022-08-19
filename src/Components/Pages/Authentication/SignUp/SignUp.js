@@ -41,7 +41,7 @@ const SignUp = () => {
 
   const createAccount = async (userData) => {
 
-    const file = userData.avatar[0];
+    const file = userData.profilePic[0];
     const formData = new FormData();
     formData.append("image", file);
     const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
@@ -54,7 +54,7 @@ const SignUp = () => {
       .then((result) => {
         if (result.success) {
           const name = userData.firstName + " " + userData.lastName;
-          const userInfo = { ...userData, name, avatar: result.data.url, date };
+          const userInfo = { ...userData, name, profilePic: result.data.url, date };
           delete userInfo.password;
           delete userInfo.ConfirmPassword;
           delete userInfo.firstName;
@@ -153,52 +153,31 @@ const SignUp = () => {
             {/* Name and Email part  */}
             <div className={`${showNamePart ? "block" : "hidden"}`}>
 
+              {/* NAME */}
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
-                  <span className="label-name">First Name</span>
+                  <span className="label-name">Full Name</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="First Name"
+                  placeholder="Full Name"
                   className="input input-bordered w-full max-w-xs lg:max-w-sm"
-                  {...register("firstName", {
+                  {...register("name", {
                     required: {
                       value: true,
-                      message: "First Name is Required",
+                      message: "Name is Required",
                     },
                   })}
                 />
                 <label className="label">
-                  {errors.firstName?.type === "required" && (
+                  {errors.name?.type === "required" && (
                     <span className="label-text-alt text-red-500">
-                      {errors.firstName.message}
+                      {errors.name.message}
                     </span>
                   )}
                 </label>
               </div>
-              <div className="form-control w-full max-w-xs ">
-                <label className="label">
-                  <span className="label-name">Last Name</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
-                  {...register("lastName", {
-                    required: {
-                      value: true,
-                      message: "Last Name is Required",
-                    },
-                  })}
-                />
-                <label className="label">
-                  {errors.lastName?.type === "required" && (
-                    <span className="label-text-alt text-red-500">
-                      {errors.lastName.message}
-                    </span>
-                  )}
-                </label>
-              </div>
+              {/* EMAIL  */}
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
                   <span className="label-email">Email</span>
@@ -239,48 +218,7 @@ const SignUp = () => {
                   }
                 </label>
               </div>
-              <div className="form-control w-full max-w-xs ">
-                <label className="label">
-                  <span className="label-name">Phone</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  className="input input-bordered w-full max-w-xs lg:max-w-sm"
-                  {...register("phone", {
-                    required: {
-                      value: true,
-                      message: "Phone Number is Required",
-                    },
-                  })}
-                />
-                <label className="label">
-                  {errors.phone?.type === "required" && (
-                    <span className="label-text-alt text-red-500">
-                      {errors.phone.message}
-                    </span>
-                  )}
-                </label>
-              </div>
-              <button onClick={() => {
-                if (Object.keys(errors).length !== 0) {
-                  if (!errors.firstName &&
-                    !errors.lastName &&
-                    !errors.email &&
-                    !emailExistsError &&
-                    !errors.phone
-                  ) {
-                    setProgress(2)
-                    setShowTypePart(true)
-                    setShowNamePart(false)
-                  }
-                }
-              }} className="btn w-full" >Next</button>
-            </div>
-            {/* --------------------------- */}
-
-            {/* Account Type  and Address */}
-            <div className={`${showTypePart ? "block" : "hidden"}`}>
+              {/* ADDRESS  */}
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
                   <span className="label-name">Address</span>
@@ -304,30 +242,49 @@ const SignUp = () => {
                   )}
                 </label>
               </div>
+
+              <button onClick={() => {
+                if (Object.keys(errors).length !== 0) {
+                  if (
+                    !errors.name &&
+                    !errors.email &&
+                    !emailExistsError &&
+                    !errors.address
+                  ) {
+                    setProgress(2)
+                    setShowTypePart(true)
+                    setShowNamePart(false)
+                  }
+                }
+              }} className="btn w-full" >Next</button>
+            </div>
+            {/* --------------------------- */}
+
+            {/* Account Type  and Phone */}
+            <div className={`${showTypePart ? "block" : "hidden"}`}>
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
-                  <span className="label-name">Zip Code</span>
+                  <span className="label-name">Phone</span>
                 </label>
                 <input
-                  type="number"
-                  placeholder="Zip or Area code"
+                  type="tel"
+                  placeholder="Phone Number"
                   className="input input-bordered w-full max-w-xs lg:max-w-sm"
-                  {...register("zip", {
+                  {...register("phone", {
                     required: {
                       value: true,
-                      message: "Zip or Area code is Required",
+                      message: "Phone Number is Required",
                     },
                   })}
                 />
                 <label className="label">
-                  {errors?.zip?.type === "required" && (
+                  {errors.phone?.type === "required" && (
                     <span className="label-text-alt text-red-500">
-                      {errors?.zip.message}
+                      {errors.phone.message}
                     </span>
                   )}
                 </label>
               </div>
-
               <label className="label ">
                 Account Type
               </label>
@@ -360,24 +317,25 @@ const SignUp = () => {
                   </label>
                 </div>
               </div>
+
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
-                  <span className="label-name">Avatar</span>
+                  <span className="label-name">Profile Picture</span>
                 </label>
                 <input
                   type="file"
                   className="input input-bordered w-full max-w-xs lg:max-w-sm"
-                  {...register("avatar", {
+                  {...register("profilePic", {
                     required: {
                       value: true,
-                      message: "Avatar is Required",
+                      message: "Profile Picture is Required",
                     },
                   })}
                 />
                 <label className="label">
-                  {errors.avatar?.type === "required" && (
+                  {errors.profilePic?.type === "required" && (
                     <span className="label-text-alt text-red-500">
-                      {errors.avatar.message}
+                      {errors.profilePic.message}
                     </span>
                   )}
                 </label>
@@ -390,7 +348,7 @@ const SignUp = () => {
 
                 }} className="btn btn-outline lg:w-5/12" >Back</button>
                 <button onClick={() => {
-                  if (!errors?.address && !errors?.zip && !errors?.avatar) {
+                  if (!errors?.phone && !errors?.profilePic) {
                     setProgress(3)
                     setShowPasswordPart(true)
                     setShowTypePart(false)
@@ -489,6 +447,7 @@ const SignUp = () => {
         </div>
       </div >
     </div >
+
   );
 };
 
