@@ -50,7 +50,7 @@ function App() {
     }
     try {
       axios
-        .get("https://shohoj-pay-server.herokuapp.com/getNotification", {
+        .get("http://localhost:5000/getNotification", {
           headers: {
             email: email,
           },

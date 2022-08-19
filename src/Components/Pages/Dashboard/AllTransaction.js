@@ -45,14 +45,11 @@ const AllTransaction = () => {
   useEffect(() => {
     dispatch(fetchAllTransaction());
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      )
+      .get(`http://localhost:5000/transactionStatus/${user?.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
       .then((res) => {
         setTransactionData(res.data);
         setFilterData(res.data);
@@ -121,7 +118,7 @@ const AllTransaction = () => {
     }, 2000);
   };
   const handledeletedata = (id) => {
-    fetch(`https://shohoj-pay-server.herokuapp.com/delete/${id}`, {
+    fetch(`http://localhost:5000/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

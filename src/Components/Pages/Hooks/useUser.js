@@ -4,7 +4,7 @@ const useUser = (email) => {
   const [user, setUser] = useState({});
   useEffect(() => {
     if (email) {
-      fetch("https://shohoj-pay-server.herokuapp.com/getUserInfo", {
+      fetch("http://localhost:5000/getUserInfo", {
         method: "GET",
         headers: {
           email,

@@ -58,7 +58,7 @@ const SignUp = () => {
           delete userInfo.ConfirmPassword;
           delete userInfo.firstName;
           delete userInfo.lastName;
-          fetch("https://shohoj-pay-server.herokuapp.com/createAccount", {
+          fetch("http://localhost:5000/createAccount", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -79,9 +79,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (emailAddress) {
-      fetch(
-        `https://shohoj-pay-server.herokuapp.com/checkemailexists/${emailAddress}`
-      )
+      fetch(`http://localhost:5000/checkemailexists/${emailAddress}`)
         .then((res) => res.json())
         .then((result) => {
           if (result.error) {

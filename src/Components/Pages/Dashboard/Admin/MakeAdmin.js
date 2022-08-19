@@ -24,7 +24,7 @@ const MakeAdmin = () => {
       type: "admin",
     };
 
-    fetch(`https://shohoj-pay-server.herokuapp.com/makeadmin/${email}`, {
+    fetch(`http://localhost:5000/makeadmin/${email}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
