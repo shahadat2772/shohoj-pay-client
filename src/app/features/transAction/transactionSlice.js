@@ -2,8 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 export const fetchAllTransaction = createAsyncThunk(
   "allTransaction/fetchAllTransaction",
-  async () => {
-    const res = await axios.get("https://jsonplaceholder.typicode.com/photos");
+  async (user) => {
+    const res = await axios.get(
+      `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
     return res.data;
   }
 );

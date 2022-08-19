@@ -15,6 +15,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { signOut } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
 // SERVICE DATA
 const someServices = [
   {
@@ -55,19 +57,13 @@ const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
   const [balance, setBalance] = useState(0);
-  const [transactionData, setTransactionData] = useState([]);
+  // const [transactionData, setTransactionData] = useState([]);
+  // const [allTransactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
-  // LATEST TRANSACTION
-  const latestTransaction = [...transactionData].splice(
-    transactionData.length - 4,
-    transactionData.length
-  );
-  // REVERSE TRANSACTION DATA
-  const reverseData = [...latestTransaction].reverse();
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
   serviceType("Receive Money");
@@ -134,6 +130,14 @@ const Dashboard = () => {
       email: user?.email,
     },
   ];
+  // IMPORT TRANSACTION DATA USING REDUX
+  const { isLoading, allTransactionData, error } = useSelector(
+    (state) => state.allTransaction
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAllTransaction(user));
+  }, [user, dispatch]);
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
@@ -152,19 +156,20 @@ const Dashboard = () => {
         navigate("/");
       });
     // USER TRANSACTION DATA GET
-    axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => setTransactionData(res.data))
-      .catch((error) => {
-        toast.error(error?.message);
-        signOut(auth);
-        localStorage.removeItem("accessToken");
-        navigate("/");
-      });
+
+    // axios
+    //   .get(`http://localhost:5000/transactionStatus/${user.email}`, {
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //     },
+    //   })
+    //   .then((res) => setTransactionData(res.data))
+    //   .catch((error) => {
+    //     toast.error(error?.message);
+    //     signOut(auth);
+    //     localStorage.removeItem("accessToken");
+    //     navigate("/");
+    //   });
     axios
       .get(`http://localhost:5000/getServices`, {
         headers: {
@@ -178,6 +183,14 @@ const Dashboard = () => {
       toast.success("Copied Transaction Information");
     }
   }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
+
+  // LATEST TRANSACTION
+  const latestTransaction = [...allTransactionData].splice(
+    allTransactionData.length - 4,
+    allTransactionData.length
+  );
+  // REVERSE TRANSACTION DATA
+  const reverseData = [...latestTransaction].reverse();
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
@@ -197,8 +210,14 @@ const Dashboard = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-  if (transactionData === 0) {
+  if (isLoading) {
     return <Spinner />;
+  }
+  if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
+    toast.error(error?.message);
+    navigate("/");
   }
   return (
     <div className="container mx-auto lg:mt-28 lg:px-10 py-10">
@@ -244,7 +263,7 @@ const Dashboard = () => {
           </div>
           {/* START  LAST TRANSACTION*/}
           <div className="mt-10 lg:mt-0">
-            {transactionData.length === 0 ? (
+            {allTransactionData.length === 0 ? (
               <h2 className="text-2xl font-bold text-red-500 p-14 text-center">
                 You Have Not Made Any Transactions Yet
               </h2>
@@ -324,7 +343,7 @@ const Dashboard = () => {
                     </li>
                   ))}
                   <div className="text-center">
-                    {transactionData.length >= 1 && (
+                    {allTransactionData.length >= 1 && (
                       <button
                         onClick={() => navigate("/dashboard/allTransAction")}
                         className="btn btn-primary btn-sm mt-5 p-2"

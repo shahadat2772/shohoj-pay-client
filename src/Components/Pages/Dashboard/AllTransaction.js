@@ -1,79 +1,61 @@
-import axios from "axios";
 import { signOut } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
-import ReactPaginate from "react-paginate";
+// import ReactPaginate from "react-paginate";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
+import Pagination from "./Pagination/Pagination";
 
 const AllTransaction = () => {
-  const [transactionData, setTransactionData] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
-  // REVERSE TRANSACTION DATA
-  const reverseData = [...filterData].reverse();
-  const itemsPerPage = 10;
-  // Invoke when user click to request another page.
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filterData.length;
-    setItemOffset(newOffset);
-  };
-  console.log(reverseData.length);
-  const count = Math.ceil(filterData.length / itemsPerPage);
-  console.log(count);
-  useEffect(() => {
-    const endOffset = itemOffset + itemsPerPage;
-    setFilterData(filterData.slice(itemOffset, endOffset));
-    setPageCount(count);
-  }, [itemsPerPage, itemOffset]);
   const { isLoading, allTransactionData, error } = useSelector(
     (state) => state.allTransaction
   );
-  const data = useSelector((state) => state);
+  console.log(allTransactionData);
   const dispatch = useDispatch();
-  console.log(allTransactionData, error, data);
   useEffect(() => {
-    dispatch(fetchAllTransaction());
-    axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      )
-      .then((res) => {
-        setTransactionData(res.data);
-        setFilterData(res.data);
-      })
-      .catch((error) => {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        toast.error(error?.message);
-        navigate("/");
-      });
+    dispatch(fetchAllTransaction(user));
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user?.email, shareLinkCopied, navigate]);
-  if (transactionData.length === 0 || isLoading) {
+  }, [shareLinkCopied, navigate, dispatch, user]);
+  useEffect(() => {
+    setFilterData(allTransactionData);
+  }, [allTransactionData]);
+  // REVERSE TRANSACTION DATA
+  const reverseData = [...filterData].reverse();
+  console.log(filterData);
+  // PAGINATION
+  let PageSize = 10;
+  const currentTrxData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return reverseData.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, reverseData]);
+  // IMPORT DATA USING REDUX
+  if (isLoading) {
     return <Spinner />;
+  }
+  if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
+    toast.error(error?.message);
+    navigate("/");
   }
 
   // FILTER TRANSACTION DATA
   const handleFilterMonth = (e) => {
-    const getMonth = transactionData.filter((data) =>
+    const getMonth = allTransactionData.filter((data) =>
       data.date.includes(e.target.value)
     );
     setFilterData(getMonth);
@@ -91,7 +73,7 @@ const AllTransaction = () => {
       }
     }
     const getdate = fullMonth + "/" + day + "/" + year;
-    const getMonth = transactionData.filter((data) =>
+    const getMonth = allTransactionData.filter((data) =>
       data.fullDate.includes(getdate)
     );
     setFilterData(getMonth);
@@ -172,7 +154,7 @@ const AllTransaction = () => {
         </div>
         <div className="mt-8">
           <ul>
-            {reverseData.map((transAction) => (
+            {currentTrxData.map((transAction) => (
               <li
                 className={`flex items-center my-4 p-3 rounded-lg w-full shadow`}
                 key={transAction._id}
@@ -242,20 +224,15 @@ const AllTransaction = () => {
             ))}
           </ul>
         </div>
-        <ReactPaginate
-          pageCount={pageCount}
-          breakLabel="..."
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
-          previousLabel="< previous"
-          renderOnZeroPageCount={null}
-          containerClassName="pagination"
-          pageLinkClassName="page-name"
-          previousLinkClassName="page-num"
-          nextLinkClassName="page-num"
-          activeLinkClassName="active"
-        />
+        <div className={`mt-12 ${allTransactionData.length < 10 && "hidden"}`}>
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={filterData.length}
+            pageSize={PageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
     </div>
   );

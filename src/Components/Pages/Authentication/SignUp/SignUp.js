@@ -30,7 +30,7 @@ const SignUp = () => {
     userCreateError,
   ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
   const [token] = useToken(user?.user?.email);
-  const [mongoUser] = useUser(user?.email)
+  const [mongoUser] = useUser(user?.email);
   const navigate = useNavigate();
   const [updateProfile] = useUpdateProfile(auth);
   const {
@@ -40,7 +40,6 @@ const SignUp = () => {
   } = useForm();
 
   const createAccount = async (userData) => {
-
     const file = userData.avatar[0];
     const formData = new FormData();
     formData.append("image", file);
@@ -65,12 +64,10 @@ const SignUp = () => {
               "content-type": "application/json",
             },
             body: JSON.stringify({ userInfo }),
-          })
-            .then((res) => res.json())
+          }).then((res) => res.json());
           // .then((result) => console.log(result));
         }
-      })
-
+      });
   };
 
   useEffect(() => {
@@ -83,19 +80,17 @@ const SignUp = () => {
   useEffect(() => {
     if (emailAddress) {
       fetch(`http://localhost:5000/checkemailexists/${emailAddress}`)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           if (result.error) {
             setEmailExistsError(result.error);
-            toast.error(result.error)
+            toast.error(result.error);
+          } else {
+            setEmailExistsError(false);
           }
-          else {
-            setEmailExistsError(false)
-          }
-        })
+        });
     }
-  }, [emailAddress])
-
+  }, [emailAddress]);
 
   useEffect(() => {
     if (user?.user.email) {
@@ -104,12 +99,10 @@ const SignUp = () => {
           toast.success("Create Account SuccessFully");
         }, 1000);
         if (mongoUser.type === "admin") {
-          navigate('/adminpanel')
-        }
-        else if (mongoUser?.type === "merchant") {
-          navigate("/merchant/services")
-        }
-        else if (mongoUser.type === "personal") {
+          navigate("/adminpanel");
+        } else if (mongoUser?.type === "merchant") {
+          navigate("/merchant/services");
+        } else if (mongoUser.type === "personal") {
           navigate("/dashboard");
         }
       }
@@ -135,7 +128,6 @@ const SignUp = () => {
 
   return (
     <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
-
       <div className="card w-96 bg-base-100 shadow-xl">
         <ul class="steps steps-horizontal">
           <li className={`step step-primary`}></li>
@@ -152,7 +144,6 @@ const SignUp = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Name and Email part  */}
             <div className={`${showNamePart ? "block" : "hidden"}`}>
-
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
                   <span className="label-name">First Name</span>
@@ -230,13 +221,11 @@ const SignUp = () => {
                       {errors.email.message}
                     </span>
                   )}
-                  {
-                    emailExistsError && (
-                      <span className="label-text-alt text-red-500">
-                        {emailExistsError}
-                      </span>
-                    )
-                  }
+                  {emailExistsError && (
+                    <span className="label-text-alt text-red-500">
+                      {emailExistsError}
+                    </span>
+                  )}
                 </label>
               </div>
               <div className="form-control w-full max-w-xs ">
@@ -262,20 +251,26 @@ const SignUp = () => {
                   )}
                 </label>
               </div>
-              <button onClick={() => {
-                if (Object.keys(errors).length !== 0) {
-                  if (!errors.firstName &&
-                    !errors.lastName &&
-                    !errors.email &&
-                    !emailExistsError &&
-                    !errors.phone
-                  ) {
-                    setProgress(2)
-                    setShowTypePart(true)
-                    setShowNamePart(false)
+              <button
+                onClick={() => {
+                  if (Object.keys(errors).length !== 0) {
+                    if (
+                      !errors.firstName &&
+                      !errors.lastName &&
+                      !errors.email &&
+                      !emailExistsError &&
+                      !errors.phone
+                    ) {
+                      setProgress(2);
+                      setShowTypePart(true);
+                      setShowNamePart(false);
+                    }
                   }
-                }
-              }} className="btn w-full" >Next</button>
+                }}
+                className="btn w-full"
+              >
+                Next
+              </button>
             </div>
             {/* --------------------------- */}
 
@@ -328,13 +323,11 @@ const SignUp = () => {
                 </label>
               </div>
 
-              <label className="label ">
-                Account Type
-              </label>
+              <label className="label ">Account Type</label>
               <div className="flex justify-between items-center mt-2 mb-7 px-1">
                 <div className="flex space-x-2 items-center">
                   <input
-                    {...register('type', { required: true })}
+                    {...register("type", { required: true })}
                     type="radio"
                     name="type"
                     value="personal"
@@ -342,22 +335,18 @@ const SignUp = () => {
                     id="personal"
                     checked
                   />
-                  <label htmlFor="personal">
-                    Personal
-                  </label>
+                  <label htmlFor="personal">Personal</label>
                 </div>
                 <div className="flex space-x-2 items-center">
                   <input
-                    {...register('type', { required: true })}
+                    {...register("type", { required: true })}
                     type="radio"
                     name="type"
                     value="merchant"
                     className="radio radio-primary"
                     id="merchant"
                   />
-                  <label htmlFor="merchant">
-                    Merchant
-                  </label>
+                  <label htmlFor="merchant">Merchant</label>
                 </div>
               </div>
               <div className="form-control w-full max-w-xs ">
@@ -383,19 +372,27 @@ const SignUp = () => {
                 </label>
               </div>
               <div className="flex justify-between items-center">
-                <button onClick={() => {
-
-                  setShowNamePart(true)
-                  setShowTypePart(false)
-
-                }} className="btn btn-outline lg:w-5/12" >Back</button>
-                <button onClick={() => {
-                  if (!errors?.address && !errors?.zip && !errors?.avatar) {
-                    setProgress(3)
-                    setShowPasswordPart(true)
-                    setShowTypePart(false)
-                  }
-                }} className="btn lg:w-6/12" >Next</button>
+                <button
+                  onClick={() => {
+                    setShowNamePart(true);
+                    setShowTypePart(false);
+                  }}
+                  className="btn btn-outline lg:w-5/12"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={() => {
+                    if (!errors?.address && !errors?.zip && !errors?.avatar) {
+                      setProgress(3);
+                      setShowPasswordPart(true);
+                      setShowTypePart(false);
+                    }
+                  }}
+                  className="btn lg:w-6/12"
+                >
+                  Next
+                </button>
               </div>
             </div>
             {/* ------------------------------- */}
@@ -469,26 +466,35 @@ const SignUp = () => {
                 </label>
               </div>
               <div className="flex justify-between items-center">
-                <button onClick={() => {
-
-                  setShowPasswordPart(false)
-                  setShowTypePart(true)
-
-                }} className="btn btn-outline lg:w-5/12" >Back</button>
-                <input className="btn lg:w-6/12" type="submit" value="Register" />
+                <button
+                  onClick={() => {
+                    setShowPasswordPart(false);
+                    setShowTypePart(true);
+                  }}
+                  className="btn btn-outline lg:w-5/12"
+                >
+                  Back
+                </button>
+                <input
+                  className="btn lg:w-6/12"
+                  type="submit"
+                  value="Register"
+                />
               </div>
             </div>
             {/* ---------------------------------- */}
           </form>
-          <p className={`${showNamePart ? "block text-center my-2" : "hidden"}`} >
+          <p
+            className={`${showNamePart ? "block text-center my-2" : "hidden"}`}
+          >
             Already have an account ?{" "}
             <Link className="font-bold text-secondary" to="/login">
               Login
             </Link>
           </p>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
