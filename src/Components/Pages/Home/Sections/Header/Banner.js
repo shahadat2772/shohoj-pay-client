@@ -11,10 +11,12 @@ const Banner = () => {
     <>
       <div className=" min-h-screen bg-img1 bg-fixed">
         <div className="hero-overlay bg-opacity-30"></div>
-          <div className="hero-content mx-auto text-center text-neutral-content min-h-screen">
-            <div data-aos="fade-up" data-aos-duration="3000"
-               data-aos-anchor-placement="center-bottom">
-
+        <div className="hero-content mx-auto text-center text-neutral-content min-h-screen">
+          <div
+            data-aos="fade-up"
+            data-aos-duration="3000"
+            data-aos-anchor-placement="center-bottom"
+          >
             <h1
               style={{
                 fontFamily: "Raleway, sans-ser",
@@ -23,15 +25,13 @@ const Banner = () => {
               }}
               className="mb-5 text-secondary md:text-6xl lg:text-6xl text-5xl font-bold"
             >
-              QUICK AND SECURE <br/> PAYMENTS STARTS WITH <br /> SHOHOJ PAY
-              
+              QUICK AND SECURE <br /> PAYMENTS STARTS WITH <br /> SHOHOJ PAY
             </h1>
             <p
               style={{ fontFamily: "Raleway, sans-ser" }}
-              className=" mt-4 mb-4 text-color font-medium md:text-lg lg:text-lg max-w-[40rem]"
+              className="mx-auto mt-4 mb-4 text-color font-medium md:text-lg lg:text-lg max-w-[40rem]"
             >
               We make your life easy by providing you one of the most important
-
               services that is Finance. Use Shohoj Pay and kick out your
               problems.
             </p>
@@ -46,9 +46,8 @@ const Banner = () => {
           </div>
         </div>
       </div>
-
-      </>
-      );
+    </>
+  );
 };
 
 export default Banner;
