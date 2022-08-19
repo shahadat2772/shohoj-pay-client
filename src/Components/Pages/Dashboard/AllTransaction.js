@@ -121,7 +121,7 @@ const AllTransaction = () => {
     }, 2000);
   };
   const handledeletedata = (id) => {
-    fetch(`http://localhost:5000/delete/${id}`, {
+    fetch(`https://shohoj-pay-server.herokuapp.com/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

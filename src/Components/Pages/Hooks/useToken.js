@@ -4,7 +4,7 @@ const useToken = (email) => {
   const [token, setToken] = useState("");
   useEffect(() => {
     if (email) {
-      fetch(`http://localhost:5000/getjwttoken/${email}`)
+      fetch(`https://shohoj-pay-server.herokuapp.com/getjwttoken/${email}`)
         .then((res) => res.json())
         .then((data) => {
           const accessToken = data.token;

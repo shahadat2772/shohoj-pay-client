@@ -137,11 +137,14 @@ const Dashboard = () => {
   useEffect(() => {
     // USER BALANCE AMOUNT GET
     axios
-      .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      .get(
+        `https://shohoj-pay-server.herokuapp.com/getUserBalances/${user?.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
       .then((res) => {
         setBalance(res.data);
       })
@@ -153,11 +156,14 @@ const Dashboard = () => {
       });
     // USER TRANSACTION DATA GET
     axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      .get(
+        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
       .then((res) => setTransactionData(res.data))
       .catch((error) => {
         toast.error(error?.message);
@@ -166,7 +172,7 @@ const Dashboard = () => {
         navigate("/");
       });
     axios
-      .get(`http://localhost:5000/getServices`, {
+      .get(`https://shohoj-pay-server.herokuapp.com/getServices`, {
         headers: {
           "content-type": "application/json",
           email: user.email,

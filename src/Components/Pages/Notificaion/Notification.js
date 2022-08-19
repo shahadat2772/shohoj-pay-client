@@ -20,13 +20,16 @@ const Notification = ({
 
   useEffect(() => {
     if (pathName === "/notification" && unseenNotification.length > 0) {
-      fetch("http://localhost:5000/updateNotificationStatus", {
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ unseenNotification }),
-      })
+      fetch(
+        "https://shohoj-pay-server.herokuapp.com/updateNotificationStatus",
+        {
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ unseenNotification }),
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.modifiedCount > 0) {

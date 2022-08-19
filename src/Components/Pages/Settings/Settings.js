@@ -20,7 +20,7 @@ const Settings = () => {
   const navigate = useNavigate();
 
   useState(() => {
-    fetch("http://localhost:5000/getUserInfo", {
+    fetch("https://shohoj-pay-server.herokuapp.com/getUserInfo", {
       method: "GET",
       headers: {
         email: firebaseUser.email,
@@ -30,7 +30,7 @@ const Settings = () => {
       .then((data) => setUser(data));
   }, []);
   const updateUser = (updatedUser) => {
-    fetch("http://localhost:5000/updateUserInfo", {
+    fetch("https://shohoj-pay-server.herokuapp.com/updateUserInfo", {
       method: "PUT",
       headers: {
         "content-type": "application/json",
