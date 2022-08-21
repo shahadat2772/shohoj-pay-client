@@ -46,12 +46,18 @@ const Notification = ({
           Notifications
         </h2>
         <div className="notificationsContainer">
-          {allNotification?.map((notification) => (
-            <EachNotification
-              key={notification._id}
-              notification={notification}
-            ></EachNotification>
-          ))}
+          {allNotification.length > 0 ? (
+            allNotification?.map((notification) => (
+              <EachNotification
+                key={notification._id}
+                notification={notification}
+              ></EachNotification>
+            ))
+          ) : (
+            <div className="min-h-[60vh] flex justify-center items-center">
+              <h2 className="text-xl gray">No notifications yet :(</h2>
+            </div>
+          )}
         </div>
       </div>
     </div>

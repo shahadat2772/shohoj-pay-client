@@ -7,7 +7,7 @@ const Footer = () => {
   const year = time.getFullYear();
   return (
     <footer className="footer-section pt-10">
-      <ScrollToTop smooth top="800" color="#002855" />
+      {/* <ScrollToTop smooth top="800" color="#002855" /> */}
       <div className="container mx-auto pt-10 pb-10">
         <div className="text-center p-5 lg:p-0 md:p-0">
           <img
@@ -19,8 +19,7 @@ const Footer = () => {
             <p className="mb-1 mt-4 text-slate-300 ">
               Thanks You So Much For Visiting Shohoj Pay Website
             </p>
-            <p className="text-slate-300">
-            </p>
+            <p className="text-slate-300"></p>
             <div className="footer-icons my-8 ">
               <a href="/#">
                 <i className="fa-brands fa-facebook"></i>

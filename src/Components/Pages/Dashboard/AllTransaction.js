@@ -45,14 +45,11 @@ const AllTransaction = () => {
   useEffect(() => {
     dispatch(fetchAllTransaction());
     axios
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      )
+      .get(`http://localhost:5000/transactionStatus/${user?.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
       .then((res) => {
         setTransactionData(res.data);
         setFilterData(res.data);
@@ -120,14 +117,6 @@ const AllTransaction = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-  const handledeletedata = (id) => {
-    fetch(`http://localhost:5000/delete/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  };
-
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
       <div className=" px-2 lg:w-8/12 mx-auto">
@@ -213,9 +202,6 @@ const AllTransaction = () => {
                         {transAction.transactionId}
                       </h6>
                     )}
-                    <button onClick={() => handledeletedata(transAction._id)}>
-                      delete
-                    </button>
                     <h5 className="gray md-responsive">{transAction?.email}</h5>
                   </div>
                   <div className="" onClick={() => onShare(transAction)}>

@@ -22,8 +22,8 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useEffect, useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin/RequireAdmin";
-import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
-import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
+import MakeAdmin from "./Components/Pages/Admin/MakeAdmin";
+import AdminPanel from "./Components/Pages/Admin/AdminPanel";
 import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
 import RequireMerchant from "./Components/Pages/Authentication/RequireMerchant/RequireMerchant";
 import useUser from "./Components/Pages/Hooks/useUser";
@@ -33,6 +33,8 @@ import Spinner from "./Components/Shared/Spinner/Spinner";
 import RestrictAuth from "./Components/Pages/Authentication/RestrictAuth/RestrictAuth";
 import axios from "axios";
 import Notification from "./Components/Pages/Notificaion/Notification";
+import ECheck from "./Components/Pages/Services/ECheck/ECheck";
+import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -140,6 +142,16 @@ function App() {
           }
         />
         <Route
+          path="/services/eCheck"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <ECheck />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/services/saveMoney"
           element={
             <RequireAuth>
@@ -200,6 +212,7 @@ function App() {
             </RequireAuth>
           }
         />
+        {/* Admin Routes */}
         <Route
           path="/adminpanel"
           exact={true}
@@ -212,7 +225,15 @@ function App() {
           }
         >
           <Route
-            path="makeadmin"
+            path="/adminpanel/summary"
+            element={
+              <RequireAdmin>
+                <AdminSummary />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/adminpanel/makeadmin"
             element={
               <RequireAdmin>
                 <MakeAdmin />
