@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import auth from "../../../../firebase.init";
+import auth from "../../../firebase.init";
 
 const MakeAdmin = () => {
   const [user] = useAuthState(auth);
@@ -45,9 +45,9 @@ const MakeAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-start items-start ">
+    <div className="h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-3 pl-1">Make Admin</h2>
+        <h2 className="textColor text-[1.70rem] mb-3 pl-1">Manage Admin</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("email")}
