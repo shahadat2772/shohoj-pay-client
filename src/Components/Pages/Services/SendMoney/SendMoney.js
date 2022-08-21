@@ -1,10 +1,10 @@
-import { Result } from "postcss";
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
 import "./SendMoney.css";
+import emailjs from "@emailjs/browser";
 
 const SendMoney = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -18,11 +18,32 @@ const SendMoney = () => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm();
+  // EMAIL JS ADDED
+  const form = "HELLO";
 
+  const sendEmail = () => {
+    emailjs
+      .sendForm(
+        // "YOUR_SERVICE_ID",
+        "service_q11i3to",
+        // "YOUR_TEMPLATE_ID",
+        "service_q11i3to",
+        form,
+        // "YOUR_PUBLIC_KEY"
+        "_BZVGBP7_QzIIrIGO"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -59,8 +80,10 @@ const SendMoney = () => {
         if (result?.error) {
           toast.error(result.error);
         } else {
+          // eslint-disable-next-line no-unused-expressions
           reset();
           toast.success(result.success);
+          sendEmail();
         }
       });
   };
