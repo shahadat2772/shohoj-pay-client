@@ -33,6 +33,7 @@ import Spinner from "./Components/Shared/Spinner/Spinner";
 import RestrictAuth from "./Components/Pages/Authentication/RestrictAuth/RestrictAuth";
 import axios from "axios";
 import Notification from "./Components/Pages/Notificaion/Notification";
+import ECheck from "./Components/Pages/Services/ECheck/ECheck";
 import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
 function App() {
   // State for confirming the money request
@@ -136,6 +137,16 @@ function App() {
             <RequireAuth>
               <RequirePersonal>
                 <SendMoney />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/eCheck"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <ECheck />
               </RequirePersonal>
             </RequireAuth>
           }
