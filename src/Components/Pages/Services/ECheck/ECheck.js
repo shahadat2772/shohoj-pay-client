@@ -1,12 +1,10 @@
-// import React, { useRef } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
-import "./SendMoney.css";
-// import emailjs from "@emailjs/browser";
 
-const SendMoney = () => {
+const ECheck = () => {
   const fullDate = new Date().toLocaleDateString();
   const date = new Date().toLocaleDateString("en-us", {
     year: "numeric",
@@ -14,85 +12,55 @@ const SendMoney = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  // EMAIL JS ADDED
-  // const form = useRef();
-
-  // const sendEmail = (e) => {
-  //   e.preventDefault();
-
-  //   emailjs
-  //     .sendForm(
-  //       // "YOUR_SERVICE_ID",
-  //       "service_q11i3to",
-  //       // "YOUR_TEMPLATE_ID",
-  //       "service_q11i3to",
-  //       form,
-  //       // "YOUR_PUBLIC_KEY"
-  //       "_BZVGBP7_QzIIrIGO"
-  //     )
-  //     .then(
-  //       (result) => {
-  //         console.log(result.text);
-  //       },
-  //       (error) => {
-  //         console.log(error.text);
-  //       }
-  //     );
-  // };
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
-
-    if (amount.slice(0, 1) === "0") {
-      toast.error("Invalid amount");
-      return;
-    }
-
-    toast.loading("Money is being sended.", { id: "sendingMoney" });
-
-    const sendMoneyInfo = {
-      type: "Send Money",
-      name: user?.displayName,
+    const reference = data?.reference;
+    console.log(amount, email, reference);
+    console.log(user);
+    // toast.loading("Money is being requested.", { id: "apply-eCheck" });
+    const eCheckInfo = {
+      type: "E-Check",
       email: user?.email,
       amount: amount,
+      name: user?.displayName,
       from: user?.email,
       to: email,
+      reference: reference,
       fullDate,
       date,
       time,
     };
 
-    fetch("http://localhost:5000/sendMoney", {
+    fetch("http://localhost:5000/eCheck", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ sendMoneyInfo }),
+      body: JSON.stringify({ eCheckInfo }),
     })
       .then((res) => res.json())
       .then((result) => {
-        toast.dismiss("sendingMoney");
+        toast.dismiss("apply-eCheck");
+        toast.dismiss();
         if (result?.error) {
           toast.error(result.error);
         } else {
-          // eslint-disable-next-line no-unused-expressions
           reset();
           toast.success(result.success);
         }
       });
   };
-
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-11 pl-1">Send Money</h2>
+        <h2 className="textColor text-[1.70rem] mb-11 pl-1">E-Check Payment</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
@@ -107,7 +75,7 @@ const SendMoney = () => {
             })}
             type="number"
             className="h-12 p-2 w-full rounded"
-            placeholder="How much to send?"
+            placeholder="How much to be paid?"
             required
           />
           {errors.amount?.message && (
@@ -119,13 +87,20 @@ const SendMoney = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Receivers email"
+            placeholder="Issuer email"
+            required
+          />
+          <input
+            {...register("reference")}
+            type="text"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Write reference"
             required
           />
           <input
             type="submit"
             className="actionButton mt-12 border-0"
-            value="Send"
+            value="Submit"
           />
         </form>
       </div>
@@ -133,4 +108,4 @@ const SendMoney = () => {
   );
 };
 
-export default SendMoney;
+export default ECheck;
