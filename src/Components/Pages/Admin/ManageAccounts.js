@@ -1,49 +1,41 @@
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 
-const AllAdmin = () => {
-  const [admins, setAdmin] = useState([]);
+const ManageAccounts = () => {
+  const [users, setUsers] = useState([]);
 
-  const fetchAdmins = () => {
-    fetch("http://localhost:5000/getAllAdmin", {
+  const fetchAllUsers = () => {
+    fetch("http://localhost:5000/getAllUser", {
       headers: {
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setAdmin(data));
-  };
-
-  useEffect(() => {
-    fetchAdmins();
-  }, []);
-
-  const handleRemove = (email) => {
-    console.log(email);
-    fetch("http://localhost:5000/manageAdmin", {
-      method: "PUT",
-      headers: {
-        email: email,
-        action: "remove",
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data?.error) {
-          toast.error(data?.error, { id: "manageAdmin" });
-        } else if (data?.success) {
-          fetchAdmins();
-          toast.success(data?.success, { id: "manageAdmin" });
-        } else {
-          toast.error("Something went wrong.", { id: "manageAdmin" });
-        }
+        setUsers(data);
       });
+  };
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
+  const updateUserStatus = (email, action) => {
+    fetch("http://localhost:5000/updateAccountStatus", {
+      method: "PUT",
+      headers: {
+        email: email,
+        action: action,
+        authorization: `Bearer ${window.localStorage.getItem("accessToken")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
   };
 
   return (
     <div>
-      <h1 className="text-3xl mt-8">All Admins</h1>
+      <h2 className="text-3xl mt-4">Manage Accounts</h2>
       <div class="overflow-x-auto w-full mt-8">
         <table class="table w-[90%]">
           {/* <!-- head --> */}
@@ -57,10 +49,9 @@ const AllAdmin = () => {
           </thead>
           <tbody>
             {/* <!-- row  --> */}
-            {admins &&
-              admins.map((admin) => {
-                const { name, email, avatar, address, number } = admin;
-                console.log(admin);
+            {users &&
+              users.map((user) => {
+                const { name, email, avatar, address, number } = user;
                 return (
                   <tr>
                     <td>
@@ -91,11 +82,27 @@ const AllAdmin = () => {
                     <td>{number && number}</td>
                     <th>
                       <button
-                        onClick={() => handleRemove(email)}
+                        // onClick={() => handleRemove(email)}
                         class="btn btn-ghost btn-xs"
                       >
-                        Remove
+                        Details
                       </button>
+                      <br />
+                      {user.status === "active" ? (
+                        <button
+                          onClick={() => updateUserStatus(email, "deactivate")}
+                          class="btn btn-ghost btn-xs"
+                        >
+                          Deactivate
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => updateUserStatus(email, "activate")}
+                          class="btn btn-ghost btn-xs"
+                        >
+                          Activate
+                        </button>
+                      )}
                     </th>
                   </tr>
                 );
@@ -107,4 +114,4 @@ const AllAdmin = () => {
   );
 };
 
-export default AllAdmin;
+export default ManageAccounts;

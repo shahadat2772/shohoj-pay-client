@@ -36,6 +36,7 @@ import ECheck from "./Components/Pages/Services/ECheck/ECheck";
 import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
 import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
 import AllAdmin from "./Components/Pages/Admin/AllAdmin";
+import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -234,7 +235,7 @@ function App() {
             }
           />
           <Route
-            path="/adminpanel/makeadmin"
+            path="/adminpanel/manageAdmin"
             element={
               <RequireAdmin>
                 <ManageAdmin />
@@ -246,6 +247,14 @@ function App() {
             element={
               <RequireAdmin>
                 <AllAdmin />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/adminpanel/manageAccounts"
+            element={
+              <RequireAdmin>
+                <ManageAccounts />
               </RequireAdmin>
             }
           />
