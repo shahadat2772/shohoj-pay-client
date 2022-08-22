@@ -37,6 +37,7 @@ import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
 import MerchantServices from "./Components/Pages/Merchant/MerchantServices/MerchantServices";
 import MerchantToPersonal from "./Components/Pages/Merchant/MerchantServices/MerchantToPersonal";
 import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
+import AllAdmin from "./Components/Pages/Admin/AllAdmin";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -239,6 +240,14 @@ function App() {
             element={
               <RequireAdmin>
                 <ManageAdmin />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/adminpanel/allAdmin"
+            element={
+              <RequireAdmin>
+                <AllAdmin />
               </RequireAdmin>
             }
           />
