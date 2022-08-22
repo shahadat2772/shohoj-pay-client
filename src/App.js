@@ -35,6 +35,7 @@ import Notification from "./Components/Pages/Notificaion/Notification";
 import ECheck from "./Components/Pages/Services/ECheck/ECheck";
 import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
 import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
+import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
 import AllAdmin from "./Components/Pages/Admin/AllAdmin";
 import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
 function App() {
@@ -139,6 +140,16 @@ function App() {
             <RequireAuth>
               <RequirePersonal>
                 <SendMoney />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/withdraw-savings"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <WithdrawSavings />
               </RequirePersonal>
             </RequireAuth>
           }

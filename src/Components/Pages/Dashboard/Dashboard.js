@@ -15,6 +15,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { signOut } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
 // SERVICE DATA
 const someServices = [
   {
@@ -28,9 +30,9 @@ const someServices = [
     action: "/services/sendMoney",
   },
   {
-    type: "Request",
-    icon: "fa-hand-holding-dollar",
-    action: "/services/requestMoney",
+    type: "Withdraw",
+    icon: "fa-money-bill-transfer",
+    action: "/services/withdraw-savings",
   },
   {
     type: "More",
@@ -54,15 +56,77 @@ const getPreviousDate = (number) => {
 const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
-  const [balance, setBalance] = useState(0);
-  const [transactionData, setTransactionData] = useState([]);
+  // const [balance, setBalance] = useState(0);
+  // const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // APPLY REDUX
+  const { isLoading, allInfo, error } = useSelector(
+    (state) => state.userAllEmailData
+  );
+  useEffect(() => {
+    dispatch(fetchUserEmailInfo(user));
+    // USER BALANCE AMOUNT GET
+    // axios
+    //   .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     setBalance(res.data);
+    //   })
+    //   .catch((error) => {
+    //     localStorage.removeItem("accessToken");
+    //     signOut(auth);
+    //     toast.error(error?.message);
+    //     navigate("/");
+    //   });
+    // USER TRANSACTION DATA GET
+    // axios
+    //   .get(`http://localhost:5000/transactionStatus/${user.email}`, {
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //     },
+    //   })
+    //   .then((res) => setTransactionData(res.data))
+    //   .catch((error) => {
+    //     toast.error(error?.message);
+    //     signOut(auth);
+    //     localStorage.removeItem("accessToken");
+    //     navigate("/");
+    //   });
+  }, [navigate, dispatch, user]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getServices`, {
+        headers: {
+          "content-type": "application/json",
+          email: user.email,
+          monthServiceFilter,
+        },
+      })
+      .then((res) => setMonthService(res.data));
+    if (shareLinkCopied) {
+      toast.success("Copied Transaction Information");
+    }
+  }, [user?.email, monthServiceFilter, shareLinkCopied]);
+  const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
+  const balance = userBalance;
+  const transactionData = userTransactionInfo;
+  console.log(userSavingsInfo);
+  if (isLoading || transactionData == undefined) {
+    return <Spinner />;
+  }
+  if (error) {
+    toast.error(error?.message);
+  }
   // LATEST TRANSACTION
-  const latestTransaction = [...transactionData].splice(
+  const latestTransaction = [...transactionData]?.splice(
     transactionData.length - 4,
     transactionData.length
   );
@@ -123,61 +187,17 @@ const Dashboard = () => {
   };
   const data = [
     {
-      name: "Receive",
+      name: "Income",
       value: TotalRecive ? TotalRecive : 1,
       email: user?.email,
     },
-    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user?.email },
+    { name: "Expense", value: TotalCost ? TotalCost : 1, email: user?.email },
     {
       name: "Savings",
       value: totalSavings ? totalSavings : 1,
       email: user?.email,
     },
   ];
-  useEffect(() => {
-    // USER BALANCE AMOUNT GET
-    axios
-      .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => {
-        setBalance(res.data);
-      })
-      .catch((error) => {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        toast.error(error?.message);
-        navigate("/");
-      });
-    // USER TRANSACTION DATA GET
-    axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => setTransactionData(res.data))
-      .catch((error) => {
-        toast.error(error?.message);
-        signOut(auth);
-        localStorage.removeItem("accessToken");
-        navigate("/");
-      });
-    axios
-      .get(`http://localhost:5000/getServices`, {
-        headers: {
-          "content-type": "application/json",
-          email: user.email,
-          monthServiceFilter,
-        },
-      })
-      .then((res) => setMonthService(res.data));
-    if (shareLinkCopied) {
-      toast.success("Copied Transaction Information");
-    }
-  }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
@@ -197,9 +217,7 @@ const Dashboard = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-  if (transactionData === 0) {
-    return <Spinner />;
-  }
+
   return (
     <div className="container mx-auto lg:mt-28 lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
@@ -308,13 +326,15 @@ const Dashboard = () => {
                           <h3
                             className={`text-2xl font-medium text-right md-amount-responsive ${
                               transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money"
+                              transAction.type === "Receive Money" ||
+                              transAction.type === "Withdraw Savings"
                                 ? "text-green-600"
                                 : "text-red-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money"
+                            transAction.type === "Receive Money" ||
+                            transAction.type === "Withdraw Savings"
                               ? "+" + transAction.amount
                               : "-" + transAction.amount}
                             $
@@ -381,6 +401,30 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
+          </div>
+          <ul className="mt-8">
+            <li className="text-2xl font-bold list-disc	">
+              Income: {TotalRecive ? TotalRecive : 1}$
+            </li>
+            <li className="text-2xl font-bold list-disc	mt-2">
+              Expense: {TotalCost ? TotalCost : 1}$
+            </li>
+            <li className="text-2xl font-bold list-disc mt-2">
+              Savings: {totalSavings ? totalSavings : 1}$
+            </li>
+          </ul>
+          <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">
+            Savings
+          </h3>
+          <div className="bg-base-200 shadow-lg rounded-md lg:px-9 py-10 px-3">
+            <h1
+              data-testid="user-name"
+              className="text-left text-2xl font-bold mb-3"
+            >
+              {user?.displayName}, Your
+            </h1>
+            <h4>Total Savings Balance</h4>
+            <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>
         </div>
       </div>

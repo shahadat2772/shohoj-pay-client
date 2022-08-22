@@ -3,71 +3,51 @@ import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
-import ReactPaginate from "react-paginate";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
+import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
 
 const AllTransaction = () => {
-  const [transactionData, setTransactionData] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const todayDate = new Date().toLocaleDateString();
   // REVERSE TRANSACTION DATA
   const reverseData = [...filterData].reverse();
-  const itemsPerPage = 10;
-  // Invoke when user click to request another page.
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filterData.length;
-    setItemOffset(newOffset);
-  };
-  console.log(reverseData.length);
-  const count = Math.ceil(filterData.length / itemsPerPage);
-  console.log(count);
-  useEffect(() => {
-    const endOffset = itemOffset + itemsPerPage;
-    setFilterData(filterData.slice(itemOffset, endOffset));
-    setPageCount(count);
-  }, [itemsPerPage, itemOffset]);
-  const { isLoading, allTransactionData, error } = useSelector(
-    (state) => state.allTransaction
-  );
-  const data = useSelector((state) => state);
   const dispatch = useDispatch();
-  console.log(allTransactionData, error, data);
+
+  const { isLoading, allInfo, error } = useSelector(
+    (state) => state.userAllEmailData
+  );
   useEffect(() => {
-    dispatch(fetchAllTransaction());
-    axios
-      .get(`http://localhost:5000/transactionStatus/${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => {
-        setTransactionData(res.data);
-        setFilterData(res.data);
-      })
-      .catch((error) => {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        toast.error(error?.message);
-        navigate("/");
-      });
+    dispatch(fetchUserEmailInfo(user));
+    // axios
+    //   .get(`http://localhost:5000/transactionStatus/${user?.email}`, {
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     setTransactionData(res.data);
+    //   })
+    //   .catch((error) => {
+    //     localStorage.removeItem("accessToken");
+    //     signOut(auth);
+    //     toast.error(error?.message);
+    //     navigate("/");
+    //   });
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user?.email, shareLinkCopied, navigate]);
-  if (transactionData.length === 0 || isLoading) {
+  }, [shareLinkCopied, dispatch, user]);
+  const transactionData = allInfo?.userTransactionInfo;
+  if (isLoading || transactionData == undefined) {
     return <Spinner />;
   }
-
+  // setFilterData(transactionData);
   // FILTER TRANSACTION DATA
   const handleFilterMonth = (e) => {
     const getMonth = transactionData.filter((data) =>
@@ -92,7 +72,6 @@ const AllTransaction = () => {
       data.fullDate.includes(getdate)
     );
     setFilterData(getMonth);
-    console.log(getMonth);
   };
   // GET FULL YEAR
   const getYear = new Date().toLocaleDateString("en-us", {
@@ -228,7 +207,7 @@ const AllTransaction = () => {
             ))}
           </ul>
         </div>
-        <ReactPaginate
+        {/* <ReactPaginate
           pageCount={pageCount}
           breakLabel="..."
           nextLabel="next >"
@@ -241,7 +220,7 @@ const AllTransaction = () => {
           previousLinkClassName="page-num"
           nextLinkClassName="page-num"
           activeLinkClassName="active"
-        />
+        /> */}
       </div>
     </div>
   );
