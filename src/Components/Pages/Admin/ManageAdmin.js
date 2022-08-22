@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import auth from "../../../firebase.init";
 
 const ManageAdmin = () => {
@@ -48,7 +49,7 @@ const ManageAdmin = () => {
             {...register("email")}
             required
             type="email"
-            className="h-12 p-2 mb-5 w-full rounded-lg"
+            className="h-12 p-2 mb-4 w-full rounded-lg"
             placeholder="Enter email"
           />
           <button
@@ -68,6 +69,9 @@ const ManageAdmin = () => {
             Remove
           </button>
         </form>
+        <Link className="block mt-7 link" to={"/adminpanel/allAdmin"}>
+          All Admins
+        </Link>
       </div>
     </div>
   );
