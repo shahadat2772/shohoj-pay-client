@@ -42,10 +42,11 @@ const MerchantToPersonal = () => {
             fee: "0",
         };
 
-        fetch("http://localhost:5000/sendMoney", {
+        fetch("http://localhost:5000/merchant-to-personal", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
+                email: user.email
             },
             body: JSON.stringify({ sendMoneyInfo }),
         })
@@ -55,7 +56,6 @@ const MerchantToPersonal = () => {
                 if (result?.error) {
                     toast.error(result.error);
                 } else {
-                    // eslint-disable-next-line no-unused-expressions
                     reset();
                     toast.success(result.success);
                 }
