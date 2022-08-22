@@ -9,7 +9,11 @@ const AdminSummary = () => {
 
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/getShohojPayInfo")
+      fetch("http://localhost:5000/getShohojPayInfo", {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           setShohojPayInfo(data);
