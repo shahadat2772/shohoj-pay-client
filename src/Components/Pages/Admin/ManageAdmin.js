@@ -7,6 +7,7 @@ import auth from "../../../firebase.init";
 
 const ManageAdmin = () => {
   const [user] = useAuthState(auth);
+  const [action, setAction] = useState();
 
   const {
     register,
@@ -16,30 +17,24 @@ const ManageAdmin = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const email = data?.email;
-
-    toast.loading("Making Admin in progress.", { id: "makingAdmin" });
-
-    const updatedUser = {
-      type: "admin",
-    };
-
-    fetch(`http://localhost:5000/makeadmin/${email}`, {
+    const email = data.email;
+    fetch("http://localhost:5000/manageAdmin", {
       method: "PUT",
       headers: {
-        "content-type": "application/json",
-        email: user.email,
+        email: email,
+        action: action,
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      body: JSON.stringify(updatedUser),
     })
       .then((res) => res.json())
-      .then((result) => {
-        toast.dismiss("makingAdmin");
-        if (result?.error) {
-          toast.error(result.error);
-        } else {
+      .then((data) => {
+        if (data?.error) {
+          toast.error(data?.error, { id: "manageAdmin" });
+        } else if (data?.success) {
+          toast.success(data?.success, { id: "manageAdmin" });
           reset();
-          toast.success(result.success);
+        } else {
+          toast.error("Something went wrong.", { id: "manageAdmin" });
         }
       });
   };
@@ -47,20 +42,31 @@ const ManageAdmin = () => {
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-3 pl-1">Manage Admin</h2>
+        <h2 className="textColor text-[1.50rem] mb-6 pl-1">Manage Admin</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("email")}
+            required
             type="email"
             className="h-12 p-2 mb-5 w-full rounded-lg"
-            placeholder="User's email"
-            required
+            placeholder="Enter email"
           />
-          <input
+          <button
+            onClick={() => setAction("add")}
+            type="submit"
+            className="btn btn-sm btn-primary px-7 mr-2 rounded-lg"
+            value="Remove"
+          >
+            Add
+          </button>
+          <button
+            onClick={() => setAction("remove")}
             type="submit"
             className="btn btn-sm btn-primary px-7  rounded-lg "
-            value="ok"
-          />
+            value="Remove"
+          >
+            Remove
+          </button>
         </form>
       </div>
     </div>
