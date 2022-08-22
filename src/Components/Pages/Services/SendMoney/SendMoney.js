@@ -67,6 +67,7 @@ const SendMoney = () => {
       fullDate,
       date,
       time,
+      fee: "10",
     };
 
     fetch("http://localhost:5000/sendMoney", {

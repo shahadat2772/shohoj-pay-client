@@ -22,7 +22,6 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useEffect, useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin/RequireAdmin";
-import MakeAdmin from "./Components/Pages/Admin/MakeAdmin";
 import AdminPanel from "./Components/Pages/Admin/AdminPanel";
 import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
 import RequireMerchant from "./Components/Pages/Authentication/RequireMerchant/RequireMerchant";
@@ -35,6 +34,9 @@ import axios from "axios";
 import Notification from "./Components/Pages/Notificaion/Notification";
 import ECheck from "./Components/Pages/Services/ECheck/ECheck";
 import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
+import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
+import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
+import AllAdmin from "./Components/Pages/Admin/AllAdmin";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -142,6 +144,16 @@ function App() {
           }
         />
         <Route
+          path="/services/withdraw-savings"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <WithdrawSavings />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/services/eCheck"
           element={
             <RequireAuth>
@@ -236,7 +248,15 @@ function App() {
             path="/adminpanel/makeadmin"
             element={
               <RequireAdmin>
-                <MakeAdmin />
+                <ManageAdmin />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/adminpanel/allAdmin"
+            element={
+              <RequireAdmin>
+                <AllAdmin />
               </RequireAdmin>
             }
           />
