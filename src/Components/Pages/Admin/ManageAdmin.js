@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../firebase.init";
 
-const MakeAdmin = () => {
+const ManageAdmin = () => {
   const [user] = useAuthState(auth);
 
   const {
@@ -67,4 +67,4 @@ const MakeAdmin = () => {
   );
 };
 
-export default MakeAdmin;
+export default ManageAdmin;

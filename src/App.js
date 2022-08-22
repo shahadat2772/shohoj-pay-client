@@ -37,6 +37,7 @@ import ECheck from "./Components/Pages/Services/ECheck/ECheck";
 import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
 import MerchantServices from "./Components/Pages/Merchant/MerchantServices/MerchantServices";
 import MerchantToPersonal from "./Components/Pages/Merchant/MerchantServices/MerchantToPersonal";
+import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -238,7 +239,7 @@ function App() {
             path="/adminpanel/makeadmin"
             element={
               <RequireAdmin>
-                <MakeAdmin />
+                <ManageAdmin />
               </RequireAdmin>
             }
           />
