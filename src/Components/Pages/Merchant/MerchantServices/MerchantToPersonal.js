@@ -46,7 +46,7 @@ const MerchantToPersonal = () => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                email: user.email
+                authorization: `Bearer ${window.localStorage.getItem("accessToken")}`,
             },
             body: JSON.stringify({ sendMoneyInfo }),
         })
