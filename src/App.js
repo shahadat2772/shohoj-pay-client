@@ -38,6 +38,8 @@ import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
 import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
 import AllAdmin from "./Components/Pages/Admin/AllAdmin";
 import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
+import MerchantServices from "./Components/Pages/Merchant/MerchantServices/MerchantServices";
+import MerchantToPersonal from "./Components/Pages/Merchant/MerchantServices/MerchantToPersonal";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -290,17 +292,7 @@ function App() {
               </RequireMerchant>
             </RequireAuth>
           }
-        ></Route>
-        <Route
-          path="/merchant/services"
-          element={
-            <RequireAuth>
-              <RequireMerchant>
-                <Services />
-              </RequireMerchant>
-            </RequireAuth>
-          }
-        ></Route>
+        />
         <Route
           path="/merchant/dashboard"
           element={
@@ -310,7 +302,37 @@ function App() {
               </RequireMerchant>
             </RequireAuth>
           }
-        ></Route>
+        />
+        <Route
+          path="/merchant/services"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantServices />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/add-money"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AddMoney />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-to-personal"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantToPersonal />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
 
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
