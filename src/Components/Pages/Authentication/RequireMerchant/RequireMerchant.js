@@ -17,6 +17,9 @@ const RequireMerchant = ({ children }) => {
     else if (mongoUser?.type === "personal") {
         return <Navigate to="/dashboard" />
     }
+    if (mongoUser.type !== 'merchant') {
+        return <Navigate to='/' />
+    }
     return children
 };
 
