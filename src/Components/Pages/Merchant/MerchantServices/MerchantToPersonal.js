@@ -42,11 +42,18 @@ const MerchantToPersonal = () => {
             fee: "0",
         };
 
+<<<<<<< HEAD
         fetch("http://localhost:5000/merchant-to-personal", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
                 authorization: `Bearer ${window.localStorage.getItem("accessToken")}`,
+=======
+        fetch("http://localhost:5000/sendMoney", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+>>>>>>> ae87a17 (merchant-services page initialized)
             },
             body: JSON.stringify({ sendMoneyInfo }),
         })
@@ -56,6 +63,10 @@ const MerchantToPersonal = () => {
                 if (result?.error) {
                     toast.error(result.error);
                 } else {
+<<<<<<< HEAD
+=======
+                    // eslint-disable-next-line no-unused-expressions
+>>>>>>> ae87a17 (merchant-services page initialized)
                     reset();
                     toast.success(result.success);
                 }
