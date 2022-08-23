@@ -21,7 +21,7 @@ const AllTransaction = () => {
   const { isLoading, allTransactionData, error } = useSelector(
     (state) => state.allTransaction
   );
-  console.log(allTransactionData);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllTransaction(user));
