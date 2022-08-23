@@ -34,10 +34,14 @@ import axios from "axios";
 import Notification from "./Components/Pages/Notificaion/Notification";
 import ECheck from "./Components/Pages/Services/ECheck/ECheck";
 import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
+import MerchantServices from "./Components/Pages/Merchant/MerchantServices/MerchantServices";
+import MerchantToPersonal from "./Components/Pages/Merchant/MerchantServices/MerchantToPersonal";
 import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
-import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
 import AllAdmin from "./Components/Pages/Admin/AllAdmin";
 import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
+import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
+import MerchantToMerchant from "./Components/Pages/Merchant/MerchantServices/MerchantToMerchant";
+
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -290,17 +294,7 @@ function App() {
               </RequireMerchant>
             </RequireAuth>
           }
-        ></Route>
-        <Route
-          path="/merchant/services"
-          element={
-            <RequireAuth>
-              <RequireMerchant>
-                <Services />
-              </RequireMerchant>
-            </RequireAuth>
-          }
-        ></Route>
+        />
         <Route
           path="/merchant/dashboard"
           element={
@@ -310,7 +304,47 @@ function App() {
               </RequireMerchant>
             </RequireAuth>
           }
-        ></Route>
+        />
+        <Route
+          path="/merchant/services"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantServices />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/add-money"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AddMoney />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-to-personal"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantToPersonal />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-to-merchant"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantToMerchant />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
 
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />
