@@ -39,24 +39,24 @@ const MerchantPay = () => {
       fee: "0",
     };
 
-    // fetch("http://localhost:5000/sendMoney", {
-    //   method: "POST",
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    //   body: JSON.stringify({ sendMoneyInfo }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     toast.dismiss("sendingMoney");
-    //     if (result?.error) {
-    //       toast.error(result.error);
-    //     } else {
-    //       // eslint-disable-next-line no-unused-expressions
-    //       reset();
-    //       toast.success(result.success);
-    //     }
-    //   });
+    fetch("http://localhost:5000/personal-to-merchant", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ merchantPayInfo }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        toast.dismiss("sendingMoney");
+        if (result?.error) {
+          toast.error(result.error);
+        } else {
+          // eslint-disable-next-line no-unused-expressions
+          reset();
+          toast.success(result.success);
+        }
+      });
   };
 
   return (
@@ -67,8 +67,8 @@ const MerchantPay = () => {
           <input
             {...register("amount", {
               min: {
-                value: 5,
-                message: "$5 is the minimum send amount.",
+                value: 30,
+                message: "$30 is the minimum send amount.",
               },
               max: {
                 value: 1000,
