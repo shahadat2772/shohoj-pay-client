@@ -21,6 +21,11 @@ const services = [
         serviceName: "M to P",
         serviceIcon: faPaperPlane,
     },
+    {
+        id: "merchant-to-merchant",
+        serviceName: "M to M",
+        serviceIcon: faPaperPlane,
+    },
 ];
 
 const MerchantServices = () => {

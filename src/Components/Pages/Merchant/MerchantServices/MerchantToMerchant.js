@@ -3,7 +3,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
-const MerchantToPersonal = () => {
+
+const MerchantToMerchant = () => {
     const fullDate = new Date().toLocaleDateString();
     const date = new Date().toLocaleDateString("en-us", {
         year: "numeric",
@@ -42,18 +43,11 @@ const MerchantToPersonal = () => {
             fee: "0",
         };
 
-<<<<<<< HEAD
-        fetch("http://localhost:5000/merchant-to-personal", {
+        fetch("http://localhost:5000/merchant-to-merchant", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
                 authorization: `Bearer ${window.localStorage.getItem("accessToken")}`,
-=======
-        fetch("http://localhost:5000/sendMoney", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
->>>>>>> ae87a17 (merchant-services page initialized)
             },
             body: JSON.stringify({ sendMoneyInfo }),
         })
@@ -63,10 +57,6 @@ const MerchantToPersonal = () => {
                 if (result?.error) {
                     toast.error(result.error);
                 } else {
-<<<<<<< HEAD
-=======
-                    // eslint-disable-next-line no-unused-expressions
->>>>>>> ae87a17 (merchant-services page initialized)
                     reset();
                     toast.success(result.success);
                 }
@@ -75,7 +65,7 @@ const MerchantToPersonal = () => {
     return (
         <div className="min-h-screen flex justify-center items-center">
             <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-                <h2 className="textColor text-[1.70rem] mb-11 pl-1">Merchant to Personal</h2>
+                <h2 className="textColor text-[1.70rem] mb-11 pl-1">Merchant to Merchant</h2>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <input
                         {...register("amount", {
@@ -116,4 +106,4 @@ const MerchantToPersonal = () => {
     );
 };
 
-export default MerchantToPersonal;
+export default MerchantToMerchant;
