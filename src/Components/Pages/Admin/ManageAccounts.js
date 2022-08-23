@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const ManageAccounts = () => {
   const [users, setUsers] = useState([]);
@@ -30,7 +31,22 @@ const ManageAccounts = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        if (data?.success) {
+          fetchAllUsers();
+          toast.success(data.success, {
+            id: "accStatusUpdateToast",
+          });
+        } else if (data?.error) {
+          toast.error(data.error, {
+            id: "accStatusUpdateToast",
+          });
+        } else {
+          toast.error("Something went wrong.", {
+            id: "accStatusUpdateToast",
+          });
+        }
+      });
   };
 
   return (
@@ -90,14 +106,14 @@ const ManageAccounts = () => {
                       <br />
                       {user.status === "active" ? (
                         <button
-                          onClick={() => updateUserStatus(email, "deactivate")}
+                          onClick={() => updateUserStatus(email, "deactive")}
                           class="btn btn-ghost btn-xs"
                         >
                           Deactivate
                         </button>
                       ) : (
                         <button
-                          onClick={() => updateUserStatus(email, "activate")}
+                          onClick={() => updateUserStatus(email, "active")}
                           class="btn btn-ghost btn-xs"
                         >
                           Activate
