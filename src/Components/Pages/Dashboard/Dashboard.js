@@ -70,36 +70,6 @@ const Dashboard = () => {
   );
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
-    // USER BALANCE AMOUNT GET
-    // axios
-    //   .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
-    //     headers: {
-    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     setBalance(res.data);
-    //   })
-    //   .catch((error) => {
-    //     localStorage.removeItem("accessToken");
-    //     signOut(auth);
-    //     toast.error(error?.message);
-    //     navigate("/");
-    //   });
-    // USER TRANSACTION DATA GET
-    // axios
-    //   .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-    //     headers: {
-    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //     },
-    //   })
-    //   .then((res) => setTransactionData(res.data))
-    //   .catch((error) => {
-    //     toast.error(error?.message);
-    //     signOut(auth);
-    //     localStorage.removeItem("accessToken");
-    //     navigate("/");
-    //   });
   }, [navigate, dispatch, user]);
   useEffect(() => {
     axios
@@ -137,7 +107,8 @@ const Dashboard = () => {
   serviceType("Receive Money");
   serviceType("Add Money");
   serviceType("Send Money");
-  serviceType("Request Money");
+  serviceType("Merchant Pay");
+  serviceType("E-Check");
 
   const totlaReceiveMoney = [
     ...serviceType("Receive Money"),
@@ -146,6 +117,8 @@ const Dashboard = () => {
   const totalLossMoney = [
     ...serviceType("Send Money"),
     ...serviceType("Request Money"),
+    ...serviceType("Merchant Pay"),
+    ...serviceType("E-Check"),
   ];
   const reducerCount = (value) => {
     return value.reduce(
@@ -241,7 +214,7 @@ const Dashboard = () => {
           {/* SOME SERVICE */}
           <div className="mt-10 px-2">
             <h2 className="border-b-4 border-black w-48 font-bold text-xl">
-              Get Service
+              Get Started
             </h2>
             <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
               {someServices.map((service, index) => {
@@ -417,13 +390,13 @@ const Dashboard = () => {
             Savings
           </h3>
           <div className="bg-base-200 shadow-lg rounded-md lg:px-9 py-10 px-3">
-            <h1
+            {/* <h1
               data-testid="user-name"
               className="text-left text-2xl font-bold mb-3"
             >
               {user?.displayName}, Your
-            </h1>
-            <h4>Total Savings Balance</h4>
+            </h1> */}
+            <h4>Total Savings</h4>
             <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>
         </div>

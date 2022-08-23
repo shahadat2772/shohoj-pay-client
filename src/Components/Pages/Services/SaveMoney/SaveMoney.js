@@ -65,9 +65,6 @@ const SaveMoney = () => {
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-9 pl-1">Save Money</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <p className="text-[1rem] mb-2 ml-[3px] textColor">
-            Get more then 3% return
-          </p>
           <input
             {...register("amount", {
               min: {
@@ -89,14 +86,14 @@ const SaveMoney = () => {
               {errors.amount?.message}
             </span>
           )}
-          <div className="flex items-center justify-between">
+          <div className="flex items-baseline justify-between">
             <input
               type="submit"
               className="actionButton block mt-11 border-0"
               value="Save"
             />
             <button
-              className="actionButton block mt-11 border-0"
+              className="btn btn-link"
               onClick={() => navigate("/services/withdraw-savings")}
             >
               Withdraw Savings

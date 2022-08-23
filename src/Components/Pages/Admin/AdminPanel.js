@@ -32,23 +32,26 @@ const AdminPanel = () => {
         <div className="drawer drawer-mobile w-60">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 
-          <div className=" drawer-side ">
+          <div className="drawer-side">
             <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-            <ul className="menu p-4 rounded-lg overflow-y-auto w-52 bg-white text-base-content justify-center">
+            <ul className="menu p-4 rounded-lg overflow-y-auto w-42 bg-white text-base-content justify-center">
               <li>
                 <Link to="/adminpanel/summary">Summary</Link>
               </li>
               <li>
-                <Link to="/adminpanel/makeadmin">Manage Admin</Link>
+                <Link to="/adminpanel/manageAdmin">Admins</Link>
+              </li>
+              <li>
+                <Link to="/adminpanel/manageAccounts">Accounts</Link>
               </li>
               <li
                 onClick={() => {
                   signOut(auth);
                   toast.success("Sign Out Successfully");
+                  window.localStorage.clear("accessToken");
                 }}
               >
-                {" "}
-                <Link to={""}>Sign Out</Link>{" "}
+                <Link to={""}>Sign Out</Link>
               </li>
             </ul>
           </div>
