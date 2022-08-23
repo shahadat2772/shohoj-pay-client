@@ -87,7 +87,7 @@ const ECheck = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Issuer email"
+            placeholder="How to issue"
             required
           />
           <input
@@ -100,7 +100,7 @@ const ECheck = () => {
           <input
             type="submit"
             className="actionButton mt-12 border-0"
-            value="Submit"
+            value="Issue"
           />
         </form>
       </div>

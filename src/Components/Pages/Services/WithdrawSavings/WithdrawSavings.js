@@ -58,24 +58,24 @@ const WithdrawSavings = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-9 pl-1">
-          Withdraw Savings Amount
+          Transfer Savings Amount
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
               min: {
                 value: 20,
-                message: "$20 is the minimum withdraw amount.",
+                message: "$20 is the minimum Transfer amount.",
               },
               max: {
                 value: 1000,
-                message: "$1000 is the maximum withdraw amount at a time.",
+                message: "$1000 is the maximum Transfer amount at a time.",
               },
             })}
             required
             type="number"
             className="h-12 p-2 w-full rounded-lg"
-            placeholder="How much to withdraw?"
+            placeholder="How much to Transfer?"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
@@ -85,7 +85,7 @@ const WithdrawSavings = () => {
           <input
             type="submit"
             className="actionButton block mt-11 border-0"
-            value="Withdraw"
+            value="Transfer"
           />
         </form>
       </div>

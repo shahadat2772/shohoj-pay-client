@@ -18,45 +18,29 @@ const AllTransaction = () => {
   // REVERSE TRANSACTION DATA
   const reverseData = [...filterData].reverse();
   const dispatch = useDispatch();
-
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
   console.log(reverseData);
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
-
-    // axios
-    //   .get(`http://localhost:5000/transactionStatus/${user?.email}`, {
-    //     headers: {
-    //       authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     setTransactionData(res.data);
-    //   })
-    //   .catch((error) => {
-    //     localStorage.removeItem("accessToken");
-    //     signOut(auth);
-    //     toast.error(error?.message);
-    //     navigate("/");
-    //   });
   }, [dispatch, user]);
+  const transactionData = allInfo?.userTransactionInfo;
   useEffect(() => {
+    // setFilterData(allInfo?.userTransactionInfo);
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [shareLinkCopied]);
-  const transactionData = allInfo?.userTransactionInfo;
+  }, [shareLinkCopied, allInfo]);
   if (isLoading || transactionData == undefined) {
     return <Spinner />;
   }
   if (error) {
     return toast.error(error?.message);
   }
-  setTimeout(() => {
-    setFilterData(transactionData);
-  }, 1000);
+  // setTimeout(() => {
+  //   setFilterData(transactionData);
+  // });
   // FILTER TRANSACTION DATA
   const handleFilterMonth = (e) => {
     const getMonth = transactionData.filter((data) =>
@@ -105,6 +89,7 @@ const AllTransaction = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
+
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
       <div className=" px-2 lg:w-8/12 mx-auto">
@@ -172,22 +157,21 @@ const AllTransaction = () => {
                 </div>
                 <div className="ml-5 flex items-center justify-between w-full">
                   <div>
-                    <h5
-                      className={`font-bold text-lg md-type-responsive ${
-                        transAction.type === "Add Money" ||
-                        transAction.type === "Receive Money"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {transAction.type}
+                    <h5 className="font-bold text-lg md-type-responsive ">
+                      {transAction?.type}
                     </h5>
                     <h5 className="gray md-responsive">
                       {transAction?.userName}
                     </h5>
-                    {transAction.transactionId && (
+                    {transAction?.transactionId && (
                       <h6 className="gray md-trx-responsive">
                         {transAction.transactionId}
+                      </h6>
+                    )}
+                    {transAction?.type === "E-Check" && (
+                      <h6 className="gray md-trx-responsive">
+                        <span className="font-bold text-black">Reference:</span>{" "}
+                        {transAction?.reference}
                       </h6>
                     )}
                     <h5 className="gray md-responsive">{transAction?.email}</h5>
