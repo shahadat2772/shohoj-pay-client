@@ -75,6 +75,7 @@ const Navbar = ({ unseenNotification }) => {
   const handleSignOut = () => {
     signOut(auth);
     toast.success("Sign Out Successfully");
+    window.localStorage.clear("accessToken");
   };
   if (loading || !mongoUser) {
     return;

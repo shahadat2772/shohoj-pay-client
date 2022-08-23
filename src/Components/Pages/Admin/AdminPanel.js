@@ -48,6 +48,7 @@ const AdminPanel = () => {
                 onClick={() => {
                   signOut(auth);
                   toast.success("Sign Out Successfully");
+                  window.localStorage.clear("accessToken");
                 }}
               >
                 <Link to={""}>Sign Out</Link>
