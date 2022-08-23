@@ -22,8 +22,10 @@ const AllTransaction = () => {
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
+  console.log(reverseData);
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
+
     // axios
     //   .get(`http://localhost:5000/transactionStatus/${user?.email}`, {
     //     headers: {
@@ -39,15 +41,22 @@ const AllTransaction = () => {
     //     toast.error(error?.message);
     //     navigate("/");
     //   });
+  }, [dispatch, user]);
+  useEffect(() => {
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [shareLinkCopied, dispatch, user]);
+  }, [shareLinkCopied]);
   const transactionData = allInfo?.userTransactionInfo;
   if (isLoading || transactionData == undefined) {
     return <Spinner />;
   }
-  // setFilterData(transactionData);
+  if (error) {
+    return toast.error(error?.message);
+  }
+  setTimeout(() => {
+    setFilterData(transactionData);
+  }, 1000);
   // FILTER TRANSACTION DATA
   const handleFilterMonth = (e) => {
     const getMonth = transactionData.filter((data) =>
