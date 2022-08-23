@@ -22,8 +22,9 @@ const RequestMoney = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const amount = data?.amount;
-    const email = data?.email;
+    // const amount = data?.amount;
+    // const email = data?.email;
+    const { email, amount, note } = data;
 
     if (amount.slice(0, 1) === "0") {
       toast.error("Invalid amount");
@@ -39,6 +40,7 @@ const RequestMoney = () => {
       amount: amount,
       from: user?.email,
       to: email,
+      note,
       fullDate,
       date,
       time,
@@ -96,6 +98,13 @@ const RequestMoney = () => {
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Senders email"
+            required
+          />
+          <input
+            {...register("note")}
+            type="text"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Write a note"
             required
           />
           <input

@@ -22,6 +22,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
       .then((res) => res.json())
       .then((data) => {
         setRequests(data);
+        console.log(data)
       });
   };
 
@@ -39,17 +40,15 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
           <div className="btn-group mt-8 mb-4">
             <button
               onClick={() => setType("incoming")}
-              className={`btn btn-primary btn-outline btn-sm ${
-                type === "incoming" && "btn-active"
-              }`}
+              className={`btn btn-primary btn-outline btn-sm ${type === "incoming" && "btn-active"
+                }`}
             >
               Incoming
             </button>
             <button
               onClick={() => setType("outgoing")}
-              className={`btn btn-primary btn-outline btn-sm ${
-                type !== "incoming" && "btn-active"
-              }`}
+              className={`btn btn-primary btn-outline btn-sm ${type !== "incoming" && "btn-active"
+                }`}
             >
               Outgoing
             </button>
@@ -90,11 +89,10 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                     <td>{request?.time}</td>
                     {type === "outgoing" && (
                       <td
-                        className={`${
-                          request.status === "Pending"
+                        className={`${request.status === "Pending"
                             ? "text-red-600"
                             : "text-green-600"
-                        }`}
+                          }`}
                       >
                         {request.status}
                       </td>
@@ -107,9 +105,8 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                           onClick={() =>
                             setRequestForConfirm([request, fetchRequests])
                           }
-                          className={`btn btn-xs btn-outline btn-primary ${
-                            request.status === "Approved" && "btn-disabled"
-                          }`}
+                          className={`btn btn-xs btn-outline btn-primary ${request.status === "Approved" && "btn-disabled"
+                            }`}
                         >
                           Approve{request.status === "Approved" && "d"}
                         </label>
