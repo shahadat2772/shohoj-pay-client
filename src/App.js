@@ -40,6 +40,7 @@ import AllAdmin from "./Components/Pages/Admin/AllAdmin";
 import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
 import MerchantServices from "./Components/Pages/Merchant/MerchantServices/MerchantServices";
 import MerchantToPersonal from "./Components/Pages/Merchant/MerchantServices/MerchantToPersonal";
+import MerchantToMerchant from "./Components/Pages/Merchant/MerchantServices/MerchantToMerchant";
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -329,6 +330,16 @@ function App() {
             <RequireAuth>
               <RequireMerchant>
                 <MerchantToPersonal />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-to-merchant"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantToMerchant />
               </RequireMerchant>
             </RequireAuth>
           }
