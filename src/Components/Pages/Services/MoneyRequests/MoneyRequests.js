@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
+import RequestDetailsModal from "./RequestDetailsModal";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user, loading] = useAuthState(auth);
   const email = user?.email;
 
   const [requests, setRequests] = useState([]);
+  const [request, setRequest] = useState([]);
   const [type, setType] = useState("incoming");
 
   const fetchRequests = () => {
@@ -79,11 +81,15 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                 {requests?.map((request, index) => (
                   <tr key={index}>
                     <td
-                      onClick={() => console.table(request)}
-                      className="cursor-pointer">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                      </svg>
+                      onClick={() => setRequest(request)}
+                    >
+                      <label
+                        htmlFor="request-details-modal"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 cursor-pointer">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                        </svg>
+                      </label>
 
                     </td>
                     <td>
@@ -127,6 +133,9 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
           )}
         </div>
       </div>
+      <RequestDetailsModal
+        request={request}
+      />
     </div>
   );
 };
