@@ -3,6 +3,9 @@ import React from 'react';
 const RequestDetailsModal = ({
     request
 }) => {
+    console.table(request)
+    const { requesterName, donorName, amount, note, date } = request;
+
     return (
         <div>
             <input
@@ -12,11 +15,36 @@ const RequestDetailsModal = ({
             />
             <div className="modal">
                 <div className="modal-box relative">
-                    <h3 className="text-lg font-bold">Approve request?</h3>
-                    <p className="py-4">
-                        You've been selected for a chance to get one year of subscription to
-                        use Wikipedia for free!
-                    </p>
+                    <h3 className="text-lg font-bold my-3 text-center">Request Details</h3>
+                    <div class="overflow-x-auto">
+                        <table class="table table-compact w-full">
+                            <tbody>
+                                <tr>
+                                    <td>Requester</td>
+                                    <td>{requesterName}</td>
+                                </tr>
+                                <tr>
+                                    <td>Donor</td>
+                                    <td>{donorName}</td>
+                                </tr>
+                                <tr>
+                                    <td>Amount</td>
+                                    <td>{amount}</td>
+                                </tr>
+                                {
+                                    note && <tr>
+                                        <td>Note</td>
+                                        <td>{note}</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>Date</td>
+                                    <td>{date}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
                     <div className="actionButtons mt-4">
                         <label
                             htmlFor='request-details-modal'
