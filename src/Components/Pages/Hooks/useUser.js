@@ -12,7 +12,7 @@ const useUser = (email) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("useUser", data);
+          // console.log("useUser", data);
           setUser(data);
         });
     }
