@@ -14,7 +14,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
-import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
 // SERVICE DATA
@@ -40,7 +39,7 @@ const someServices = [
     action: "/services",
   },
 ];
-// FIND TODAY DATE MONTH YEAR
+// GET TODAY DATE MONTH YEAR
 const filterDate = new Date().toLocaleDateString("en-us", {
   year: "numeric",
   month: "short",
@@ -56,21 +55,23 @@ const getPreviousDate = (number) => {
 const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
-  // const [balance, setBalance] = useState(0);
-  // const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // APPLY REDUX
+  // GET DATA USING REDUX
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
+  const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
+  const balance = userBalance;
+  const transactionData = userTransactionInfo;
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
   }, [navigate, dispatch, user]);
+  // GET MONTH SERVICE DATA
   useEffect(() => {
     axios
       .get(`http://localhost:5000/getServices`, {
@@ -85,23 +86,22 @@ const Dashboard = () => {
       toast.success("Copied Transaction Information");
     }
   }, [user?.email, monthServiceFilter, shareLinkCopied]);
-  const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
-  const balance = userBalance;
-  const transactionData = userTransactionInfo;
-  console.log(userSavingsInfo);
+  // HANDLE SPINNER
   if (isLoading || transactionData == undefined) {
     return <Spinner />;
   }
+  // HANDLE ERROR
   if (error) {
     toast.error(error?.message);
   }
-  // LATEST TRANSACTION
+  // GET LATEST TRANSACTION
   const latestTransaction = [...transactionData]?.splice(
     transactionData.length - 4,
     transactionData.length
   );
   // REVERSE TRANSACTION DATA
   const reverseData = [...latestTransaction].reverse();
+  // GET SERVICE INCLUDES TYPE
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
   serviceType("Receive Money");
@@ -120,6 +120,7 @@ const Dashboard = () => {
     ...serviceType("Merchant Pay"),
     ...serviceType("E-Check"),
   ];
+  // COUNT RECEIVE, EXPENSE, AND SAVINGS MONEY
   const reducerCount = (value) => {
     return value.reduce(
       (previousValue, currentValue) =>
@@ -131,7 +132,7 @@ const Dashboard = () => {
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
-  const COLORS = ["#066106", "#c30606", "#050566"];
+  const COLORS = ["#224B0C", "#C21010", "#002B5B"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -292,22 +293,23 @@ const Dashboard = () => {
                             </h6>
                           )}
                         </div>
-                        <div className="" onClick={() => onShare(transAction)}>
-                          <i className="fa-solid fa-copy cursor-pointer gray"></i>
-                        </div>
-                        <div>
+                        <div className="flex align-items-center ">
+                          <div
+                            className=""
+                            onClick={() => onShare(transAction)}
+                          >
+                            <i className="fa-solid fa-copy cursor-pointer"></i>
+                          </div>
                           <h3
-                            className={`text-2xl font-medium text-right md-amount-responsive ${
+                            className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
                               transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money" ||
-                              transAction.type === "Withdraw Savings"
+                              transAction.type === "Receive Money"
                                 ? "text-green-600"
                                 : "text-red-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money" ||
-                            transAction.type === "Withdraw Savings"
+                            transAction.type === "Receive Money"
                               ? "+" + transAction.amount
                               : "-" + transAction.amount}
                             $
@@ -350,6 +352,7 @@ const Dashboard = () => {
               </select>
             </div>
             <div className=" flex justify-center h-22 ">
+              {/* START PAICHART */}
               <div className="w-full lg:w-96 h-72">
                 <ResponsiveContainer>
                   <PieChart>
@@ -386,16 +389,11 @@ const Dashboard = () => {
               Savings: {totalSavings ? totalSavings : 1}$
             </li>
           </ul>
+          {/* START SAVINGS */}
           <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">
             Savings
           </h3>
           <div className="bg-base-200 shadow-lg rounded-md lg:px-9 py-10 px-3">
-            {/* <h1
-              data-testid="user-name"
-              className="text-left text-2xl font-bold mb-3"
-            >
-              {user?.displayName}, Your
-            </h1> */}
             <h4>Total Savings</h4>
             <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>
