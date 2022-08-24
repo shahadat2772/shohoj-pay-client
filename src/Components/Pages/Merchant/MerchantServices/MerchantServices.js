@@ -26,6 +26,11 @@ const services = [
         serviceName: "M to M",
         serviceIcon: faPaperPlane,
     },
+    {
+        id: "get-paid",
+        serviceName: "Get Paid",
+        serviceIcon: faHandHoldingDollar,
+    },
 ];
 
 const MerchantServices = () => {
