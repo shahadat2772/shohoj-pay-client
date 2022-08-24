@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 export const fetchAllTransaction = createAsyncThunk(
   "allTransaction/fetchAllTransaction",
-  async () => {
-    const res = await axios.get("https://jsonplaceholder.typicode.com/photos");
+  async (user) => {
+    const res = await axios.get(
+      `http://localhost:5000/all-transaction/${user?.email}`
+    );
     return res.data;
   }
 );
