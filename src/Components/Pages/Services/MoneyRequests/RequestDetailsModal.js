@@ -1,10 +1,22 @@
 import React from 'react';
+import Trow from "./Trow";
 
 const RequestDetailsModal = ({
     request
 }) => {
-    console.table(request)
-    const { requesterName, donorName, amount, note, date } = request;
+    const { requesterName, donorName, amount, note, date, payFor, productOrServiceName, description } = request;
+
+    const commonProps = {
+        "Requester": requesterName,
+        "Donor": donorName,
+        "Amount": amount,
+        "Date": date
+    };
+    const merchantProps = {
+        "Pay for": payFor,
+        "Product / Service": productOrServiceName,
+        "Description": description
+    };
 
     return (
         <div>
@@ -19,28 +31,27 @@ const RequestDetailsModal = ({
                     <div class="overflow-x-auto">
                         <table class="table table-compact w-full">
                             <tbody>
-                                <tr>
-                                    <td>Requester</td>
-                                    <td>{requesterName}</td>
-                                </tr>
-                                <tr>
-                                    <td>Donor</td>
-                                    <td>{donorName}</td>
-                                </tr>
-                                <tr>
-                                    <td>Amount</td>
-                                    <td>{amount}</td>
-                                </tr>
                                 {
-                                    note && <tr>
-                                        <td>Note</td>
-                                        <td>{note}</td>
-                                    </tr>
+                                    Object.keys(commonProps).map(key => <Trow
+                                        key={key}
+                                        propkey={key}
+                                        value={commonProps[key]}
+                                    />
+                                    )
                                 }
-                                <tr>
-                                    <td>Date</td>
-                                    <td>{date}</td>
-                                </tr>
+
+                                {
+                                    note && <Trow propkey={"Note"} value={note} />
+                                }
+                                {
+                                    payFor && Object.keys(merchantProps).map(key => <Trow
+                                        key={key}
+                                        propkey={key}
+                                        value={merchantProps[key]}
+                                    />
+                                    )
+                                }
+
                             </tbody>
 
                         </table>
