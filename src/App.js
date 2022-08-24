@@ -42,6 +42,8 @@ import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
 import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
 import MerchantToMerchant from "./Components/Pages/Merchant/MerchantServices/MerchantToMerchant";
 import GetPaid from "./Components/Pages/Merchant/MerchantServices/GetPaid";
+import MerchantPay from "./Components/Pages/Services/MerchantPay/MerchantPay";
+
 
 function App() {
   // State for confirming the money request
@@ -175,6 +177,16 @@ function App() {
             <RequireAuth>
               <RequirePersonal>
                 <SaveMoney />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/merchant-pay"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <MerchantPay />
               </RequirePersonal>
             </RequireAuth>
           }
