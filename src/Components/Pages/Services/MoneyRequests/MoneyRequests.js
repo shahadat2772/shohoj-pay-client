@@ -22,7 +22,6 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
       .then((res) => res.json())
       .then((data) => {
         setRequests(data);
-        console.log(data)
       });
   };
 
@@ -65,6 +64,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
               {/* <!-- head --> */}
               <thead>
                 <tr>
+                  <th></th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Amount</th>
@@ -78,6 +78,14 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                 {/* Each request */}
                 {requests?.map((request, index) => (
                   <tr key={index}>
+                    <td
+                      onClick={() => console.table(request)}
+                      className="cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                      </svg>
+
+                    </td>
                     <td>
                       {type === "incoming"
                         ? request?.requesterName
@@ -90,8 +98,8 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                     {type === "outgoing" && (
                       <td
                         className={`${request.status === "Pending"
-                            ? "text-red-600"
-                            : "text-green-600"
+                          ? "text-red-600"
+                          : "text-green-600"
                           }`}
                       >
                         {request.status}
