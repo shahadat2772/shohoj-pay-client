@@ -3,6 +3,9 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllService } from "../../../../app/features/getAllServiceSlice";
+import Spinner from "../../../Shared/Spinner/Spinner";
 
 const current = new Date();
 // GET THIS MONTH
@@ -18,8 +21,13 @@ const AdminSummary = () => {
   const [shohojPayInfo, setShohojPayInfo] = useState(null);
   const [monthServiceFilter, setMonthServiceFilter] = useState(thisMonth);
   const [monthService, setMonthService] = useState([]);
+  const dispatch = useDispatch();
+  const { isLoading, allService, error } = useSelector(
+    (state) => state.getAllService
+  );
 
   useEffect(() => {
+    dispatch(fetchAllService(monthServiceFilter));
     try {
       fetch("http://localhost:5000/getShohojPayInfo", {
         headers: {
@@ -33,15 +41,21 @@ const AdminSummary = () => {
     } catch (error) {
       toast.error(error.message);
     }
-    axios
-      .get(`http://localhost:5000/all-service`, {
-        headers: {
-          "content-type": "application/json",
-          monthServiceFilter,
-        },
-      })
-      .then((res) => setMonthService(res.data));
-  }, [monthServiceFilter]);
+    setMonthService(allService);
+    // axios
+    //   .get(`http://localhost:5000/all-service`, {
+    //     headers: {
+    //       "content-type": "application/json",
+    //       monthServiceFilter,
+    //     },
+    //   })
+    //   .then((res) => setMonthService(res.data));
+  }, [monthServiceFilter, dispatch]);
+
+  // const monthService = allService;
+  if (error) {
+    return toast.error(error?.message);
+  }
   // GET SERVICE INCLUDES TYPE
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
@@ -96,6 +110,9 @@ const AdminSummary = () => {
       amount: totalMerchantPay,
     },
   ];
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <div className="container mx-auto lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
