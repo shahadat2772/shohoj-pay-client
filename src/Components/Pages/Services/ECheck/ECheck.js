@@ -66,11 +66,11 @@ const ECheck = () => {
             {...register("amount", {
               min: {
                 value: 5,
-                message: "$5 is the minimum send amount.",
+                message: "$5 is the minimum amount.",
               },
               max: {
                 value: 1000,
-                message: "$1000 is the maximum send amount at a time.",
+                message: "$1000 is the maximum amount at a time.",
               },
             })}
             type="number"
@@ -87,7 +87,7 @@ const ECheck = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="How to issue"
+            placeholder="Who to issue"
             required
           />
           <input

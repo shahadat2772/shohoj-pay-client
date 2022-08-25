@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
 import RequestDetailsModal from "./RequestDetailsModal";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const email = user?.email;
 
   const [requests, setRequests] = useState([]);

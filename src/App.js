@@ -43,6 +43,7 @@ import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/Withdra
 import MerchantToMerchant from "./Components/Pages/Merchant/MerchantServices/MerchantToMerchant";
 import GetPaid from "./Components/Pages/Merchant/MerchantServices/GetPaid";
 import MerchantPay from "./Components/Pages/Services/MerchantPay/MerchantPay";
+import MerchantECheck from "./Components/Pages/Merchant/MerchantServices/MerchantECheck";
 
 
 function App() {
@@ -364,6 +365,16 @@ function App() {
             <RequireAuth>
               <RequireMerchant>
                 <GetPaid />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-echeck"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantECheck />
               </RequireMerchant>
             </RequireAuth>
           }
