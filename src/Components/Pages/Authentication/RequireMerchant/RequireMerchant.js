@@ -11,14 +11,13 @@ const RequireMerchant = ({ children }) => {
     if (!mongoUser?.type || loading) {
         return <Spinner />
     }
-    if (mongoUser?.type === "admin") {
-        return <Navigate to="/adminpanel" />
-    }
-    else if (mongoUser?.type === "personal") {
-        return <Navigate to="/dashboard" />
-    }
     if (mongoUser.type !== 'merchant') {
-        return <Navigate to='/' />
+        if (mongoUser.type === "admin") {
+            <Navigate to="/adminpanel" />
+        }
+        else if (mongoUser.type === "personal") {
+            <Navigate to="/dashboard" />
+        }
     }
     return children
 };

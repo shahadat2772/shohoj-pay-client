@@ -13,10 +13,9 @@ const Login = () => {
     useSignInWithEmailAndPassword(auth);
   const [show, setShow] = useState(false);
   const [token] = useToken(user?.user?.email);
-  const [mongoUser] = useUser(user?.email);
+  const [mongoUser] = useUser(user?.email)
   const passwordShowRef = useRef("");
   let navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -32,10 +31,12 @@ const Login = () => {
     if (token && mongoUser) {
       toast.success("User Login SuccessFull");
       if (mongoUser.type === "admin") {
-        navigate("/adminpanel/summary");
-      } else if (mongoUser?.type === "merchant") {
-        navigate("/merchant/services");
-      } else if (mongoUser.type === "personal") {
+        navigate('/adminpanel')
+      }
+      else if (mongoUser?.type === "merchant") {
+        navigate("/merchant/services")
+      }
+      else if (mongoUser.type === "personal") {
         navigate("/dashboard");
       }
     }

@@ -137,7 +137,6 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         fullDate,
         date,
         time,
-        fee: "0",
       };
 
       fetch("http://localhost:5000/addMoney", {

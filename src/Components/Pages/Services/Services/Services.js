@@ -39,8 +39,8 @@ const services = [
     serviceIcon: faMoneyCheckDollar,
   },
   {
-    id: "merchant-pay",
-    serviceName: "Merchant Pay",
+    id: "loanRequest",
+    serviceName: "Loan Request",
     serviceIcon: faSackDollar,
   },
 ];

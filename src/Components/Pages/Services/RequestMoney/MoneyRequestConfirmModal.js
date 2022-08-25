@@ -25,7 +25,6 @@ const MoneyRequestConfirmModal = ({
           toast.dismiss("moneyRequestLoadingToast");
           toast.success(data?.success);
         } else {
-          toast.dismiss("moneyRequestLoadingToast");
           toast.error(data?.error);
         }
       });
@@ -42,22 +41,22 @@ const MoneyRequestConfirmModal = ({
         <div className="modal-box relative">
           <h3 className="text-lg font-bold">Approve request?</h3>
           <p className="py-4">
-            Are you sure to confirm request of ${requestInfo.amount}
+            You've been selected for a chance to get one year of subscription to
+            use Wikipedia for free!
           </p>
-          <div className="actionButtons mt-4 flex space-x-4">
-            <button
-              onClick={() => setRequestForConfirm([])}
-              className="btn btn-sm btn-outline "
-            >
-              Cancel
-            </button>
+          <div className="actionButtons mt-4">
             <button
               onClick={() => handleApprove(requestInfo)}
-              className="btn btn-sm btn-primary "
+              className="btn btn-sm btn-outline btn-primary mr-3"
             >
               Confirm
             </button>
-
+            <button
+              onClick={() => setRequestForConfirm([])}
+              className="btn btn-sm btn-outline btn-warning"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>

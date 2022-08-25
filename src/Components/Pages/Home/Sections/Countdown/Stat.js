@@ -6,14 +6,14 @@ const Stat = ({ e }) => {
     const { icon, title, figure } = e;
     return (
         <div className='flex items-center justify-center'>
-            <div className='m-4 p-2'>
-                <img className='w-[65px]' src={icon} alt="" />
+            <div className='m-2'>
+                <img className='fluid' src={icon} alt="" />
             </div>
             <div>
                 <div className='flex items-center justify-center'>
                     <CountUp
                         end={figure}
-                        className="text-xl lg:text-5xl font-bold" />
+                        className="text-xl lg:text-3xl font-bold" />
                     <img className='w-[35px]' src={plus} alt="" />
                 </div>
                 <h2 className='text-lg lg:text-xl font-mono font-bold'>{title}</h2>
