@@ -1,11 +1,13 @@
 import React from "react";
 import "./Footer.css";
+import ScrollToTop from "react-scroll-to-top";
 
 const Footer = () => {
   const time = new Date();
   const year = time.getFullYear();
   return (
     <footer className="footer-section pt-10">
+      {/* <ScrollToTop smooth top="800" color="#002855" /> */}
       <div className="container mx-auto pt-10 pb-10">
         <div className="text-center p-5 lg:p-0 md:p-0">
           <img
@@ -15,11 +17,9 @@ const Footer = () => {
           />
           <div className="text-light">
             <p className="mb-1 mt-4 text-slate-300 ">
-              Thanks You So Much For Visiting Cogbo Immigration VisA Website
+              Thanks You So Much For Visiting Shohoj Pay Website
             </p>
-            <p className="text-slate-300">
-              ullamcorper odio vitae eleifend ultricies lectus
-            </p>
+            <p className="text-slate-300"></p>
             <div className="footer-icons my-8 ">
               <a href="/#">
                 <i className="fa-brands fa-facebook"></i>
@@ -43,16 +43,16 @@ const Footer = () => {
           <div className="mt-8 lg:translate-x-16">
             <h4 className="text-slate-300 font-bold text-2xl mb-3">Services</h4>
             <div className="mt-3">
-              <a href="/#">Worker Visa</a>
+              <a href="/#">Send Money</a>
             </div>
             <div className="mt-3">
-              <a href="/#">Worker Visa</a>
+              <a href="/#">Add Money</a>
             </div>
             <div className="mt-3">
-              <a href="/#">Worker Visa</a>
+              <a href="/#">Save Money</a>
             </div>
             <div className="mt-3">
-              <a href="/#">Worker Visa</a>
+              <a href="/#">Request Money</a>
             </div>
           </div>
           <div className="mt-8 lg:-translate-x-10">
@@ -63,10 +63,10 @@ const Footer = () => {
               <a href="/#">About</a>
             </div>
             <div className="mt-3">
-              <a href="/#">Coaching</a>
+              <a href="/#">Contact</a>
             </div>
             <div className="mt-3">
-              <a href="/#">Visa</a>
+              <a href="/#"></a>
             </div>
             <div className="mt-3">
               <a href="/#">Pricing</a>
@@ -103,7 +103,6 @@ const Footer = () => {
             </h4>
             <div>
               <p className="mb-1">Please Subscribe Our Newslatter,</p>
-              <p>consectetur adipiscing elit. </p>
               <div className="footer-form flex items-center">
                 <input type="email" placeholder="Your Email" />
                 <button

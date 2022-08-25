@@ -14,7 +14,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
-import { signOut } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
 // SERVICE DATA
 const someServices = [
   {
@@ -28,9 +29,9 @@ const someServices = [
     action: "/services/sendMoney",
   },
   {
-    type: "Request",
-    icon: "fa-hand-holding-dollar",
-    action: "/services/requestMoney",
+    type: "Withdraw",
+    icon: "fa-money-bill-transfer",
+    action: "/services/withdraw-savings",
   },
   {
     type: "More",
@@ -38,7 +39,7 @@ const someServices = [
     action: "/services",
   },
 ];
-// FIND TODAY DATE MONTH YEAR
+// GET TODAY DATE MONTH YEAR
 const filterDate = new Date().toLocaleDateString("en-us", {
   year: "numeric",
   month: "short",
@@ -54,26 +55,60 @@ const getPreviousDate = (number) => {
 const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
-  const [balance, setBalance] = useState(0);
-  const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
-  // LATEST TRANSACTION
-  const latestTransaction = [...transactionData].splice(
+  const dispatch = useDispatch();
+  // GET DATA USING REDUX
+  const { isLoading, allInfo, error } = useSelector(
+    (state) => state.userAllEmailData
+  );
+  const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
+  const balance = userBalance;
+  const transactionData = userTransactionInfo;
+  useEffect(() => {
+    dispatch(fetchUserEmailInfo(user));
+  }, [navigate, dispatch, user]);
+  // GET MONTH SERVICE DATA
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getServices`, {
+        headers: {
+          "content-type": "application/json",
+          email: user.email,
+          monthServiceFilter,
+        },
+      })
+      .then((res) => setMonthService(res.data));
+    if (shareLinkCopied) {
+      toast.success("Copied Transaction Information");
+    }
+  }, [user?.email, monthServiceFilter, shareLinkCopied]);
+  // HANDLE SPINNER
+  if (isLoading || transactionData == undefined) {
+    return <Spinner />;
+  }
+  // HANDLE ERROR
+  if (error) {
+    toast.error(error?.message);
+  }
+  // GET LATEST TRANSACTION
+  const latestTransaction = [...transactionData]?.splice(
     transactionData.length - 4,
     transactionData.length
   );
   // REVERSE TRANSACTION DATA
   const reverseData = [...latestTransaction].reverse();
+  // GET SERVICE INCLUDES TYPE
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
   serviceType("Receive Money");
   serviceType("Add Money");
   serviceType("Send Money");
-  serviceType("Request Money");
+  serviceType("Merchant Pay");
+  serviceType("E-Check");
 
   const totlaReceiveMoney = [
     ...serviceType("Receive Money"),
@@ -82,7 +117,10 @@ const Dashboard = () => {
   const totalLossMoney = [
     ...serviceType("Send Money"),
     ...serviceType("Request Money"),
+    ...serviceType("Merchant Pay"),
+    ...serviceType("E-Check"),
   ];
+  // COUNT RECEIVE, EXPENSE, AND SAVINGS MONEY
   const reducerCount = (value) => {
     return value.reduce(
       (previousValue, currentValue) =>
@@ -94,7 +132,7 @@ const Dashboard = () => {
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
-  const COLORS = ["#066106", "#c30606", "#050566"];
+  const COLORS = ["#224B0C", "#C21010", "#002B5B"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -123,61 +161,17 @@ const Dashboard = () => {
   };
   const data = [
     {
-      name: "Receive",
+      name: "Income",
       value: TotalRecive ? TotalRecive : 1,
       email: user?.email,
     },
-    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user?.email },
+    { name: "Expense", value: TotalCost ? TotalCost : 1, email: user?.email },
     {
       name: "Savings",
       value: totalSavings ? totalSavings : 1,
       email: user?.email,
     },
   ];
-  useEffect(() => {
-    // USER BALANCE AMOUNT GET
-    axios
-      .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => {
-        setBalance(res.data);
-      })
-      .catch((error) => {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        toast.error(error?.message);
-        navigate("/");
-      });
-    // USER TRANSACTION DATA GET
-    axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => setTransactionData(res.data))
-      .catch((error) => {
-        toast.error(error?.message);
-        signOut(auth);
-        localStorage.removeItem("accessToken");
-        navigate("/");
-      });
-    axios
-      .get(`http://localhost:5000/getServices`, {
-        headers: {
-          "content-type": "application/json",
-          email: user.email,
-          monthServiceFilter,
-        },
-      })
-      .then((res) => setMonthService(res.data));
-    if (shareLinkCopied) {
-      toast.success("Copied Transaction Information");
-    }
-  }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
@@ -197,9 +191,7 @@ const Dashboard = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-  if (transactionData === 0) {
-    return <Spinner />;
-  }
+
   return (
     <div className="container mx-auto lg:mt-28 lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
@@ -223,7 +215,7 @@ const Dashboard = () => {
           {/* SOME SERVICE */}
           <div className="mt-10 px-2">
             <h2 className="border-b-4 border-black w-48 font-bold text-xl">
-              Get Service
+              Get Started
             </h2>
             <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
               {someServices.map((service, index) => {
@@ -301,12 +293,15 @@ const Dashboard = () => {
                             </h6>
                           )}
                         </div>
-                        <div className="" onClick={() => onShare(transAction)}>
-                          <i className="fa-solid fa-copy cursor-pointer gray"></i>
-                        </div>
-                        <div>
+                        <div className="flex align-items-center ">
+                          <div
+                            className=""
+                            onClick={() => onShare(transAction)}
+                          >
+                            <i className="fa-solid fa-copy cursor-pointer"></i>
+                          </div>
                           <h3
-                            className={`text-2xl font-medium text-right md-amount-responsive ${
+                            className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
                               transAction.type === "Add Money" ||
                               transAction.type === "Receive Money"
                                 ? "text-green-600"
@@ -357,6 +352,7 @@ const Dashboard = () => {
               </select>
             </div>
             <div className=" flex justify-center h-22 ">
+              {/* START PAICHART */}
               <div className="w-full lg:w-96 h-72">
                 <ResponsiveContainer>
                   <PieChart>
@@ -381,6 +377,25 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
+          </div>
+          <ul className="mt-8">
+            <li className="text-2xl font-bold list-disc	">
+              Income: {TotalRecive ? TotalRecive : 1}$
+            </li>
+            <li className="text-2xl font-bold list-disc	mt-2">
+              Expense: {TotalCost ? TotalCost : 1}$
+            </li>
+            <li className="text-2xl font-bold list-disc mt-2">
+              Savings: {totalSavings ? totalSavings : 1}$
+            </li>
+          </ul>
+          {/* START SAVINGS */}
+          <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">
+            Savings
+          </h3>
+          <div className="bg-base-200 shadow-lg rounded-md lg:px-9 py-10 px-3">
+            <h4>Total Savings</h4>
+            <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>
         </div>
       </div>

@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 import useUser from "../../Pages/Hooks/useUser";
 
-const Navbar = () => {
+const Navbar = ({ unseenNotification }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathName = location?.pathname;
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const navigate = useNavigate();
   const [user, loading] = useAuthState(auth);
 
   const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
@@ -73,6 +75,7 @@ const Navbar = () => {
   const handleSignOut = () => {
     signOut(auth);
     toast.success("Sign Out Successfully");
+    window.localStorage.clear("accessToken");
   };
   if (loading || !mongoUser) {
     return;
@@ -130,9 +133,29 @@ const Navbar = () => {
                     ))}
                   {user &&
                     commonRoutes.map((item) => (
-                      <li key={item.name} className="block text-center">
-                        <NavLink to={item.link}>{item.name}</NavLink>
-                      </li>
+                      <>
+                        {item.name === "Notification" ? (
+                          <li
+                            className={`block text-center relative`}
+                            key={item.name}
+                          >
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                            <p
+                              className={`notificationCounter ${
+                                unseenNotification?.length !== 0 &&
+                                pathName !== "/notification" &&
+                                "notificationCounterShow"
+                              }`}
+                            >
+                              {unseenNotification?.length}
+                            </p>
+                          </li>
+                        ) : (
+                          <li className={`block text-center`} key={item.name}>
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                          </li>
+                        )}
+                      </>
                     ))}
                   {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                   <div className=" flex items-center justify-center lg:hidden">

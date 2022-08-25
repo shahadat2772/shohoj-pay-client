@@ -1,90 +1,75 @@
-import axios from "axios";
 import { signOut } from "firebase/auth";
-import React, { useEffect, useInsertionEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
-// import ReactPaginate from "react-paginate";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
+import Pagination from "../../Shared/Pagination/Pagination";
+import Modal from "./Modal";
 
 const AllTransaction = () => {
-  // askdfkasdf
-  // const [currentItems, setCurrentItems] = useState(null);
-  const [transactionData, setTransactionData] = useState([]);
+  // ALL STATE
   const [filterData, setFilterData] = useState([]);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [itemOffset, setItemOffset] = useState(0);
-  // const [reverse, setReverse] = useState([]);
+  const [modalData, setModalData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-  const navigate = useNavigate();
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // GET TODAY DATE
   const todayDate = new Date().toLocaleDateString();
+  // GET FULL YEAR
+  const getYear = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+  });
   // REVERSE TRANSACTION DATA
   const reverseData = [...filterData].reverse();
-  // const items = [
-  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-  //   10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3,
-  //   4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  //   13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7,
-  //   8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1,
-  //   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  //   11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4,
-  //   5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  //   13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7,
-  //   8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1,
-  //   2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  //   11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-  // ];
-  // const itemsPerPage = 4;
-  // useInsertionEffect(() => {
-  //   // Fetch items from another resources.
-  //   const endOffset = itemOffset + itemsPerPage;
-  //   setCurrentItems(items.slice(itemOffset, endOffset));
-  //   setPageCount(Math.ceil(items.length / itemsPerPage));
-  // }, [itemOffset, itemsPerPage]);
-  // // Invoke when user click to request another page.
-  // const handlePageClick = (event) => {
-  //   const newOffset = (event.selected * itemsPerPage) % items.length;
-  //   setItemOffset(newOffset);
-  // };
+  // GET TRANSACTION DATA USING REDUX
+  const { isLoading, allTransactionData, error } = useSelector(
+    (state) => state.allTransaction
+  );
+  const transactionData = allTransactionData;
   useEffect(() => {
-    axios
-
-      .get(
-        `https://shohoj-pay-server.herokuapp.com/transactionStatus/${user?.email}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      )
-      .then((res) => {
-        setTransactionData(res.data);
-        setFilterData(res.data);
-      })
-      .catch((error) => {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        toast.error(error?.message);
-        navigate("/");
-      });
+    dispatch(fetchAllTransaction(user));
+  }, [dispatch, user]);
+  useEffect(() => {
+    setFilterData(allTransactionData);
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
     }
-  }, [user?.email, shareLinkCopied, navigate]);
-  if (transactionData.length === 0) {
+  }, [shareLinkCopied, allTransactionData]);
+  // START PAGINATION
+  let PageSize = 10;
+  const currentTrxData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return reverseData.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, reverseData, PageSize]);
+  // HANDLE SPINNER
+  if (isLoading) {
     return <Spinner />;
+  }
+  // HANDLE ERROR
+  if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
+    toast.error(error?.message);
+    navigate("/");
   }
 
   // FILTER TRANSACTION DATA
+  // FILTER MONTH
   const handleFilterMonth = (e) => {
     const getMonth = transactionData.filter((data) =>
       data.date.includes(e.target.value)
     );
     setFilterData(getMonth);
   };
+  // FILTER DATE
   const getFilterDate = (e) => {
     const date = e.target.value;
     const [year, month, day] = date.substring(0, 10).split("-");
@@ -102,13 +87,7 @@ const AllTransaction = () => {
       data.fullDate.includes(getdate)
     );
     setFilterData(getMonth);
-    console.log(getMonth);
   };
-  // GET FULL YEAR
-  const getYear = new Date().toLocaleDateString("en-us", {
-    year: "numeric",
-  });
-
   //   COPY TRANSACTION DATA FUNCTION
   const onShare = (data) => {
     navigator.clipboard.writeText(`
@@ -127,16 +106,10 @@ const AllTransaction = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-  const handledeletedata = (id) => {
-    fetch(`http://localhost:5000/delete/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  };
 
   return (
     <div className="container mx-auto lg:mt-24 lg:px-10 py-10 mt-10">
+      {/* START ALL TRANSACTION PAGE */}
       <div className=" px-2 lg:w-8/12 mx-auto">
         <div className="flex items-center justify-between">
           <div>
@@ -146,6 +119,7 @@ const AllTransaction = () => {
             >
               All Transaction
             </h2>
+            {/* FILTER DATA BY DATE */}
             <label htmlFor="input-date" className="text-lg font-bold">
               Select Date:
             </label>
@@ -157,6 +131,7 @@ const AllTransaction = () => {
               className="bg-transparent	ml-3"
             />
           </div>
+          {/* FILTER DATA BY MONTH */}
           <select
             onChange={handleFilterMonth}
             name="option"
@@ -179,91 +154,80 @@ const AllTransaction = () => {
         </div>
         <div className="mt-8">
           <ul>
-            {reverseData.map((transAction) => (
-              <li
-                className={`flex items-center my-4 p-3 rounded-lg w-full shadow`}
+            {currentTrxData.map((transAction) => (
+              <label
                 key={transAction._id}
+                htmlFor="details-modal"
+                onClick={() => setModalData(transAction)}
               >
-                <div className="lg:mr-8 w-36">
-                  <h5 className="gray text-sm mb-1 md-responsive">
-                    {transAction.fullDate === todayDate
-                      ? "Today"
-                      : transAction.fullDate}
-                  </h5>
-                  <h6 className="gray md-responsive">{transAction.time}</h6>
-                </div>
-                <div className="avatar">
-                  <div className="w-16 md-img-responsive rounded-full ">
-                    <img
-                      src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                      alt="User Image"
-                    />
+                <li className="flex items-center my-4 p-3 rounded-lg w-full shadow">
+                  <div className="lg:mr-8 w-36">
+                    <h5 className="gray text-sm mb-1 md-responsive">
+                      {transAction.fullDate === todayDate
+                        ? "Today"
+                        : transAction.fullDate}
+                    </h5>
+                    <h6 className="gray md-responsive">{transAction.time}</h6>
                   </div>
-                </div>
-                <div className="ml-5 flex items-center justify-between w-full">
-                  <div>
-                    <h5
-                      className={`font-bold text-lg md-type-responsive ${
-                        transAction.type === "Add Money" ||
-                        transAction.type === "Receive Money"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {transAction.type}
-                    </h5>
-                    <h5 className="gray md-responsive">
-                      {transAction?.userName}
-                    </h5>
-                    {transAction.transactionId && (
-                      <h6 className="gray md-trx-responsive">
-                        {transAction.transactionId}
+                  <div className="avatar">
+                    <div className="w-14 md-img-responsive rounded-full ">
+                      <img
+                        src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
+                        alt="User Image"
+                      />
+                    </div>
+                  </div>
+                  <div className="ml-5 flex items-center justify-between w-full">
+                    <div>
+                      <h5 className="font-bold text-lg md-type-responsive ">
+                        {transAction?.type}
+                      </h5>
+                      <h6 className="gray md-responsive">
+                        {transAction?.userName}
                       </h6>
-                    )}
-                    <button onClick={() => handledeletedata(transAction._id)}>
-                      delete
-                    </button>
-                    <h5 className="gray md-responsive">{transAction?.email}</h5>
-                  </div>
-                  <div className="" onClick={() => onShare(transAction)}>
-                    <i className="fa-solid fa-copy cursor-pointer"></i>
-                  </div>
-                  <div>
-                    <h3
-                      className={`text-2xl font-medium  text-right md-amount-responsive ${
-                        transAction.type === "Add Money" ||
+                      {transAction?.transactionId && (
+                        <h6 className="gray md-trx-responsive">
+                          {transAction.transactionId}
+                        </h6>
+                      )}
+                    </div>
+                    <div className="flex align-items-center ">
+                      <div className="" onClick={() => onShare(transAction)}>
+                        <i className="fa-solid fa-copy cursor-pointer"></i>
+                      </div>
+                      <h3
+                        className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
+                          transAction.type === "Add Money" ||
+                          transAction.type === "Receive Money"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {transAction.type === "Add Money" ||
                         transAction.type === "Receive Money"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {transAction.type === "Add Money" ||
-                      transAction.type === "Receive Money"
-                        ? "+" + transAction.amount
-                        : "-" + transAction.amount}
-                      $
-                    </h3>
+                          ? "+" + transAction.amount
+                          : "-" + transAction.amount}
+                        $
+                      </h3>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>
+              </label>
             ))}
           </ul>
-          {/* <Items currentItems={currentItems} /> */}
+          {/* TRANSACTION DETAILS MODAL */}
+          <Modal modalData={modalData} />
         </div>
-        {/* <ReactPaginate
-          breakLabel="..."
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
-          pageCount={pageCount}
-          previousLabel="< previous"
-          renderOnZeroPageCount={null}
-          containerClassName="pagination"
-          pageLinkClassName="page-name"
-          previousLinkClassName="page-num"
-          nextLinkClassName="page-num"
-          activeLinkClassName="active"
-        /> */}
+        <div className={`mt-12 ${allTransactionData.length < 10 && "hidden"}`}>
+          {/* START PAGINATION */}
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={filterData.length}
+            pageSize={PageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
     </div>
   );
