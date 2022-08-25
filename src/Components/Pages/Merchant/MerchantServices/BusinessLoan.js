@@ -17,6 +17,7 @@ const BusinessLoan = () => {
     } = useForm();
 
     const onSubmit = (data) => {
+
         const loanInfo = {
             requester: user.email,
             amount: data.amount,
@@ -24,7 +25,7 @@ const BusinessLoan = () => {
             fullDate: date,
             day
         };
-        console.log(loanInfo);
+        toast.loading("request in progress...", { id: "progressToast" });
         const fetchUrl = "http://localhost:5000/request-business-loan";
         fetch(fetchUrl, {
             method: "POST",
@@ -35,7 +36,12 @@ const BusinessLoan = () => {
             body: JSON.stringify(loanInfo)
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                toast.dismiss("progressToast");
+                console.log(data)
+                const { success, error } = data;
+                success ? toast.success(success) : toast.error(error);
+            })
             .catch(error => console.log(error))
     }
     return (

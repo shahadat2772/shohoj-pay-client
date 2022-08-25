@@ -39,7 +39,7 @@ const services = [
     {
         id: "business-loan",
         serviceName: "Business Loan",
-        serviceIcon: faMoneyCheckDollar,
+        serviceIcon: faSackDollar,
     },
 ];
 

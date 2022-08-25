@@ -67,7 +67,7 @@ const GetPaid = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center mt-20 lg:mt-10 ">
+    <div className="min-h-screen flex justify-center items-center mt-20  ">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Get Paid</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
