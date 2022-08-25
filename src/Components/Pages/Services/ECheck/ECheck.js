@@ -22,9 +22,7 @@ const ECheck = () => {
     const amount = data?.amount;
     const email = data?.email;
     const reference = data?.reference;
-    console.log(amount, email, reference);
-    console.log(user);
-    // toast.loading("Money is being requested.", { id: "apply-eCheck" });
+    toast.loading("Money is being Process.", { id: "apply-eCheck" });
     const eCheckInfo = {
       type: "E-Check",
       email: user?.email,
