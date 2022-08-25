@@ -44,6 +44,7 @@ import MerchantToMerchant from "./Components/Pages/Merchant/MerchantServices/Mer
 import GetPaid from "./Components/Pages/Merchant/MerchantServices/GetPaid";
 import MerchantPay from "./Components/Pages/Services/MerchantPay/MerchantPay";
 import MerchantECheck from "./Components/Pages/Merchant/MerchantServices/MerchantECheck";
+import BusinessLoan from "./Components/Pages/Merchant/MerchantServices/BusinessLoan";
 
 
 function App() {
@@ -375,6 +376,16 @@ function App() {
             <RequireAuth>
               <RequireMerchant>
                 <MerchantECheck />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/business-loan"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <BusinessLoan />
               </RequireMerchant>
             </RequireAuth>
           }
