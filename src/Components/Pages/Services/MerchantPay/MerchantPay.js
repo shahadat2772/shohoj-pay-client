@@ -38,7 +38,6 @@ const MerchantPay = () => {
       time,
       fee: "0",
     };
-
     fetch("http://localhost:5000/personal-to-merchant", {
       method: "POST",
       headers: {
@@ -52,7 +51,6 @@ const MerchantPay = () => {
         if (result?.error) {
           toast.error(result.error);
         } else {
-          // eslint-disable-next-line no-unused-expressions
           reset();
           toast.success(result.success);
         }
