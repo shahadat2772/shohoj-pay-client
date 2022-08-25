@@ -31,6 +31,16 @@ const services = [
         serviceName: "Get Paid",
         serviceIcon: faHandHoldingDollar,
     },
+    {
+        id: "merchant-echeck",
+        serviceName: "Merchant E-Check",
+        serviceIcon: faMoneyCheckDollar,
+    },
+    {
+        id: "business-loan",
+        serviceName: "Business Loan",
+        serviceIcon: faSackDollar,
+    },
 ];
 
 const MerchantServices = () => {
@@ -39,7 +49,7 @@ const MerchantServices = () => {
         <section className="min-h-screen">
             <div className="servicesContainer pt-28 pb-32">
                 <h1 className="textColor md:text-4xl text-3xl font-medium mb-12 text-center">
-                    User your <span className="text-primary">powers!</span>
+                    A lot to <span className="text-primary">do!</span>
                 </h1>
                 {/* Services */}
                 <div className="services grid lg:grid-cols-3 md:lg:grid-cols-3 grid-cols-2 gap-6 lg:gap-14 md:gap-14 w-fit mx-auto justify-items-center">
