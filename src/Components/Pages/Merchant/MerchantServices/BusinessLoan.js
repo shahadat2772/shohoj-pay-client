@@ -5,11 +5,7 @@ import auth from "../../../../firebase.init";
 
 const BusinessLoan = () => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const date = new Date().toLocaleDateString("en-us", {
-        year: "numeric",
-        month: "short",
-    });
-    const fullDate = new Date().toLocaleDateString();
+    const date = new Date().toLocaleDateString();
     const day = days[new Date().getDay()];
     const [user] = useAuthState(auth);
 
@@ -25,11 +21,22 @@ const BusinessLoan = () => {
             requester: user.email,
             amount: data.amount,
             status: "pending",
-            fullDate,
+            fullDate: date,
             day
-
         };
         console.log(loanInfo);
+        const fetchUrl = "http://localhost:5000/request-business-loan";
+        fetch(fetchUrl, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${window.localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify(loanInfo)
+        })
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(error => console.log(error))
     }
     return (
         <div className="min-h-screen flex justify-center items-center">
@@ -39,17 +46,17 @@ const BusinessLoan = () => {
                     <input
                         {...register("amount", {
                             min: {
-                                value: 5,
-                                message: "$5 is the minimum send amount.",
+                                value: 300,
+                                message: "$300 is the minimum amount.",
                             },
                             max: {
                                 value: 1000,
-                                message: "$1000 is the maximum send amount at a time.",
+                                message: "$1000 is the maximum amount at a time.",
                             },
                         })}
                         type="number"
                         className="h-12 p-2 w-full rounded"
-                        placeholder="How much to send?"
+                        placeholder="How much do you need?"
                         required
                     />
                     {errors.amount?.message && (
