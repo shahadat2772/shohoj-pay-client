@@ -43,9 +43,9 @@ const AllAdmin = () => {
 
   return (
     <div>
-      <h1 className="text-3xl mt-8">All Admins</h1>
-      <div className="overflow-x-auto w-full mt-8">
-        <table className="table w-[90%]">
+      <h1 className="text-3xl mt-6 ml-14">All Admins</h1>
+      <div className="overflow-x-auto w-full mt-6">
+        <table className="table w-[90%] mx-auto">
           {/* <!-- head --> */}
           <thead>
             <tr>
