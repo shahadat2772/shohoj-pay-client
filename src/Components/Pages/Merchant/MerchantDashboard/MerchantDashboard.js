@@ -1,7 +1,7 @@
 import React from 'react';
 import BalanceSection from './BalanceSection';
 import ServicesSection from './ServicesSection';
-import Statistics from './Statistics';
+import Statistic from './Statistic';
 
 const MerchantDashboard = () => {
     return (
@@ -14,7 +14,7 @@ const MerchantDashboard = () => {
 
             {/* right part  */}
             <div className='grid lg:col-span-5 gap-5'>
-                <Statistics />
+                <Statistic />
             </div>
         </div>
     );

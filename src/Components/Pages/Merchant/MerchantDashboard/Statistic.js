@@ -6,16 +6,17 @@ const data = [
     { name: 'Loan', value: 300, color: "#FFBB28" },
 ];
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-const Statistics = () => {
+const Statistic = () => {
     return (
         <div className='rounded-lg w-full p-10'>
             <div className='flex justify-between items-center w-full'>
                 <h4 className='text-2xl font-semibold'>Statistic</h4>
-                <select className=" select select-ghost   ">
+                <select className=" select select-ghost text-gray-700  ">
                     <option selected> Aug, 2022</option>
-                    <option>Svelte</option>
-                    <option>Vue</option>
-                    <option>React</option>
+                    <option>Jul, 2022</option>
+                    <option>Jun, 2022</option>
+                    <option>May, 2022</option>
+
                 </select>
             </div>
 
@@ -63,4 +64,4 @@ const Statistics = () => {
     );
 };
 
-export default Statistics;
+export default Statistic;
