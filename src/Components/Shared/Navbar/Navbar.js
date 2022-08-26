@@ -7,6 +7,7 @@ import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 import useUser from "../../Pages/Hooks/useUser";
+import { useSelector } from "react-redux";
 
 const Navbar = ({ unseenNotification }) => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ const Navbar = ({ unseenNotification }) => {
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+  const { signUpLoading } = useSelector((state) => state.signUpLoading);
 
   const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
 
@@ -34,8 +37,6 @@ const Navbar = ({ unseenNotification }) => {
     { name: "Notification", link: "/notification" },
     { name: "Settings", link: "/settings" },
   ];
-
-  const [mongoUser] = useUser(user?.email);
 
   // on scroll hide and show navbar functionality
   const controlNavbar = () => {
@@ -74,17 +75,17 @@ const Navbar = ({ unseenNotification }) => {
   };
   const handleSignOut = () => {
     signOut(auth);
-    toast.success("Sign Out Successfully");
     window.localStorage.clear("accessToken");
   };
-  if (loading || !mongoUser) {
+
+  if (loading || mongoUserLoading || signUpLoading) {
     return;
   }
 
   return (
     <nav
       className={`active ${show && "hidden"} ${
-        user && mongoUser.type === "admin" && "hidden"
+        user && mongoUser?.type === "admin" && "hidden"
       }`}
     >
       <div className="fixed top-0 w-[100%] z-50">
