@@ -52,7 +52,7 @@ const Login = () => {
       navigate("/adminpanel/summary");
       // navigate(from ? (from, { replace: true }) : "/adminpanel/summary");
     } else if (mongoUser?.type === "merchant") {
-      navigate("/merchant/services");
+      navigate("/merchant/dashboard");
       // navigate(from ? (from, { replace: true }) : "/merchant/services");
     } else if (mongoUser.type === "personal") {
       navigate("/dashboard");
