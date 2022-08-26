@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import Pagination from "../../Shared/Pagination/Pagination";
 
 const ManageAccounts = () => {
   const [users, setUsers] = useState([]);
+  // const [filterData, setFilterData] = useState(users);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchAllUsers = () => {
     fetch("http://localhost:5000/getAllUser", {
@@ -20,7 +23,13 @@ const ManageAccounts = () => {
   useEffect(() => {
     fetchAllUsers();
   }, []);
-
+  // START PAGINATION
+  let PageSize = 15;
+  const paginateUsers = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return users.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, users, PageSize]);
   const updateUserStatus = (email, action) => {
     fetch("http://localhost:5000/updateAccountStatus", {
       method: "PUT",
@@ -48,10 +57,30 @@ const ManageAccounts = () => {
         }
       });
   };
-
+  // const handleFindUser = (e) => {
+  //   // console.log(users);
+  //   // const searchData = users.filter((user) =>
+  //   //   user.email.includes("akib@gmail.com")
+  //   // );
+  //   console.log(e.target.value);
+  // };
+  // const handleFindUser = (e) => {
+  //   const searchData = users?.filter((user) =>
+  //     user?.email.includes(e.target.value)
+  //   );
+  //   // setSearch(searchData);
+  //   console.log(searchData);
+  //   console.log(e.target.value);
+  // };
   return (
     <div>
       <h2 className="text-3xl mt-4">Manage Accounts</h2>
+      {/* <input
+        onChange={handleFindUser}
+        type="text"
+        placeholder="Find Account By Email"
+        class="input input-bordered input-primary w-fulgl max-w-xs"
+      /> */}
       <div class="overflow-x-auto w-full mt-8">
         <table class="table w-[90%]">
           {/* <!-- head --> */}
@@ -66,7 +95,7 @@ const ManageAccounts = () => {
           <tbody>
             {/* <!-- row  --> */}
             {users &&
-              users.map((user) => {
+              paginateUsers.map((user) => {
                 const { name, email, avatar, address, number } = user;
                 return (
                   <tr>
@@ -125,6 +154,16 @@ const ManageAccounts = () => {
               })}
           </tbody>
         </table>
+        <div className={`mt-8  ${users.length < 10 && "hidden"}`}>
+          {/* START PAGINATION */}
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={users?.length}
+            pageSize={PageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
     </div>
   );

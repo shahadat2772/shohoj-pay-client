@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
 import "./SendMoney.css";
-import emailjs from "@emailjs/browser";
+// import emailjs from "@emailjs/browser";
 
 const SendMoney = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -22,26 +22,26 @@ const SendMoney = () => {
     formState: { errors },
   } = useForm();
   // EMAIL JS ADDED
-  const formRef = useRef();
+  // const formRef = useRef();
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-    console.log(formRef);
-    console.log(formRef.current);
+  // const sendEmail = (e) => {
+  //   e.preventDefault();
+  //   console.log(formRef);
+  //   console.log(formRef.current);
 
-    emailjs
-      .sendForm(
-        //       // "YOUR_SERVICE_ID",
-        "service_q11i3to",
-        //       // "YOUR_TEMPLATE_ID",
-        "template_60e7bmp",
-        formRef.current,
-        //       // "YOUR_PUBLIC_KEY"
-        "_BZVGBP7_QzIIrIGO"
-      )
-      .then((result) => console.log(result.text))
-      .catch((error) => console.log(error.text));
-  };
+  //   emailjs
+  //     .sendForm(
+  //       //       // "YOUR_SERVICE_ID",
+  //       // "service_q11i3to",
+  //       //       // "YOUR_TEMPLATE_ID",
+  //       // "template_60e7bmp",
+  //       // formRef.current,
+  //       //       // "YOUR_PUBLIC_KEY"
+  //       // "_BZVGBP7_QzIIrIGO"
+  //     )
+  //     .then((result) => console.log(result.text))
+  //     .catch((error) => console.log(error.text));
+  // };
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -90,7 +90,7 @@ const SendMoney = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Send Money</h2>
-        <form ref={formRef} onSubmit={sendEmail}>
+        {/* <form ref={formRef} onSubmit={sendEmail}>
           <input
             type="text"
             name="user_name"
@@ -116,7 +116,7 @@ const SendMoney = () => {
             className="blur c-blur1"
             style={{ background: "var(--purple)" }}
           ></div>
-        </form>
+        </form> */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {

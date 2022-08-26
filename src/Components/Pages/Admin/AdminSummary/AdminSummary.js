@@ -103,14 +103,6 @@ const AdminSummary = () => {
       <div className="lg:flex">
         {/* USER INFORMATION */}
         <div className="w-full lg:mt-0">
-          {/* <div className="md:mx-10 lg:mx-0 card  rounded ">
-            <div className="card-body py-0">
-              <div className="text-left">
-                <h4 className="">Total Balance</h4>
-                <h1 className="text-6xl font-bold">$ 54654654</h1>
-              </div>
-            </div>
-          </div> */}
           <div className="px-2">
             <div className="bg-base-200 shadow-lg rounded-md lg:px-16 py-10 px-3">
               <h4 className="mb-3">Total Revenue</h4>
@@ -131,7 +123,7 @@ const AdminSummary = () => {
                 onChange={(e) => setMonthServiceFilter(e.target.value)}
                 className="select select-ghost w-full max-w-xs mb-50 text-xl"
               >
-                {/* <option defaultValue={filterDate}>{filterDate}</option> */}
+                <option defaultValue={thisMonth}>Select Month</option>
                 <option value={`Jan ${year}`}>{`Jan ${year}`}</option>
                 <option value={`Feb ${year}`}>{`Feb ${year}`}</option>
                 <option value={`Mar ${year}`}>{`Mar ${year}`}</option>
@@ -156,34 +148,6 @@ const AdminSummary = () => {
                   <h3 className="text-2xl">${service?.amount}</h3>
                 </div>
               ))}
-              {/* <div className="flex items-center justify-between shadow-lg p-5 rounded">
-                <div className="flex items-center">
-                  <i class="fa-solid fa-paper-plane mr-2"></i>{" "}
-                  <h5 className="text-xl font-bold">Send Money</h5>{" "}
-                </div>
-                <h3 className="text-2xl">${totalSendMoney}</h3>
-              </div>
-              <div className="flex items-center justify-between shadow-lg p-5 rounded">
-                <div className="flex items-center">
-                  <i class="fa-solid fa-circle-dollar-to-slot mr-2"></i>{" "}
-                  <h5 className="text-xl font-bold">Save Money</h5>{" "}
-                </div>
-                <h3 className="text-2xl">${totalSaveMoney}</h3>
-              </div> */}
-              {/* <div className="flex items-center justify-between shadow-lg p-5 rounded">
-                <div className="flex items-center">
-                  <i class="fa-solid fa-money-check-dollar mr-2"></i>{" "}
-                  <h5 className="text-xl font-bold">E-Check</h5>{" "}
-                </div>
-                <h3 className="text-2xl">${totalECheck}</h3>
-              </div> */}
-              {/* <div className="flex items-center justify-between shadow-lg p-5 rounded">
-                <div className="flex items-center">
-                  <i class="fa-solid fa-money-bill-trend-up mr-2"></i>{" "}
-                  <h5 className="text-xl font-bold">Merchant Pay</h5>{" "}
-                </div>
-                <h3 className="text-2xl">${totalMerchantPay}</h3>
-              </div> */}
             </div>
           </div>
         </div>
