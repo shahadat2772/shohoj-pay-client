@@ -14,6 +14,7 @@ const Modal = ({ modalData }) => {
           >
             ✕
           </label>
+
           <div className="flex items-center justify-between">
             <h3 class="text-lg font-bold">{modalData?.type}</h3>
             <div className="mr-8">

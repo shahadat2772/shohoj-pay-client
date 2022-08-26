@@ -10,6 +10,7 @@ function RequireAuth({ children }) {
     return <Spinner />;
   }
   if (!user) {
+    window.localStorage.removeItem("accessToken");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
