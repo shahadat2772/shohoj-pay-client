@@ -67,7 +67,7 @@ const GetPaid = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center mt-20 lg:mt-10 ">
+    <div className="min-h-screen flex justify-center items-center mt-20  ">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Get Paid</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -140,7 +140,7 @@ const GetPaid = () => {
           <textarea
             {...register("description")}
             type="text"
-            className="textarea textarea-bordered textarea-ghost h-12 p-2 mt-4 w-full rounded"
+            className="textarea textarea-bordered textarea-ghost h-32 p-2 mt-4 w-full rounded"
             row={"10"}
             placeholder="Description"
             // minLength={12}

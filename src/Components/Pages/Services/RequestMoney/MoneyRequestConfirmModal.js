@@ -44,19 +44,20 @@ const MoneyRequestConfirmModal = ({
           <p className="py-4">
             Are you sure to confirm request of ${requestInfo.amount}
           </p>
-          <div className="actionButtons mt-4">
-            <button
-              onClick={() => handleApprove(requestInfo)}
-              className="btn btn-sm btn-outline btn-primary mr-3"
-            >
-              Confirm
-            </button>
+          <div className="actionButtons mt-4 flex space-x-4">
             <button
               onClick={() => setRequestForConfirm([])}
-              className="btn btn-sm btn-outline btn-warning"
+              className="btn btn-sm btn-outline "
             >
               Cancel
             </button>
+            <button
+              onClick={() => handleApprove(requestInfo)}
+              className="btn btn-sm btn-primary "
+            >
+              Confirm
+            </button>
+
           </div>
         </div>
       </div>
