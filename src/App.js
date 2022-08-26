@@ -45,6 +45,7 @@ import GetPaid from "./Components/Pages/Merchant/MerchantServices/GetPaid";
 import MerchantPay from "./Components/Pages/Services/MerchantPay/MerchantPay";
 import MerchantECheck from "./Components/Pages/Merchant/MerchantServices/MerchantECheck";
 import BusinessLoan from "./Components/Pages/Merchant/MerchantServices/BusinessLoan";
+import MerchantDashboard from "./Components/Pages/Merchant/MerchantDashboard/MerchantDashboard";
 
 
 function App() {
@@ -315,7 +316,7 @@ function App() {
           element={
             <RequireAuth>
               <RequireMerchant>
-                <Dashboard />
+                <MerchantDashboard />
               </RequireMerchant>
             </RequireAuth>
           }
