@@ -57,13 +57,13 @@ const ManageAccounts = () => {
         }
       });
   };
-  const handleFindUser = (e) => {
-    // console.log(users);
-    // const searchData = users.filter((user) =>
-    //   user.email.includes("akib@gmail.com")
-    // );
-    console.log(e.target.value);
-  };
+  // const handleFindUser = (e) => {
+  //   // console.log(users);
+  //   // const searchData = users.filter((user) =>
+  //   //   user.email.includes("akib@gmail.com")
+  //   // );
+  //   console.log(e.target.value);
+  // };
   // const handleFindUser = (e) => {
   //   const searchData = users?.filter((user) =>
   //     user?.email.includes(e.target.value)
@@ -75,12 +75,12 @@ const ManageAccounts = () => {
   return (
     <div>
       <h2 className="text-3xl mt-4">Manage Accounts</h2>
-      <input
+      {/* <input
         onChange={handleFindUser}
         type="text"
         placeholder="Find Account By Email"
         class="input input-bordered input-primary w-full max-w-xs"
-      />
+      /> */}
       <div class="overflow-x-auto w-full mt-8">
         <table class="table w-[90%]">
           {/* <!-- head --> */}

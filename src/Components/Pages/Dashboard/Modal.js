@@ -45,7 +45,10 @@ const Modal = ({ modalData }) => {
                     {modalData?.to ? modalData?.to : modalData?.email}
                   </h6>
                   {modalData?.transactionId && (
-                    <h6 className="">{modalData?.transactionId}</h6>
+                    <small className="">
+                      <span className="font-bold">TRX-ID: </span>
+                      {modalData?.transactionId}
+                    </small>
                   )}
                   {modalData?.reference && (
                     <h6 className="text-justify">
