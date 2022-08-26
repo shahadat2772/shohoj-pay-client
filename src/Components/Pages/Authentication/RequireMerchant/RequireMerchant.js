@@ -1,26 +1,34 @@
-import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { Navigate } from 'react-router-dom';
-import auth from '../../../../firebase.init';
-import Spinner from '../../../Shared/Spinner/Spinner';
-import useUser from '../../Hooks/useUser';
-const RequireMerchant = ({ children }) => {
-    const [firebaseUser, loading] = useAuthState(auth);
-    const [mongoUser] = useUser(firebaseUser?.email);
+import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import auth from "../../../../firebase.init";
+import Spinner from "../../../Shared/Spinner/Spinner";
+import useUser from "../../Hooks/useUser";
 
-    if (!mongoUser?.type || loading) {
-        return <Spinner />
-    }
+const RequireMerchant = ({ children }) => {
+  const navigate = useNavigate();
+  let location = useLocation();
+  const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+
+  if (loading || mongoUserLoading) {
+    return <Spinner />;
+  }
+
+  if (!user) {
+    window.localStorage.removeItem("accessToken");
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (mongoUser && mongoUser.type !== "merchant") {
     if (mongoUser?.type === "admin") {
-        return <Navigate to="/adminpanel" />
+      return navigate("/adminpanel/summary");
+    } else if (mongoUser.type === "personal") {
+      return navigate("/dashboard");
     }
-    else if (mongoUser?.type === "personal") {
-        return <Navigate to="/dashboard" />
-    }
-    if (mongoUser.type !== 'merchant') {
-        return <Navigate to='/' />
-    }
-    return children
+  }
+
+  return children;
 };
 
 export default RequireMerchant;
