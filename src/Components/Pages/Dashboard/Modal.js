@@ -6,17 +6,17 @@ const Modal = ({ modalData }) => {
   return (
     <div>
       <input type="checkbox" id="details-modal" className="modal-toggle" />
-      <div class="modal">
-        <div class="modal-box relative ">
+      <div className="modal">
+        <div className="modal-box relative ">
           <label
             htmlFor="details-modal"
-            class="btn btn-sm btn-circle absolute right-2 top-2"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
           </label>
 
           <div className="flex items-center justify-between">
-            <h3 class="text-lg font-bold">{modalData?.type}</h3>
+            <h3 className="text-lg font-bold">{modalData?.type}</h3>
             <div className="mr-8">
               <h5 className="gray text-sm mb-1 ">
                 {modalData?.fullDate === todayDate

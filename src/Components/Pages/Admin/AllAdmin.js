@@ -44,8 +44,8 @@ const AllAdmin = () => {
   return (
     <div>
       <h1 className="text-3xl mt-8">All Admins</h1>
-      <div class="overflow-x-auto w-full mt-8">
-        <table class="table w-[90%]">
+      <div className="overflow-x-auto w-full mt-8">
+        <table className="table w-[90%]">
           {/* <!-- head --> */}
           <thead>
             <tr>
@@ -64,9 +64,9 @@ const AllAdmin = () => {
                 return (
                   <tr>
                     <td>
-                      <div class="flex items-center space-x-3">
-                        <div class="avatar">
-                          <div class="mask mask-squircle w-12 h-12">
+                      <div className="flex items-center space-x-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle w-12 h-12">
                             <img
                               src={
                                 avatar
@@ -78,21 +78,21 @@ const AllAdmin = () => {
                           </div>
                         </div>
                         <div>
-                          <div class="font-bold">{name}</div>
-                          <div class="text-sm opacity-50">{email}</div>
+                          <div className="font-bold">{name}</div>
+                          <div className="text-sm opacity-50">{email}</div>
                         </div>
                       </div>
                     </td>
                     <td>
                       {address && address}
                       <br />
-                      {/* <span class="badge badge-ghost badge-sm">{number}</span> */}
+                      {/* <span className="badge badge-ghost badge-sm">{number}</span> */}
                     </td>
                     <td>{number && number}</td>
                     <th>
                       <button
                         onClick={() => handleRemove(email)}
-                        class="btn btn-ghost btn-xs"
+                        className="btn btn-ghost btn-xs"
                       >
                         Remove
                       </button>

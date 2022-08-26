@@ -42,7 +42,7 @@ const Pagination = (props) => {
         })}
         onClick={onPrevious}
       >
-        <i class="fa-solid fa-arrow-left"></i>
+        <i className="fa-solid fa-arrow-left"></i>
       </li>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
@@ -70,7 +70,7 @@ const Pagination = (props) => {
         className={`pagination-item ${currentPage === lastPage && "disabled"}`}
         onClick={onNext}
       >
-        <i class="fa-solid fa-arrow-right right"></i>
+        <i className="fa-solid fa-arrow-right right"></i>
       </li>
     </ul>
   );
