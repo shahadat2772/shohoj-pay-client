@@ -79,7 +79,7 @@ const ManageAccounts = () => {
         onChange={handleFindUser}
         type="text"
         placeholder="Find Account By Email"
-        class="input input-bordered input-primary w-full max-w-xs"
+        class="input input-bordered input-primary w-fulgl max-w-xs"
       /> */}
       <div class="overflow-x-auto w-full mt-8">
         <table class="table w-[90%]">
