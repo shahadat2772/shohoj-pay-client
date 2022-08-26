@@ -33,7 +33,7 @@ const services = [
     },
     {
         id: "merchant-echeck",
-        serviceName: "Merchant E-Check",
+        serviceName: "E-Check",
         serviceIcon: faMoneyCheckDollar,
     },
     {
