@@ -43,7 +43,6 @@ const GetPaid = () => {
       fullDate,
       date,
       time,
-      fee: "0",
     };
 
     fetch("http://localhost:5000/requestMoney", {
@@ -71,7 +70,6 @@ const GetPaid = () => {
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Get Paid</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-
           <input
             {...register("email")}
             type="email"
@@ -90,9 +88,7 @@ const GetPaid = () => {
                 id="product"
                 required
               />
-              <label>
-                Product Payment
-              </label>
+              <label>Product Payment</label>
             </div>
             <div className="flex items-center space-x-4">
               <input
@@ -104,9 +100,7 @@ const GetPaid = () => {
                 id="service"
                 required
               />
-              <label>
-                Service Payment
-              </label>
+              <label>Service Payment</label>
             </div>
           </div>
           <input

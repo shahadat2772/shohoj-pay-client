@@ -36,7 +36,6 @@ const MerchantPay = () => {
       fullDate,
       date,
       time,
-      fee: "0",
     };
     fetch("http://localhost:5000/personal-to-merchant", {
       method: "POST",
