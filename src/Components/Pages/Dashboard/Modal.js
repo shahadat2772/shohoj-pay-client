@@ -26,17 +26,16 @@ const Modal = ({ modalData }) => {
               <h5 className="gray text-sm mb-1 ">{modalData?.time}</h5>
             </div>
           </div>
-
           <div className="mt-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-14 rounded-full mr-4">
+              <div className="flex ">
+                <div className="w-16 rounded-full mr-4">
                   <img
                     src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
                     alt="User Image"
                   />
                 </div>
-                <div>
+                <div className="w-60">
                   <h6 className="font-bold">
                     {modalData?.userName
                       ? modalData?.userName
@@ -46,12 +45,21 @@ const Modal = ({ modalData }) => {
                     {modalData?.to ? modalData?.to : modalData?.email}
                   </h6>
                   {modalData?.transactionId && (
-                    <h6 className="">{modalData?.transactionId}</h6>
+                    <small className="">
+                      <span className="font-bold">TRX-ID: </span>
+                      {modalData?.transactionId}
+                    </small>
+                  )}
+                  {modalData?.reference && (
+                    <h6 className="text-justify">
+                      <span className="font-bold">Reference: </span>
+                      {modalData?.reference}
+                    </h6>
                   )}
                 </div>
               </div>
               <h3
-                className={`text-2xl amount-style font-medium  text-right ${
+                className={`text-2xl  font-medium  text-right ${
                   modalData?.type === "Add Money" ||
                   modalData?.type === "Receive Money"
                     ? "text-green-600"
