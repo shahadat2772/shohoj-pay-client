@@ -22,9 +22,7 @@ const ECheck = () => {
     const amount = data?.amount;
     const email = data?.email;
     const reference = data?.reference;
-    console.log(amount, email, reference);
-    console.log(user);
-    // toast.loading("Money is being requested.", { id: "apply-eCheck" });
+    toast.loading("Money is being Process.", { id: "apply-eCheck" });
     const eCheckInfo = {
       type: "E-Check",
       email: user?.email,
@@ -66,11 +64,11 @@ const ECheck = () => {
             {...register("amount", {
               min: {
                 value: 5,
-                message: "$5 is the minimum send amount.",
+                message: "$5 is the minimum amount.",
               },
               max: {
                 value: 1000,
-                message: "$1000 is the maximum send amount at a time.",
+                message: "$1000 is the maximum amount at a time.",
               },
             })}
             type="number"
@@ -87,7 +85,7 @@ const ECheck = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Issuer email"
+            placeholder="Who to issue"
             required
           />
           <input
@@ -100,7 +98,7 @@ const ECheck = () => {
           <input
             type="submit"
             className="actionButton mt-12 border-0"
-            value="Submit"
+            value="Issue"
           />
         </form>
       </div>
