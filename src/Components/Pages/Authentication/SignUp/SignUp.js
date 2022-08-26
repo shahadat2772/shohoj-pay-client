@@ -10,121 +10,158 @@ import {
 import auth from "../../../../firebase.init";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import useUser from "../../Hooks/useUser";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [showNamePart, setShowNamePart] = useState(true);
   const [showPasswordPart, setShowPasswordPart] = useState(false);
   const [showTypePart, setShowTypePart] = useState(false);
   const [progress, setProgress] = useState(1);
-  const [emailAddress, setEmailAddress] = useState("");
-  const [emailExistsError, setEmailExistsError] = useState(false);
-  const date = new Date().toLocaleDateString();
+  const [dbUserCreationLoading, setDbUserCreationLoading] = useState(false);
   const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
-
   const passwordShowRef = useRef("");
+  const date = new Date().toLocaleDateString();
+  const dispatch = useDispatch();
+
   const [
     createUserWithEmailAndPassword,
     user,
     userCreatLoading,
     userCreateError,
   ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
-  const [token] = useToken(user?.user?.email);
-  const [mongoUser] = useUser(user?.email);
-  const navigate = useNavigate();
-  const [updateProfile] = useUpdateProfile(auth);
+  const [updateProfile, updating, uerror] = useUpdateProfile(auth);
+
+  const [token, tokenLoading] = useToken(user);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const createAccount = async (userData) => {
-    const file = userData.avatar[0];
+  const onSubmit = async (data) => {
+    dispatch(updateSignUpLoading(true));
+    const email = data.email;
+    const password = data.password;
+    if (data.password !== data.ConfirmPassword) {
+      dispatch(updateSignUpLoading(false));
+      return toast.error("Opps Password Not Match");
+    }
+
+    const emailCheckResponse = await axios.get(
+      `http://localhost:5000/checkemailexists/${email}`
+    );
+    if (emailCheckResponse?.data?.error) {
+      dispatch(updateSignUpLoading(false));
+      return toast.error(emailCheckResponse.data.error, {
+        id: "emailExistsErr",
+      });
+    }
+
+    setDbUserCreationLoading(true);
+
+    const file = data.avatar[0];
     const formData = new FormData();
     formData.append("image", file);
     const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
-
-    fetch(url, {
+    const imgUploadRes = await fetch(url, {
       method: "POST",
       body: formData,
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.success) {
-          const name = userData.firstName + " " + userData.lastName;
-          const userInfo = { ...userData, name, avatar: result.data.url, date };
-          delete userInfo.password;
-          delete userInfo.ConfirmPassword;
-          delete userInfo.firstName;
-          delete userInfo.lastName;
-          fetch("http://localhost:5000/createAccount", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({ userInfo }),
-          }).then((res) => res.json());
-          // .then((result) => console.log(result));
-        }
+    });
+    const imgUploadResult = await imgUploadRes.json();
+
+    if (!imgUploadResult.success === true) {
+      dispatch(updateSignUpLoading(false));
+      setDbUserCreationLoading(false);
+      return toast.error("Something went wrong.", {
+        id: "signUpERR",
       });
+    }
+
+    const name = data.firstName + " " + data.lastName;
+    const userInfo = {
+      ...data,
+      name,
+      avatar: imgUploadResult.data.url,
+      date,
+      status: "active",
+    };
+    delete userInfo.password;
+    delete userInfo.ConfirmPassword;
+    delete userInfo.firstName;
+    delete userInfo.lastName;
+
+    const userUploadRes = await fetch("http://localhost:5000/createAccount", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ userInfo }),
+    });
+
+    const userUploadResult = await userUploadRes.json();
+
+    if (!userUploadResult.userResult.insertedId) {
+      dispatch(updateSignUpLoading(false));
+      setDbUserCreationLoading(false);
+      return toast.error("Something went wrong.", {
+        id: "signUpERR",
+      });
+    }
+    await setDbUserCreationLoading(false);
+    await createUserWithEmailAndPassword(email, password);
+    await updateProfile({ displayName: data.firstName + " " + data.lastName });
   };
 
-  useEffect(() => {
-    if (userCreateError) {
-      const error = userCreateError?.message.split(":")[1];
-      toast.error(error);
-    }
-  }, [userCreateError]);
-
-  useEffect(() => {
-    if (emailAddress) {
-      fetch(`http://localhost:5000/checkemailexists/${emailAddress}`)
-        .then((res) => res.json())
-        .then((result) => {
-          if (result.error) {
-            setEmailExistsError(result.error);
-            toast.error(result.error);
-          } else {
-            setEmailExistsError(false);
-          }
-        });
-    }
-  }, [emailAddress]);
-
-  useEffect(() => {
-    if (user?.user.email) {
-      if (token && mongoUser) {
-        setTimeout(() => {
-          toast.success("Create Account SuccessFully");
-        }, 1000);
-        if (mongoUser.type === "admin") {
-          navigate("/adminpanel");
-        } else if (mongoUser?.type === "merchant") {
-          navigate("/merchant/services");
-        } else if (mongoUser.type === "personal") {
-          navigate("/dashboard");
-        }
-      }
-    }
-  }, [user, navigate, token, mongoUser]);
-  if (userCreatLoading || !mongoUser) {
+  console.log(
+    tokenLoading,
+    mongoUserLoading,
+    userCreatLoading,
+    dbUserCreationLoading,
+    updating
+  );
+  if (
+    userCreatLoading ||
+    tokenLoading ||
+    mongoUserLoading ||
+    dbUserCreationLoading ||
+    updating
+  ) {
     return <Spinner />;
   }
-  const onSubmit = async (data) => {
-    if (Object.keys(data).length !== 0) {
-      if (data.password !== data.ConfirmPassword) {
-        return toast.error("Opps Password Not Match");
-      }
-      await createUserWithEmailAndPassword(data?.email, data?.password);
-      await updateProfile({ displayName: data.firstName + data.lastName });
-      createAccount(data);
+
+  if (user && token && mongoUser) {
+    toast.success("Signed up successfully.", {
+      id: "successfulSignUp",
+    });
+    dispatch(updateSignUpLoading(false));
+    if (mongoUser.type === "admin") {
+      navigate("/adminpanel/summary");
+    } else if (mongoUser?.type === "merchant") {
+      navigate("/merchant/dashboard");
+    } else if (mongoUser.type === "personal") {
+      navigate("/dashboard");
     }
-  };
+  }
+
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
     setShow(passShow);
   };
+
+  if (userCreateError || uerror) {
+    dispatch(updateSignUpLoading(false));
+    const error =
+      userCreateError?.message.split(":")[1] || uerror?.message.split(":")[1];
+    toast.error(error, {
+      id: "userCreationToast",
+    });
+  }
 
   return (
     <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
@@ -195,7 +232,6 @@ const SignUp = () => {
                   <span className="label-email">Email</span>
                 </label>
                 <input
-                  onKeyUp={(e) => setEmailAddress(e.target.value)}
                   type="email"
                   placeholder="Email"
                   className="input input-bordered w-full max-w-xs"
@@ -219,11 +255,6 @@ const SignUp = () => {
                   {errors?.email?.type === "pattern" && (
                     <span className="label-text-alt text-red-500">
                       {errors.email.message}
-                    </span>
-                  )}
-                  {emailExistsError && (
-                    <span className="label-text-alt text-red-500">
-                      {emailExistsError}
                     </span>
                   )}
                 </label>
@@ -258,7 +289,6 @@ const SignUp = () => {
                       !errors.firstName &&
                       !errors.lastName &&
                       !errors.email &&
-                      !emailExistsError &&
                       !errors.phone
                     ) {
                       setProgress(2);

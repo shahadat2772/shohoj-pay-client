@@ -42,14 +42,14 @@ function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
   const [request, fetchRequests] = requestForConfirm;
-  const [firebaseUser, loading] = useAuthState(auth);
-  const [user] = useUser(firebaseUser?.email);
+  const [user, loading] = useAuthState(auth);
+  // const [mongoUser, mongoUserLoading] = useUser(user);
 
   // Notification
   const [allNotification, setAllNotification] = useState([]);
   const [unseenNotification, setUnseenNotification] = useState([]);
   const fetchNotification = () => {
-    const email = user.email;
+    const email = user?.user?.email || user?.email;
     if (!email) {
       return;
     }
@@ -70,13 +70,13 @@ function App() {
     }
   };
   useEffect(() => {
-    const email = user?.email;
+    const email = user?.user?.email || user?.email;
     if (email) {
       fetchNotification();
     }
   }, [user]);
 
-  if (loading || !user) {
+  if (loading) {
     return <Spinner />;
   }
 
@@ -230,11 +230,9 @@ function App() {
           path="/adminpanel"
           exact={true}
           element={
-            <RequireAuth>
-              <RequireAdmin>
-                <AdminPanel />
-              </RequireAdmin>
-            </RequireAuth>
+            <RequireAdmin>
+              <AdminPanel />
+            </RequireAdmin>
           }
         >
           <Route
@@ -256,17 +254,21 @@ function App() {
           <Route
             path="/adminpanel/allAdmin"
             element={
-              <RequireAdmin>
-                <AllAdmin />
-              </RequireAdmin>
+              <RequireAuth>
+                <RequireAdmin>
+                  <AllAdmin />
+                </RequireAdmin>
+              </RequireAuth>
             }
           />
           <Route
             path="/adminpanel/manageAccounts"
             element={
-              <RequireAdmin>
-                <ManageAccounts />
-              </RequireAdmin>
+              <RequireAuth>
+                <RequireAdmin>
+                  <ManageAccounts />
+                </RequireAdmin>
+              </RequireAuth>
             }
           />
         </Route>
