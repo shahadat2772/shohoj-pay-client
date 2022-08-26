@@ -16,7 +16,6 @@ const Statistic = () => {
                     <option>Jul, 2022</option>
                     <option>Jun, 2022</option>
                     <option>May, 2022</option>
-
                 </select>
             </div>
 
@@ -52,8 +51,8 @@ const Statistic = () => {
                                     style={{ backgroundColor: d.color }}
                                     className={`w-3 h-3 rounded-full  `}></div>
                                 <div>
-                                    <p className='text-xl font-medium'>{d.value / 10} %</p>
-                                    <small className='text-gray-300'>{d.name}</small>
+                                    <p className='text-xl font-medium'>{d.value / 10}%</p>
+                                    <small className='text-gray-400'>{d.name}</small>
                                 </div>
                             </li>))
                         }
