@@ -40,15 +40,17 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
           <div className="btn-group mt-8 mb-4">
             <button
               onClick={() => setType("incoming")}
-              className={`btn btn-primary btn-outline btn-sm ${type === "incoming" && "btn-active"
-                }`}
+              className={`btn btn-primary btn-outline btn-sm ${
+                type === "incoming" && "btn-active"
+              }`}
             >
               Incoming
             </button>
             <button
               onClick={() => setType("outgoing")}
-              className={`btn btn-primary btn-outline btn-sm ${type !== "incoming" && "btn-active"
-                }`}
+              className={`btn btn-primary btn-outline btn-sm ${
+                type !== "incoming" && "btn-active"
+              }`}
             >
               Outgoing
             </button>
@@ -79,7 +81,6 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                 {/* Each request */}
                 {requests?.map((request, index) => (
                   <tr key={index}>
-
                     <td>
                       {type === "incoming"
                         ? request?.requesterName
@@ -92,28 +93,54 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                     {type === "outgoing" && (
                       <>
                         <td title={request.status}>
-
-                          {request.status === "Approved"
-                            ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 fill-primary">
-                              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm3.059 8.062a.75.75 0 10-.993-1.124 12.785 12.785 0 00-3.209 4.358L9.53 12.22a.75.75 0 00-1.06 1.06l2.135 2.136a.75.75 0 001.24-.289 11.264 11.264 0 013.214-4.815z" clipRule="evenodd" />
+                          {request.status === "Approved" ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="w-6 h-6 fill-primary"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm3.059 8.062a.75.75 0 10-.993-1.124 12.785 12.785 0 00-3.209 4.358L9.53 12.22a.75.75 0 00-1.06 1.06l2.135 2.136a.75.75 0 001.24-.289 11.264 11.264 0 013.214-4.815z"
+                                clipRule="evenodd"
+                              />
                             </svg>
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 stroke-primary">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 stroke-primary"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
                             </svg>
-
-
-                          }
-
+                          )}
                         </td>
                         <td>
                           <label
                             htmlFor="request-details-modal"
                             onClick={() => setRequest(request)}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 cursor-pointer">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                              />
                             </svg>
                           </label>
                         </td>
@@ -128,19 +155,31 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
                             onClick={() =>
                               setRequestForConfirm([request, fetchRequests])
                             }
-                            className={`btn btn-xs btn-primary ${request.status === "Approved" && "btn-disabled"
-                              }`}
+                            className={`btn btn-xs btn-primary ${
+                              request.status === "Approved" && "btn-disabled"
+                            }`}
                           >
                             Approve{request.status === "Approved" && "d"}
                           </label>
                         </td>
-                        <td >
+                        <td>
                           <label
                             htmlFor="request-details-modal"
                             onClick={() => setRequest(request)}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 cursor-pointer">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                              />
                             </svg>
                           </label>
                         </td>
@@ -153,9 +192,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
           )}
         </div>
       </div>
-      <RequestDetailsModal
-        request={request}
-      />
+      <RequestDetailsModal request={request} />
     </div>
   );
 };

@@ -47,7 +47,6 @@ import MerchantECheck from "./Components/Pages/Merchant/MerchantServices/Merchan
 import BusinessLoan from "./Components/Pages/Merchant/MerchantServices/BusinessLoan";
 import MerchantDashboard from "./Components/Pages/Merchant/MerchantDashboard/MerchantDashboard";
 
-
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
@@ -308,7 +307,7 @@ function App() {
           element={
             <RequireAuth>
               <RequireMerchant>
-                <MoneyRequests />
+                <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
               </RequireMerchant>
             </RequireAuth>
           }
