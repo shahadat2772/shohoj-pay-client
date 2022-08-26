@@ -85,9 +85,8 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`active ${show && "hidden"} ${
-        user && mongoUser?.type === "admin" && "hidden"
-      }`}
+      className={`active ${show && "hidden"} ${user && mongoUser?.type === "admin" && "hidden"
+        }`}
     >
       <div className="fixed top-0 w-[100%] z-50">
         <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
@@ -108,9 +107,8 @@ const Navbar = () => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
-                    open ? "left-[-10px] top-16" : "left-[-1080px]"
-                  }`}
+                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
+                    }`}
                 >
                   {!user &&
                     unAuthorizedRoutes?.map((item) => (
@@ -143,11 +141,10 @@ const Navbar = () => {
                           >
                             <NavLink to={item.link}>{item.name}</NavLink>
                             <p
-                              className={`notificationCounter ${
-                                unseenNotifications?.length !== 0 &&
+                              className={`notificationCounter ${unseenNotifications?.length !== 0 &&
                                 pathName !== "/notification" &&
                                 "notificationCounterShow"
-                              }`}
+                                }`}
                             >
                               {unseenNotifications?.length}
                             </p>
