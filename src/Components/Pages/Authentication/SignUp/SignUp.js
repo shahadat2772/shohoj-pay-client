@@ -106,7 +106,7 @@ const SignUp = () => {
 
     const userUploadResult = await userUploadRes.json();
 
-    if (!userUploadResult.userResult.insertedId) {
+    if (!userUploadResult?.userResult?.insertedId) {
       dispatch(updateSignUpLoading(false));
       setDbUserCreationLoading(false);
       return toast.error("Something went wrong.", {
