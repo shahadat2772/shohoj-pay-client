@@ -97,6 +97,7 @@ const AdminSummary = () => {
       amount: totalMerchantPay,
     },
   ];
+
   return (
     <div className="container mx-auto lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
