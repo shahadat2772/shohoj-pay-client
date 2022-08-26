@@ -74,15 +74,15 @@ const ManageAccounts = () => {
   // };
   return (
     <div>
-      <h2 className="text-3xl mt-4">Manage Accounts</h2>
+      <h2 className="text-3xl mt-6 ml-14">Manage Accounts</h2>
       {/* <input
         onChange={handleFindUser}
         type="text"
         placeholder="Find Account By Email"
         className="input input-bordered input-primary w-fulgl max-w-xs"
       /> */}
-      <div className="overflow-x-auto w-full mt-8">
-        <table className="table w-[90%]">
+      <div className="overflow-x-auto w-full mt-6">
+        <table className="table w-[90%] mx-auto">
           {/* <!-- head --> */}
           <thead>
             <tr>
