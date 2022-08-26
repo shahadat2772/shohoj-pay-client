@@ -17,7 +17,7 @@ const MerchantDashboard = () => {
     const { isLoading, allInfo, error } = useSelector(
         (state) => state.userAllEmailData
     );
-    const { balance } = allInfo?.userBalance;
+    const { userBalance } = allInfo;
     useEffect(() => {
         dispatch(fetchUserEmailInfo(user));
     }, [navigate, dispatch, user]);
@@ -31,7 +31,7 @@ const MerchantDashboard = () => {
         <div className='grid grid-cols-1 lg:grid-cols-12 py-32 lg:px-20 bg-white'>
             {/* left part */}
             <div className='lg:col-span-7 grid grid-cols-1 gap-5'>
-                <BalanceSection balance={balance} />
+                <BalanceSection balance={userBalance?.balance} />
                 <ServicesSection />
             </div>
 
