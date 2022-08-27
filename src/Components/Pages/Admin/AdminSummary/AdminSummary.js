@@ -97,6 +97,7 @@ const AdminSummary = () => {
       amount: totalMerchantPay,
     },
   ];
+
   return (
     <div className="container mx-auto lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
@@ -104,9 +105,12 @@ const AdminSummary = () => {
         {/* USER INFORMATION */}
         <div className="w-full lg:mt-0">
           <div className="px-2">
-            <div className="bg-base-200 shadow-lg rounded-md lg:px-16 py-10 px-3">
-              <h4 className="mb-3">Total Revenue</h4>
-              <h1 className="text-6xl font-bold">$ {shohojPayInfo?.revenue}</h1>
+            <div className="bg-blue-100 shadow rounded-md lg:px-12 py-8 px-3">
+              <h4 className="mb-5 text-xl ml-2">Total Revenue</h4>
+              <h1 className="text-6xl font-medium">
+                ${shohojPayInfo?.revenue}
+              </h1>
+              <p className="mt-6 ml-2">26 August, 2022</p>
             </div>
           </div>
           {/* START STATISTIC */}
@@ -114,15 +118,9 @@ const AdminSummary = () => {
         <div className="divider divider-horizontal divide-black px-9 divider-hidden"></div>
         <div className="">
           <div className="px-2 lg:w-96 w-full">
-            <h3 className="font-bold text-xl pb-2 border-b border-black">
-              Total Money Statistic
-            </h3>
-            <div>
-              <select
-                name="option"
-                onChange={(e) => setMonthServiceFilter(e.target.value)}
-                className="select select-ghost w-full max-w-xs mb-50 text-xl"
-              >
+            <div className="flex justify-between items-center w-full">
+              <h4 className="text-xl ml-2">Transactions</h4>
+              <select className=" select select-ghost text-gray-700 font-normal">
                 <option defaultValue={thisMonth}>Select Month</option>
                 <option value={`Jan ${year}`}>{`Jan ${year}`}</option>
                 <option value={`Feb ${year}`}>{`Feb ${year}`}</option>
@@ -138,14 +136,42 @@ const AdminSummary = () => {
                 <option value={`Dec ${year}`}>{`Dec ${year}`}</option>
               </select>
             </div>
+
+            {/* <h3 className="text-xl pb-2 border-b border-black">Transactions</h3>
+            <div>
+              <select
+                name="option"
+                onChange={(e) => setMonthServiceFilter(e.target.value)}
+                className="select select-ghost w-full max-w-xs mb-50 text-xl font-normal"
+              >
+                <option defaultValue={thisMonth}>Select Month</option>
+                <option value={`Jan ${year}`}>{`Jan ${year}`}</option>
+                <option value={`Feb ${year}`}>{`Feb ${year}`}</option>
+                <option value={`Mar ${year}`}>{`Mar ${year}`}</option>
+                <option value={`Apr ${year}`}>{`Apr ${year}`}</option>
+                <option value={`May ${year}`}>{`May ${year}`}</option>
+                <option value={`Jun ${year}`}>{`Jun ${year}`}</option>
+                <option value={`Jul ${year}`}>{`Jul ${year}`}</option>
+                <option value={`Aug ${year}`}>{`Aug ${year}`}</option>
+                <option value={`Sep ${year}`}>{`Sep ${year}`}</option>
+                <option value={`Oct ${year}`}>{`Oct ${year}`}</option>
+                <option value={`Nov ${year}`}>{`Nov ${year}`}</option>
+                <option value={`Dec ${year}`}>{`Dec ${year}`}</option>
+              </select>
+            </div> */}
+
             <div>
               {serviceData.map((service) => (
-                <div className="flex items-center justify-between shadow bg-base-100 p-5 rounded mt-4">
+                <div className="flex items-center justify-between shadow-sm bg-base-100 p-5 rounded mt-4">
                   <div className="flex items-center">
-                    <i class={`fa-solid ${service?.icon} mr-2`}></i>{" "}
-                    <h5 className="text-xl font-bold">{service?.name}</h5>{" "}
+                    <div className="bg-blue-100 h-8 w-8 flex justify-center items-center rounded">
+                      <i
+                        class={`fa-solid text-secondary  text-xl ${service?.icon}`}
+                      ></i>
+                    </div>
+                    <h5 className="text-xl ml-2">{service?.name}</h5>{" "}
                   </div>
-                  <h3 className="text-2xl">${service?.amount}</h3>
+                  <h3 className="text-xl">${service?.amount}</h3>
                 </div>
               ))}
             </div>

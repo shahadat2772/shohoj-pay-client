@@ -74,15 +74,15 @@ const ManageAccounts = () => {
   // };
   return (
     <div>
-      <h2 className="text-3xl mt-4">Manage Accounts</h2>
+      <h2 className="text-3xl mt-6 ml-14">Manage Accounts</h2>
       {/* <input
         onChange={handleFindUser}
         type="text"
         placeholder="Find Account By Email"
-        class="input input-bordered input-primary w-fulgl max-w-xs"
+        className="input input-bordered input-primary w-fulgl max-w-xs"
       /> */}
-      <div class="overflow-x-auto w-full mt-8">
-        <table class="table w-[90%]">
+      <div className="overflow-x-auto w-full mt-6">
+        <table className="table w-[90%] mx-auto">
           {/* <!-- head --> */}
           <thead>
             <tr>
@@ -100,9 +100,9 @@ const ManageAccounts = () => {
                 return (
                   <tr>
                     <td>
-                      <div class="flex items-center space-x-3">
-                        <div class="avatar">
-                          <div class="mask mask-squircle w-12 h-12">
+                      <div className="flex items-center space-x-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle w-12 h-12">
                             <img
                               src={
                                 avatar
@@ -114,21 +114,21 @@ const ManageAccounts = () => {
                           </div>
                         </div>
                         <div>
-                          <div class="font-bold">{name}</div>
-                          <div class="text-sm opacity-50">{email}</div>
+                          <div className="font-bold">{name}</div>
+                          <div className="text-sm opacity-50">{email}</div>
                         </div>
                       </div>
                     </td>
                     <td>
                       {address && address}
                       <br />
-                      {/* <span class="badge badge-ghost badge-sm">{number}</span> */}
+                      {/* <span className="badge badge-ghost badge-sm">{number}</span> */}
                     </td>
                     <td>{number && number}</td>
                     <th>
                       <button
                         // onClick={() => handleRemove(email)}
-                        class="btn btn-ghost btn-xs"
+                        className="btn btn-ghost btn-xs"
                       >
                         Details
                       </button>
@@ -136,14 +136,14 @@ const ManageAccounts = () => {
                       {user.status === "active" ? (
                         <button
                           onClick={() => updateUserStatus(email, "deactive")}
-                          class="btn btn-ghost btn-xs"
+                          className="btn btn-ghost btn-xs"
                         >
                           Deactivate
                         </button>
                       ) : (
                         <button
                           onClick={() => updateUserStatus(email, "active")}
-                          class="btn btn-ghost btn-xs"
+                          className="btn btn-ghost btn-xs"
                         >
                           Activate
                         </button>
