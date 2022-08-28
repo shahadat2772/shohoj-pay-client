@@ -21,10 +21,10 @@ const CardForm = ({ addAmount, setAmountErr }) => {
   const elements = useElements();
 
   useEffect(() => {
-    if (addAmount < 5) {
+    if (addAmount < 10) {
       setClientSecret("");
       setAmountErr("");
-      setAmountErr("$5 is the minimum add amount.");
+      setAmountErr("$10 is the minimum add amount.");
       return;
     }
     if (addAmount > 1000) {
@@ -181,6 +181,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
             },
           }}
         />
+        <p className="my-3">No fees when adding money from your card</p>
         <p className="text-xs text-red-500 mt-1">{cardError && cardError}</p>
         <button
           className="actionButton btn mt-11"
