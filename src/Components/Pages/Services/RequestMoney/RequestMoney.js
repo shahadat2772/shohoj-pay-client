@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useUser from "../../Hooks/useUser";
+import Spinner from "../../../Shared/Spinner/Spinner";
 
 const RequestMoney = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -12,15 +14,17 @@ const RequestMoney = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm();
-
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
   const onSubmit = (data) => {
     const { email, amount, note } = data;
 
@@ -42,6 +46,7 @@ const RequestMoney = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/requestMoney", {
@@ -103,9 +108,12 @@ const RequestMoney = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Write a note"
           />
+          <p className="my-3">
+            If you add money through request money, 1% fee will be deducted.
+          </p>
           <input
             type="submit"
-            className="actionButton mt-12 border-0"
+            className="actionButton mt-10 border-0"
             value="Request"
           />
         </form>

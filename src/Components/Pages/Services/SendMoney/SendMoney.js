@@ -1,19 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 import "./SendMoney.css";
+import Spinner from "../../../Shared/Spinner/Spinner";
 // import emailjs from "@emailjs/browser";
 
 const SendMoney = () => {
+  const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
   const fullDate = new Date().toLocaleDateString();
   const date = new Date().toLocaleDateString("en-us", {
     year: "numeric",
     month: "short",
   });
   const time = new Date().toLocaleTimeString();
-  const [user] = useAuthState(auth);
 
   const {
     register,
@@ -21,6 +24,9 @@ const SendMoney = () => {
     reset,
     formState: { errors },
   } = useForm();
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
   // EMAIL JS ADDED
   // const formRef = useRef();
 
@@ -52,7 +58,6 @@ const SendMoney = () => {
     }
 
     toast.loading("Money is being sended.", { id: "sendingMoney" });
-
     const sendMoneyInfo = {
       type: "Send Money",
       name: user?.displayName,
@@ -63,6 +68,7 @@ const SendMoney = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/sendMoney", {
@@ -145,9 +151,10 @@ const SendMoney = () => {
             placeholder="Receivers email"
             required
           />
+          <p className="my-3">1% fee will be deducted if using send money</p>
           <input
             type="submit"
-            className="actionButton mt-12 border-0"
+            className="actionButton mt-10 border-0"
             value="Send"
           />
         </form>
