@@ -1,6 +1,6 @@
-import { Elements, useElements, useStripe } from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CardForm from "./CardForm";
 import "./AddMoney.css";
 

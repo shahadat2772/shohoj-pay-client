@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
-import {
-  CardElement,
-  Elements,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import "./CardForm.css";
-import { Doughnut } from "react-chartjs-2";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
   const fullDate = new Date().toLocaleDateString();
@@ -103,7 +96,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       id: "waitingToast",
     });
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
@@ -122,13 +115,15 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         },
       }
     );
-
+    const image =
+      "https://previews.123rf.com/images/stockgiu/stockgiu1802/stockgiu180203103/94855033-color-finance-bank-economy-with-bills-cash-money.jpg";
     if (intentErr) {
       toast.dismiss("waitingToast");
       setCardError(intentErr?.message);
     } else {
       const id = paymentIntent?.id;
       const addMoneyInfo = {
+        image,
         type: "Add Money",
         email: user?.email,
         name: user?.displayName,
