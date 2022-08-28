@@ -120,29 +120,9 @@ const AdminSummary = () => {
           <div className="px-2 lg:w-96 w-full">
             <div className="flex justify-between items-center w-full">
               <h4 className="text-xl ml-2">Transactions</h4>
-              <select className=" select select-ghost text-gray-700 font-normal">
-                <option defaultValue={thisMonth}>Select Month</option>
-                <option value={`Jan ${year}`}>{`Jan ${year}`}</option>
-                <option value={`Feb ${year}`}>{`Feb ${year}`}</option>
-                <option value={`Mar ${year}`}>{`Mar ${year}`}</option>
-                <option value={`Apr ${year}`}>{`Apr ${year}`}</option>
-                <option value={`May ${year}`}>{`May ${year}`}</option>
-                <option value={`Jun ${year}`}>{`Jun ${year}`}</option>
-                <option value={`Jul ${year}`}>{`Jul ${year}`}</option>
-                <option value={`Aug ${year}`}>{`Aug ${year}`}</option>
-                <option value={`Sep ${year}`}>{`Sep ${year}`}</option>
-                <option value={`Oct ${year}`}>{`Oct ${year}`}</option>
-                <option value={`Nov ${year}`}>{`Nov ${year}`}</option>
-                <option value={`Dec ${year}`}>{`Dec ${year}`}</option>
-              </select>
-            </div>
-
-            {/* <h3 className="text-xl pb-2 border-b border-black">Transactions</h3>
-            <div>
               <select
-                name="option"
                 onChange={(e) => setMonthServiceFilter(e.target.value)}
-                className="select select-ghost w-full max-w-xs mb-50 text-xl font-normal"
+                className=" select select-ghost text-gray-700 font-normal"
               >
                 <option defaultValue={thisMonth}>Select Month</option>
                 <option value={`Jan ${year}`}>{`Jan ${year}`}</option>
@@ -158,8 +138,7 @@ const AdminSummary = () => {
                 <option value={`Nov ${year}`}>{`Nov ${year}`}</option>
                 <option value={`Dec ${year}`}>{`Dec ${year}`}</option>
               </select>
-            </div> */}
-
+            </div>
             <div>
               {serviceData.map((service) => (
                 <div className="flex items-center justify-between shadow-sm bg-base-100 p-5 rounded mt-4">

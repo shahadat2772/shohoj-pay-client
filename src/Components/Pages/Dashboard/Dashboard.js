@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
+import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 // SERVICE DATA
 const someServices = [
   {
@@ -141,7 +141,6 @@ const Dashboard = () => {
     innerRadius,
     outerRadius,
     percent,
-    index,
   }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
