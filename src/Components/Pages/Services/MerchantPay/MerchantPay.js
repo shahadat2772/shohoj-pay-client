@@ -3,6 +3,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
+import Spinner from "../../../Shared/Spinner/Spinner";
+import useUser from "../../Hooks/useUser";
 
 const MerchantPay = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -12,6 +14,7 @@ const MerchantPay = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const {
     register,
@@ -19,6 +22,9 @@ const MerchantPay = () => {
     reset,
     formState: { errors },
   } = useForm();
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -36,6 +42,7 @@ const MerchantPay = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
     fetch("http://localhost:5000/personal-to-merchant", {
       method: "POST",
@@ -89,6 +96,7 @@ const MerchantPay = () => {
             placeholder="Merchant email"
             required
           />
+          <p className="my-3">1% fee will be deducted if using merchant pay.</p>
           <input
             type="submit"
             className="actionButton mt-12 border-0"
