@@ -120,7 +120,10 @@ const AdminSummary = () => {
           <div className="px-2 lg:w-96 w-full">
             <div className="flex justify-between items-center w-full">
               <h4 className="text-xl ml-2">Transactions</h4>
-              <select className=" select select-ghost text-gray-700 font-normal">
+              <select
+                onChange={(e) => setMonthServiceFilter(e.target.value)}
+                className=" select select-ghost text-gray-700 font-normal"
+              >
                 <option defaultValue={thisMonth}>Select Month</option>
                 <option value={`Jan ${year}`}>{`Jan ${year}`}</option>
                 <option value={`Feb ${year}`}>{`Feb ${year}`}</option>
