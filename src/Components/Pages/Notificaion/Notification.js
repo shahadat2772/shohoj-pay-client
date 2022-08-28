@@ -7,32 +7,38 @@ import { useLocation } from "react-router-dom";
 import auth from "../../../firebase.init";
 import EachNotification from "./EachNotification";
 import "./Notification.css";
-
-const Notification = ({
-  fetchNotification,
-  allNotification,
-  unseenNotification,
-  setUnseenNotification,
-}) => {
-  const [user, loading] = useAuthState(auth);
+import { useSelector } from "react-redux";
+import {
+  fetchNotifications,
+  updateUnseenNotifications,
+} from "../../../app/slices/notificationSlice";
+import { useDispatch } from "react-redux";
+const Notification = () => {
   const location = useLocation();
   const pathName = location?.pathname;
+  const dispatch = useDispatch();
+
+  const { notifications, unseenNotifications } = useSelector(
+    (state) => state.allNotification
+  );
+  const [user, loading] = useAuthState(auth);
+  const email = user?.email || user?.user?.email;
 
   useEffect(() => {
-    if (pathName === "/notification" && unseenNotification.length > 0) {
+    if (pathName === "/notification" && unseenNotifications.length > 0) {
       fetch("http://localhost:5000/updateNotificationStatus", {
         method: "PATCH",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ unseenNotification }),
+        body: JSON.stringify({ unseenNotifications }),
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.modifiedCount > 0) {
-            setUnseenNotification([]);
+            dispatch(updateUnseenNotifications([]));
             setTimeout(() => {
-              fetchNotification();
+              dispatch(fetchNotifications(email));
             }, 5000);
           }
         });
@@ -46,8 +52,8 @@ const Notification = ({
           Notifications
         </h2>
         <div className="notificationsContainer">
-          {allNotification.length > 0 ? (
-            allNotification?.map((notification) => (
+          {notifications.length > 0 ? (
+            notifications?.map((notification) => (
               <EachNotification
                 key={notification._id}
                 notification={notification}

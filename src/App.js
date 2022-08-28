@@ -46,42 +46,21 @@ import MerchantPay from "./Components/Pages/Services/MerchantPay/MerchantPay";
 import MerchantECheck from "./Components/Pages/Merchant/MerchantServices/MerchantECheck";
 import BusinessLoan from "./Components/Pages/Merchant/MerchantServices/BusinessLoan";
 import MerchantDashboard from "./Components/Pages/Merchant/MerchantDashboard/MerchantDashboard";
+import { fetchNotifications } from "./app/slices/notificationSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
   const [request, fetchRequests] = requestForConfirm;
   const [user, loading] = useAuthState(auth);
-  // const [mongoUser, mongoUserLoading] = useUser(user);
+  const dispatch = useDispatch();
 
-  // Notification
-  const [allNotification, setAllNotification] = useState([]);
-  const [unseenNotification, setUnseenNotification] = useState([]);
-  const fetchNotification = () => {
-    const email = user?.user?.email || user?.email;
-    if (!email) {
-      return;
-    }
-    try {
-      axios
-        .get("http://localhost:5000/getNotification", {
-          headers: {
-            email: email,
-          },
-        })
-        .then((res) => {
-          const [all, unseen] = res.data;
-          setAllNotification(all.reverse());
-          setUnseenNotification(unseen);
-        });
-    } catch (error) {
-      toast.error(error?.message);
-    }
-  };
+  // Loading notification on getting user info
   useEffect(() => {
     const email = user?.user?.email || user?.email;
     if (email) {
-      fetchNotification();
+      dispatch(fetchNotifications(email));
     }
   }, [user]);
 
@@ -91,7 +70,7 @@ function App() {
 
   return (
     <div>
-      <Navbar unseenNotification={unseenNotification}></Navbar>
+      <Navbar></Navbar>
       <Routes>
         <Route
           path="/"
@@ -123,12 +102,7 @@ function App() {
           path="/notification"
           element={
             <RequireAuth>
-              <Notification
-                fetchNotification={fetchNotification}
-                allNotification={allNotification}
-                unseenNotification={unseenNotification}
-                setUnseenNotification={setUnseenNotification}
-              />
+              <Notification />
             </RequireAuth>
           }
         />
