@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import useUser from "../../Pages/Hooks/useUser";
 import { useSelector } from "react-redux";
 
-const Navbar = ({ unseenNotification }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const pathName = location?.pathname;
@@ -18,6 +18,7 @@ const Navbar = ({ unseenNotification }) => {
   const [user, loading] = useAuthState(auth);
   const [mongoUser, mongoUserLoading] = useUser(user);
   const { signUpLoading } = useSelector((state) => state.signUpLoading);
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
 
   const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
 
@@ -143,12 +144,12 @@ const Navbar = ({ unseenNotification }) => {
                             <NavLink to={item.link}>{item.name}</NavLink>
                             <p
                               className={`notificationCounter ${
-                                unseenNotification?.length !== 0 &&
+                                unseenNotifications?.length !== 0 &&
                                 pathName !== "/notification" &&
                                 "notificationCounterShow"
                               }`}
                             >
-                              {unseenNotification?.length}
+                              {unseenNotifications?.length}
                             </p>
                           </li>
                         ) : (
