@@ -21,7 +21,6 @@ const Navbar = () => {
   const { unseenNotifications } = useSelector((state) => state.allNotification);
 
   const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
-
   const personalUserRoutes = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
@@ -90,7 +89,7 @@ const Navbar = () => {
       }`}
     >
       <div className="fixed top-0 w-[100%] z-50">
-        <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
+        <div className="nav-active px-4 py-1 lg:p-0">
           <div className="p-1 lg:px-8 md:px-4">
             <nav className="flex items-center justify-between">
               {/* PROJECT LOGO */}
