@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification, socket } from "../../../../App";
 import auth from "../../../../firebase.init";
 import "./SendMoney.css";
 // import emailjs from "@emailjs/browser";
@@ -80,6 +81,7 @@ const SendMoney = () => {
         } else {
           // eslint-disable-next-line no-unused-expressions
           reset();
+          sendNotification(email, "sendMoney");
           toast.success(result.success);
         }
       });
