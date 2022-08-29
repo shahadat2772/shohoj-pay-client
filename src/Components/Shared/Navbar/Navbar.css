@@ -36,6 +36,8 @@
   text-align: center;
   display: flex;
   display: none;
+  color: #fff;
+  font-weight: 600;
 }
 
 .notificationCounterShow {
