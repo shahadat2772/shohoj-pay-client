@@ -15,7 +15,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
+import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
+import { signOut } from "firebase/auth";
 // SERVICE DATA
 const someServices = [
   {
@@ -77,6 +78,7 @@ const Dashboard = () => {
       .get(`http://localhost:5000/getServices`, {
         headers: {
           "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           email: user.email,
           monthServiceFilter,
         },
@@ -86,13 +88,17 @@ const Dashboard = () => {
       toast.success("Copied Transaction Information");
     }
   }, [user?.email, monthServiceFilter, shareLinkCopied]);
+
   // HANDLE SPINNER
   if (isLoading || transactionData == undefined) {
     return <Spinner />;
   }
   // HANDLE ERROR
   if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
     toast.error(error?.message);
+    navigate("/");
   }
   // GET LATEST TRANSACTION
   const latestTransaction = [...transactionData]?.splice(
@@ -141,7 +147,6 @@ const Dashboard = () => {
     innerRadius,
     outerRadius,
     percent,
-    index,
   }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);

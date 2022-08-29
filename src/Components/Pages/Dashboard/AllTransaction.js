@@ -4,7 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
+import { fetchAllTransaction } from "../../../app/slices/transactionSlice";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
