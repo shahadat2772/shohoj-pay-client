@@ -2,6 +2,7 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
 
 const ECheck = () => {
@@ -51,6 +52,7 @@ const ECheck = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "eCheck");
           toast.success(result.success);
         }
       });
