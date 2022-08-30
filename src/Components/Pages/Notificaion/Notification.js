@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
-import axios from "axios";
-import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 import auth from "../../../firebase.init";
 import EachNotification from "./EachNotification";
@@ -21,6 +18,7 @@ const Notification = () => {
   const { notifications, unseenNotifications } = useSelector(
     (state) => state.allNotification
   );
+
   const [user] = useAuthState(auth);
   const email = user?.email || user?.user?.email;
 

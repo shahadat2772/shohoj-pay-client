@@ -32,7 +32,7 @@ const MerchantToMerchant = () => {
     toast.loading("Money is being sended.", { id: "sendingMoney" });
 
     const sendMoneyInfo = {
-      type: "Send Money",
+      type: "M to M",
       name: user?.displayName,
       email: user?.email,
       amount: amount,

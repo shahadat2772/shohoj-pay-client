@@ -384,15 +384,21 @@ const Dashboard = () => {
             </div>
           </div>
           <ul className="mt-8">
-            <li className="text-2xl font-bold list-disc	">
-              Income: {TotalRecive ? TotalRecive : 1}$
-            </li>
-            <li className="text-2xl font-bold list-disc	mt-2">
-              Expense: {TotalCost ? TotalCost : 1}$
-            </li>
-            <li className="text-2xl font-bold list-disc mt-2">
-              Savings: {totalSavings ? totalSavings : 1}$
-            </li>
+            {!isLoading ? (
+              <>
+                <li className="text-2xl font-bold list-disc	">
+                  Income: {TotalRecive ? TotalRecive : 1}$
+                </li>
+                <li className="text-2xl font-bold list-disc	mt-2">
+                  Expense: {TotalCost ? TotalCost : 1}$
+                </li>
+                <li className="text-2xl font-bold list-disc mt-2">
+                  Savings: {totalSavings ? totalSavings : 1}$
+                </li>
+              </>
+            ) : (
+              <h3 className="text-xm">Loading..</h3>
+            )}
           </ul>
           {/* START SAVINGS */}
           <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">

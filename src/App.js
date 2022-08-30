@@ -76,6 +76,7 @@ function App() {
     }
   }, [user]);
 
+  // New notification arrived
   useEffect(() => {
     socket.on("receive_notification", (data) => {
       dispatch(fetchNotifications(data.email));
