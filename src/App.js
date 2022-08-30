@@ -319,6 +319,16 @@ function App() {
           }
         />
         <Route
+          path="/merchant/dashboard/allTransaction"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AllTransaction />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/merchant/services"
           element={
             <RequireAuth>
