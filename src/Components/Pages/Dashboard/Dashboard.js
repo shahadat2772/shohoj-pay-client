@@ -138,7 +138,7 @@ const Dashboard = () => {
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
-  const COLORS = ["#224B0C", "#C21010", "#002B5B"];
+  const COLORS = ["#224B0C", "#820000", "#002B5B"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
