@@ -3,6 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import ReactSignatureCanvas from 'react-signature-canvas';
+import { sendNotification } from "../../../../App";
 import auth from '../../../../firebase.init';
 
 const MerchantECheck = () => {
@@ -56,6 +57,7 @@ const MerchantECheck = () => {
                     reset();
                     clear();
                     setSignature("");
+                    sendNotification(email, 'merchantECheck')
                     toast.success(result.success);
                 }
             });

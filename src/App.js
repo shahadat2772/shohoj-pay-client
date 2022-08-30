@@ -76,6 +76,7 @@ function App() {
     }
   }, [user]);
 
+  // New notification arrived
   useEffect(() => {
     socket.on("receive_notification", (data) => {
       dispatch(fetchNotifications(data.email));
@@ -314,6 +315,16 @@ function App() {
             <RequireAuth>
               <RequireMerchant>
                 <MerchantDashboard />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/dashboard/allTransaction"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AllTransaction />
               </RequireMerchant>
             </RequireAuth>
           }

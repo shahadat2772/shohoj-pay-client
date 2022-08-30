@@ -4,6 +4,7 @@ import auth from "../../../../firebase.init";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import "./CardForm.css";
+import { sendNotification } from "../../../../App";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
   const fullDate = new Date().toLocaleDateString();
@@ -149,6 +150,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
           if (data?.success) {
             document.getElementById("addAmountInput").value = "";
             card.clear();
+            sendNotification(user?.email, "addMoney");
             toast.success(data.success);
           } else {
             toast.error(data.error);
