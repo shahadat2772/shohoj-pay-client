@@ -4,6 +4,7 @@ import userAllEmailData from "./slices/userAllEmailInfoSlice";
 import signUpLoadingReducer from "./slices/signUpLoadingSlice";
 // import allServiceData from "./slices/getAllServiceSlice";
 import notificationReducer from "./slices/notificationSlice";
+import transactionReportReducer from "./slices/transactionReportSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     signUpLoading: signUpLoadingReducer,
     // getAllService: allServiceData,
     allNotification: notificationReducer,
+    transactionReport: transactionReportReducer,
   },
 });
 export default store;

@@ -21,6 +21,7 @@ const Notification = () => {
   const { notifications, unseenNotifications } = useSelector(
     (state) => state.allNotification
   );
+
   const [user, loading] = useAuthState(auth);
   const email = user?.email || user?.user?.email;
 
