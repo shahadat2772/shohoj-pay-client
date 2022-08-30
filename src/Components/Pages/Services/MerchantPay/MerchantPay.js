@@ -2,6 +2,7 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import useUser from "../../Hooks/useUser";
@@ -58,6 +59,7 @@ const MerchantPay = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "merchantPay");
           toast.success(result.success);
         }
       });

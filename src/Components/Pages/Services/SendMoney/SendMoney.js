@@ -2,7 +2,7 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { sendNotification, socket } from "../../../../App";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
 import useUser from "../../Hooks/useUser";
 import "./SendMoney.css";

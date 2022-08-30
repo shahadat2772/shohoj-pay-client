@@ -1,11 +1,14 @@
 import React from "react";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 
 const MoneyRequestConfirmModal = ({
   requestInfo,
   setRequestForConfirm,
   fetchRequests,
 }) => {
+  const email = requestInfo?.from;
+  console.log(email);
   const handleApprove = (request) => {
     toast.loading("Request is being confirmed.", {
       id: "moneyRequestLoadingToast",
@@ -23,6 +26,7 @@ const MoneyRequestConfirmModal = ({
         fetchRequests();
         if (data?.success) {
           toast.dismiss("moneyRequestLoadingToast");
+          sendNotification(email, "requestMoney");
           toast.success(data?.success);
         } else {
           toast.dismiss("moneyRequestLoadingToast");
@@ -57,7 +61,6 @@ const MoneyRequestConfirmModal = ({
             >
               Confirm
             </button>
-
           </div>
         </div>
       </div>
