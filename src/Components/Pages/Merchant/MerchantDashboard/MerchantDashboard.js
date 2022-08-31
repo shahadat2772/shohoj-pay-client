@@ -20,11 +20,14 @@ const MerchantDashboard = () => {
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
+
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
+
   const { userBalance, userTransactionInfo } = allInfo;
   const transactionData = userTransactionInfo;
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
-  }, [navigate, dispatch, user]);
+  }, [navigate, dispatch, user, unseenNotifications]);
   useEffect(() => {
     if (shareLinkCopied) {
       toast.success("Copied Transaction Information");
@@ -96,10 +99,7 @@ const MerchantDashboard = () => {
                     </div>
                     <div className="avatar">
                       <div className="w-14 rounded-full md-img-responsive">
-                        <img
-                          src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                          alt="User Image"
-                        />
+                        <img src={transAction?.image} alt="User Image" />
                       </div>
                     </div>
                     <div className="ml-5 flex items-center justify-between w-full">
