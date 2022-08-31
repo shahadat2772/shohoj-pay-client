@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import toast from "react-hot-toast";
@@ -11,19 +11,14 @@ import { useDispatch } from "react-redux";
 import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const [signInWithEmailAndPassword, user, signinLoading, signInError] =
     useSignInWithEmailAndPassword(auth);
 
-  const from = location?.state?.from;
-
   const {
     register,
     handleSubmit,
-    resetField,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -171,7 +166,7 @@ const Login = () => {
             <input className="btn w-full" type="submit" value="Login" />
           </form>
           <p className="text-center my-2">
-            New to Shohoj Pay | Portal ?{" "}
+            New to Shohoj Pay ?{" "}
             <Link className="font-bold text-secondary" to="/signUp">
               Register
             </Link>
