@@ -46,7 +46,7 @@ const TransactionReport = () => {
     {
       id: 3,
       name: "Receive Money",
-      icon: "fa-paper-plane",
+      icon: "fa-circle-dollar-to-slot",
       amount: transactionReports?.totalReceiveMoney,
       transactionCount: transactionReports?.receiveMoneyTransactionCount,
     },
@@ -102,7 +102,7 @@ const TransactionReport = () => {
   ];
 
   return (
-    <div className="px-2 lg:w-96 w-full">
+    <div className="px-2">
       <div className="flex justify-between items-center w-full">
         <h4 className="text-xl ml-2">Transactions</h4>
         <select
