@@ -22,7 +22,8 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setRequests(data);
+        const mData = data?.reverse();
+        setRequests(mData);
       });
   };
 

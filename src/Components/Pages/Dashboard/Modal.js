@@ -14,7 +14,6 @@ const Modal = ({ modalData }) => {
           >
             ✕
           </label>
-
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold">{modalData?.type}</h3>
             <div className="mr-8">
@@ -61,13 +60,15 @@ const Modal = ({ modalData }) => {
               <h3
                 className={`text-2xl  font-medium  text-right ${
                   modalData?.type === "Add Money" ||
-                  modalData?.type === "Receive Money"
+                  modalData?.type === "Receive Money" ||
+                  modalData?.type === "Transfer Savings"
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
                 {modalData?.type === "Add Money" ||
-                modalData?.type === "Receive Money"
+                modalData?.type === "Receive Money" ||
+                modalData?.type === "Transfer Savings"
                   ? "+" + modalData?.amount
                   : "-" + modalData?.amount}
                 $

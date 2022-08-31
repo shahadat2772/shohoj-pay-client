@@ -4,7 +4,7 @@ import auth from "../../../../firebase.init";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import "./CardForm.css";
-import { sendNotification } from "../../../../App";
+import useUser from "../../Hooks/useUser";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
   const fullDate = new Date().toLocaleDateString();
@@ -16,7 +16,8 @@ const CardForm = ({ addAmount, setAmountErr }) => {
 
   const [clientSecret, setClientSecret] = useState("");
   const [cardError, setCardError] = useState("");
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -110,14 +111,13 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         payment_method: {
           card: card,
           billing_details: {
-            name: `${user?.displayName}`,
+            name: `${mongoUser?.name}`,
             email: `${user?.email}`,
           },
         },
       }
     );
-    const image =
-      "https://previews.123rf.com/images/stockgiu/stockgiu1802/stockgiu180203103/94855033-color-finance-bank-economy-with-bills-cash-money.jpg";
+    const image = "https://static.thenounproject.com/png/1109435-200.png";
     if (intentErr) {
       toast.dismiss("waitingToast");
       setCardError(intentErr?.message);
@@ -127,7 +127,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         image,
         type: "Add Money",
         email: user?.email,
-        name: user?.displayName,
+        name: mongoUser?.name,
         amount: addAmount,
         transactionId: id,
         fullDate,
@@ -150,7 +150,6 @@ const CardForm = ({ addAmount, setAmountErr }) => {
           if (data?.success) {
             document.getElementById("addAmountInput").value = "";
             card.clear();
-            sendNotification(user?.email, "addMoney");
             toast.success(data.success);
           } else {
             toast.error(data.error);
@@ -183,10 +182,10 @@ const CardForm = ({ addAmount, setAmountErr }) => {
             },
           }}
         />
-        <p className="my-3">No fees when adding money from your card</p>
         <p className="text-xs text-red-500 mt-1">{cardError && cardError}</p>
+        <p className="ml-1 gray text-sm mt-4">Enjoy free add money.</p>
         <button
-          className="actionButton btn mt-11"
+          className="actionButton btn mt-9"
           type="submit"
           disabled={!stripe || !clientSecret}
         >

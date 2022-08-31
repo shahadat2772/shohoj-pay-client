@@ -16,7 +16,6 @@ const AddMoney = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Add Money</h2>
-        <label htmlFor="addMoney">Add money from your Card.</label>
         <input
           id="addAmountInput"
           placeholder="How much to add?"
