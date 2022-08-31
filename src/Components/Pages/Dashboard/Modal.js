@@ -29,10 +29,7 @@ const Modal = ({ modalData }) => {
             <div className="flex items-center justify-between">
               <div className="flex ">
                 <div className="w-16 rounded-full mr-4">
-                  <img
-                    src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                    alt="User Image"
-                  />
+                  <img src={modalData?.image} alt="User Image" />
                 </div>
                 <div className="w-60">
                   <h6 className="font-bold">
