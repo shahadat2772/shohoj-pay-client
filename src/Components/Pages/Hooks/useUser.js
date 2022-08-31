@@ -7,6 +7,7 @@ const useUser = (user) => {
   useEffect(() => {
     const email = user?.user?.email || user?.email;
     if (email) {
+      console.log("paichi");
       setMongoUserLoading(true);
       fetch("http://localhost:5000/getUserInfo", {
         method: "GET",
@@ -16,6 +17,7 @@ const useUser = (user) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setMongoUser(data);
           setMongoUserLoading(false);
         });

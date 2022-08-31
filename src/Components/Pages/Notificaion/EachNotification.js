@@ -12,9 +12,10 @@ const EachNotification = ({ notification }) => {
           notification?.status === "unseen" && "showUnseenSign"
         }`}
       ></div>
-      <div className="avatarImage md:w-[48px] lg:w-[48px] w-[40px] rounded-full">
+      <div className="avatarImage">
         <img
-          src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
+          className="rounded-full w-[40px] md:w-[48px] lg:w-[48px] h-[40px] md:h-[48px] lg:h-[48px]"
+          src={notification?.image}
           alt="User Image"
         />
       </div>

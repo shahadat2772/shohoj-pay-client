@@ -6,7 +6,7 @@ const RequestDetailsModal = ({ request }) => {
     requesterName,
     donorName,
     amount,
-    note,
+    reference,
     date,
     payFor,
     productOrServiceName,
@@ -44,7 +44,7 @@ const RequestDetailsModal = ({ request }) => {
                   <Trow key={key} propkey={key} value={commonProps[key]} />
                 ))}
 
-                {note && <Trow propkey={"Note"} value={note} />}
+                {reference && <Trow propkey={"Reference"} value={reference} />}
                 {payFor &&
                   Object.keys(merchantProps).map((key) => (
                     <Trow key={key} propkey={key} value={merchantProps[key]} />
