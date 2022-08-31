@@ -16,7 +16,6 @@ const useUser = (user) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setMongoUser(data);
           setMongoUserLoading(false);
         });

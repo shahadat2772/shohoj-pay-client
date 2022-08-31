@@ -13,6 +13,7 @@ import useUser from "../../Hooks/useUser";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
+import FirstPart from "./FirstPart";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -181,7 +182,7 @@ const SignUp = () => {
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Name and Email part  */}
-            <div className={`${showNamePart ? "block" : "hidden"}`}>
+            {/* <div className={`${showNamePart ? "block" : "hidden"}`}>
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
                   <span className="label-name">First Name</span>
@@ -302,7 +303,15 @@ const SignUp = () => {
               >
                 Next
               </button>
-            </div>
+            </div> */}
+            <FirstPart
+              showNamePart={showNamePart}
+              setShowNamePart={setShowNamePart}
+              setShowTypePart={setShowTypePart}
+              setProgress={setProgress}
+              errors={errors}
+              register={register}
+            />
             {/* --------------------------- */}
 
             {/* Account Type  and Address */}
