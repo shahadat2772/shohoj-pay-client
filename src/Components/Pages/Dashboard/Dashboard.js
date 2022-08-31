@@ -30,7 +30,7 @@ const someServices = [
     action: "/services/sendMoney",
   },
   {
-    type: "Withdraw",
+    type: "Transfer",
     icon: "fa-money-bill-transfer",
     action: "/services/withdraw-savings",
   },
@@ -222,7 +222,7 @@ const Dashboard = () => {
             <h2 className="border-b-4 border-black w-48 font-bold text-xl">
               Get Started
             </h2>
-            <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
+            <div className="flex align-center justify-between bg-base-200 rounded-md lg:px-16 py-10 my-8 px-3">
               {someServices.map((service, index) => {
                 const { type, icon, action } = service;
                 return (
@@ -404,7 +404,7 @@ const Dashboard = () => {
           <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">
             Savings
           </h3>
-          <div className="bg-base-200 shadow-lg rounded-md lg:px-9 py-10 px-3">
+          <div className="bg-base-200 rounded-md lg:px-9 py-10 px-3">
             <h4>Total Savings</h4>
             <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>
