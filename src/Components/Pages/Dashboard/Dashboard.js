@@ -17,6 +17,7 @@ import Spinner from "../../Shared/Spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 import { signOut } from "firebase/auth";
+import useUser from "../Hooks/useUser";
 // SERVICE DATA
 const someServices = [
   {
@@ -60,18 +61,22 @@ const Dashboard = () => {
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
+  const [mongoUser] = useUser(user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // GET DATA USING REDUX
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
+
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
+
   const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
   const balance = userBalance;
   const transactionData = userTransactionInfo;
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
-  }, [navigate, dispatch, user]);
+  }, [navigate, dispatch, user, unseenNotifications]);
   // GET MONTH SERVICE DATA
   useEffect(() => {
     axios
@@ -100,13 +105,9 @@ const Dashboard = () => {
     toast.error(error?.message);
     navigate("/");
   }
-  // GET LATEST TRANSACTION
-  const latestTransaction = [...transactionData]?.splice(
-    transactionData.length - 4,
-    transactionData.length
-  );
+
   // REVERSE TRANSACTION DATA
-  const reverseData = [...latestTransaction].reverse();
+  const reverseData = [...transactionData].reverse();
   // GET SERVICE INCLUDES TYPE
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
@@ -209,7 +210,7 @@ const Dashboard = () => {
                 data-testid="user-name"
                 className="text-left text-3xl font-bold mb-3"
               >
-                Hi, {user?.displayName}
+                Hi, {mongoUser?.name}
               </h1>
               <div className="text-left">
                 <h4 className="">Total Balance</h4>
@@ -268,10 +269,7 @@ const Dashboard = () => {
                       </div>
                       <div className="avatar">
                         <div className="w-14 rounded-full md-img-responsive">
-                          <img
-                            src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                            alt="User Image"
-                          />
+                          <img src={transAction?.image} alt="User Image" />
                         </div>
                       </div>
                       <div className="ml-5 flex items-center justify-between w-full">
@@ -308,13 +306,15 @@ const Dashboard = () => {
                           <h3
                             className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
                               transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money"
+                              transAction.type === "Receive Money" ||
+                              transAction.type === "Transfer Savings"
                                 ? "text-green-600"
                                 : "text-red-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money"
+                            transAction.type === "Receive Money" ||
+                            transAction.type === "Transfer Savings"
                               ? "+" + transAction.amount
                               : "-" + transAction.amount}
                             $

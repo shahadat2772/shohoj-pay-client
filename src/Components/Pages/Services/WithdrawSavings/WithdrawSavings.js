@@ -27,7 +27,7 @@ const WithdrawSavings = () => {
     toast.loading("Money is being Withdraw.", { id: "withdraw-savings" });
 
     const withdrawInfo = {
-      type: "Withdraw Savings",
+      type: "Transfer Savings",
       email: user?.email,
       name: user?.displayName,
       amount: amount,
@@ -57,9 +57,7 @@ const WithdrawSavings = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-9 pl-1">
-          Transfer Savings Amount
-        </h2>
+        <h2 className="textColor text-[1.70rem] mb-9 pl-1">Transfer Savings</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
@@ -75,7 +73,7 @@ const WithdrawSavings = () => {
             required
             type="number"
             className="h-12 p-2 w-full rounded-lg"
-            placeholder="How much to Transfer?"
+            placeholder="How much to Transfer"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
