@@ -12,7 +12,7 @@ const AdminSummary = () => {
           <FeeChart />
         </div>
       </div>
-      <div className="lg:col-span-5 w-[90%] md:w-[85%] lg:w-[85%] mx-auto md:col-span-12 lg:mt-3 md:mt-16 mt-16 col-span-12">
+      <div className="lg:col-span-5 w-[95%] md:w-[85%] lg:w-[85%] mx-auto md:col-span-12 lg:mt-3 md:mt-16 mt-16 col-span-12">
         <TransactionReport />
       </div>
     </div>
