@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 const RevenueCard = () => {
   const date = new Date().toLocaleDateString("en-us", {
@@ -8,10 +9,14 @@ const RevenueCard = () => {
     year: "numeric",
   });
 
+  const { isLoading, transactionReports, error } = useSelector(
+    (state) => state.transactionReport
+  );
+
   const [shohojPayInfo, setShohojPayInfo] = useState(null);
   const [infoLoading, setInfoLoading] = useState(false);
 
-  useEffect(() => {
+  const loadRevenue = async () => {
     try {
       setInfoLoading(true);
       fetch("http://localhost:5000/getShohojPayInfo", {
@@ -28,6 +33,10 @@ const RevenueCard = () => {
       toast.error(error.message);
       setInfoLoading(false);
     }
+  };
+
+  useEffect(() => {
+    loadRevenue();
   }, []);
 
   return (
@@ -41,7 +50,17 @@ const RevenueCard = () => {
         ) : (
           <h1 className="text-6xl font-medium">Loading...</h1>
         )}
-        <p className="mt-6 ml-2">{date}</p>
+        <div className="mt-6 ml-2 flex justify-between">
+          <p className="">{date}</p>
+          <button
+            onClick={() => loadRevenue()}
+            class={`btn btn-xs btn-ghost btn-primary ${
+              infoLoading && "loading"
+            }`}
+          >
+            Reload Revenue
+          </button>
+        </div>
       </div>
     </div>
   );
