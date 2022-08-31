@@ -3,6 +3,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
+import useUser from "../../Hooks/useUser";
 
 const GetPaid = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -12,6 +14,7 @@ const GetPaid = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser] = useUser(user);
 
   const {
     register,
@@ -21,7 +24,7 @@ const GetPaid = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { email, amount, payFor, productOrServiceName, description } = data;
+    const { email, amount, payFor, productOrServiceName, reference } = data;
 
     if (amount.slice(0, 1) === "0") {
       toast.error("Invalid amount");
@@ -39,10 +42,11 @@ const GetPaid = () => {
       to: email,
       payFor,
       productOrServiceName,
-      description,
+      reference,
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/requestMoney", {
@@ -60,6 +64,7 @@ const GetPaid = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "getPaid");
           toast.success(result.success);
         }
       });
@@ -131,7 +136,14 @@ const GetPaid = () => {
               {errors.amount?.message}
             </span>
           )}
-          <textarea
+          <input
+            {...register("reference")}
+            type="text"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Reference"
+            required
+          />
+          {/* <textarea
             {...register("description")}
             type="text"
             className="textarea textarea-bordered textarea-ghost h-32 p-2 mt-4 w-full rounded"
@@ -139,7 +151,7 @@ const GetPaid = () => {
             placeholder="Description"
             // minLength={12}
             required
-          />
+          /> */}
           <input
             type="submit"
             className="actionButton mt-8 border-0"

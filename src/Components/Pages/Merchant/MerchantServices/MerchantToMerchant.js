@@ -14,7 +14,7 @@ const MerchantToMerchant = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
-  const [mongoUser, mongoUserLoading] = useUser(user);
+  const [mongoUser] = useUser(user);
 
   const {
     register,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -7,6 +7,7 @@ import { sendNotification } from "../../../../App";
 import { fetchNotifications } from "../../../../app/slices/notificationSlice";
 import auth from "../../../../firebase.init";
 import useUser from "../../Hooks/useUser";
+// import emailjs from "@emailjs/browser";
 
 const ECheck = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -16,7 +17,7 @@ const ECheck = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
-  const [mongoUser, loading] = useUser(user);
+  const [mongoUser] = useUser(user);
   const dispatch = useDispatch();
   const {
     register,
@@ -24,6 +25,9 @@ const ECheck = () => {
     reset,
     formState: { errors },
   } = useForm();
+  // USE EMAIL JS
+  const form = useRef();
+
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -42,7 +46,21 @@ const ECheck = () => {
       time,
       image: mongoUser?.avatar,
     };
-
+    // emailjs
+    //   .sendForm(
+    //     "service_q11i3to",
+    //     "service_q11i3to",
+    //     form.current,
+    //     "_BZVGBP7_QzIIrIGO"
+    //   )
+    //   .then(
+    //     (result) => {
+    //       console.log(result.text);
+    //     },
+    //     (error) => {
+    //       toast.error(error.message);
+    //     }
+    //   );
     fetch("http://localhost:5000/eCheck", {
       method: "POST",
       headers: {
@@ -63,6 +81,7 @@ const ECheck = () => {
           } else {
             sendNotification(email, "eCheck");
           }
+
           toast.success(result.success);
         }
       });
@@ -71,7 +90,7 @@ const ECheck = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">E-Check Payment</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form ref={form} onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
               min: {
@@ -87,6 +106,7 @@ const ECheck = () => {
             className="h-12 p-2 w-full rounded"
             placeholder="How much to be paid?"
             required
+            name="amount"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
@@ -99,6 +119,7 @@ const ECheck = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Who to issue"
             required
+            name="email"
           />
           <input
             {...register("reference")}
