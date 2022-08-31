@@ -4,7 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchAllTransaction } from "../../../app/features/transAction/transactionSlice";
+import { fetchAllTransaction } from "../../../app/slices/transactionSlice";
 import auth from "../../../firebase.init";
 import Spinner from "../../Shared/Spinner/Spinner";
 import "./AllTransaction.css";
@@ -171,10 +171,7 @@ const AllTransaction = () => {
                   </div>
                   <div className="avatar">
                     <div className="w-14 md-img-responsive rounded-full ">
-                      <img
-                        src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                        alt="User Image"
-                      />
+                      <img src={transAction?.image} alt="User Image" />
                     </div>
                   </div>
                   <div className="ml-5 flex items-center justify-between w-full">
@@ -198,13 +195,15 @@ const AllTransaction = () => {
                       <h3
                         className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
                           transAction.type === "Add Money" ||
-                          transAction.type === "Receive Money"
+                          transAction.type === "Receive Money" ||
+                          transAction.type === "Transfer Savings"
                             ? "text-green-600"
                             : "text-red-600"
                         }`}
                       >
                         {transAction.type === "Add Money" ||
-                        transAction.type === "Receive Money"
+                        transAction.type === "Receive Money" ||
+                        transAction.type === "Transfer Savings"
                           ? "+" + transAction.amount
                           : "-" + transAction.amount}
                         $

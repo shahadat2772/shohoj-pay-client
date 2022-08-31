@@ -15,7 +15,9 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserEmailInfo } from "../../../app/features/userAllEmailInfoSlice";
+import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
+import { signOut } from "firebase/auth";
+import useUser from "../Hooks/useUser";
 // SERVICE DATA
 const someServices = [
   {
@@ -59,24 +61,29 @@ const Dashboard = () => {
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
+  const [mongoUser] = useUser(user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // GET DATA USING REDUX
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
+
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
+
   const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
   const balance = userBalance;
   const transactionData = userTransactionInfo;
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
-  }, [navigate, dispatch, user]);
+  }, [navigate, dispatch, user, unseenNotifications]);
   // GET MONTH SERVICE DATA
   useEffect(() => {
     axios
       .get(`http://localhost:5000/getServices`, {
         headers: {
           "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           email: user.email,
           monthServiceFilter,
         },
@@ -86,21 +93,21 @@ const Dashboard = () => {
       toast.success("Copied Transaction Information");
     }
   }, [user?.email, monthServiceFilter, shareLinkCopied]);
+
   // HANDLE SPINNER
   if (isLoading || transactionData == undefined) {
     return <Spinner />;
   }
   // HANDLE ERROR
   if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
     toast.error(error?.message);
+    navigate("/");
   }
-  // GET LATEST TRANSACTION
-  const latestTransaction = [...transactionData]?.splice(
-    transactionData.length - 4,
-    transactionData.length
-  );
+
   // REVERSE TRANSACTION DATA
-  const reverseData = [...latestTransaction].reverse();
+  const reverseData = [...transactionData].reverse();
   // GET SERVICE INCLUDES TYPE
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
@@ -132,7 +139,7 @@ const Dashboard = () => {
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
-  const COLORS = ["#224B0C", "#C21010", "#002B5B"];
+  const COLORS = ["#224B0C", "#820000", "#002B5B"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -141,7 +148,6 @@ const Dashboard = () => {
     innerRadius,
     outerRadius,
     percent,
-    index,
   }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -204,7 +210,7 @@ const Dashboard = () => {
                 data-testid="user-name"
                 className="text-left text-3xl font-bold mb-3"
               >
-                Hi, {user?.displayName}
+                Hi, {mongoUser?.name}
               </h1>
               <div className="text-left">
                 <h4 className="">Total Balance</h4>
@@ -263,10 +269,7 @@ const Dashboard = () => {
                       </div>
                       <div className="avatar">
                         <div className="w-14 rounded-full md-img-responsive">
-                          <img
-                            src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                            alt="User Image"
-                          />
+                          <img src={transAction?.image} alt="User Image" />
                         </div>
                       </div>
                       <div className="ml-5 flex items-center justify-between w-full">
@@ -303,13 +306,15 @@ const Dashboard = () => {
                           <h3
                             className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
                               transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money"
+                              transAction.type === "Receive Money" ||
+                              transAction.type === "Transfer Savings"
                                 ? "text-green-600"
                                 : "text-red-600"
                             }`}
                           >
                             {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money"
+                            transAction.type === "Receive Money" ||
+                            transAction.type === "Transfer Savings"
                               ? "+" + transAction.amount
                               : "-" + transAction.amount}
                             $
@@ -379,15 +384,21 @@ const Dashboard = () => {
             </div>
           </div>
           <ul className="mt-8">
-            <li className="text-2xl font-bold list-disc	">
-              Income: {TotalRecive ? TotalRecive : 1}$
-            </li>
-            <li className="text-2xl font-bold list-disc	mt-2">
-              Expense: {TotalCost ? TotalCost : 1}$
-            </li>
-            <li className="text-2xl font-bold list-disc mt-2">
-              Savings: {totalSavings ? totalSavings : 1}$
-            </li>
+            {!isLoading ? (
+              <>
+                <li className="text-2xl font-bold list-disc	">
+                  Income: {TotalRecive ? TotalRecive : 1}$
+                </li>
+                <li className="text-2xl font-bold list-disc	mt-2">
+                  Expense: {TotalCost ? TotalCost : 1}$
+                </li>
+                <li className="text-2xl font-bold list-disc mt-2">
+                  Savings: {totalSavings ? totalSavings : 1}$
+                </li>
+              </>
+            ) : (
+              <h3 className="text-xm">Loading..</h3>
+            )}
           </ul>
           {/* START SAVINGS */}
           <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">

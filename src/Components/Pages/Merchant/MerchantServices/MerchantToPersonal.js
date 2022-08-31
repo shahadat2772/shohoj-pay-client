@@ -2,7 +2,9 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 const MerchantToPersonal = () => {
   const fullDate = new Date().toLocaleDateString();
   const date = new Date().toLocaleDateString("en-us", {
@@ -30,8 +32,8 @@ const MerchantToPersonal = () => {
     toast.loading("Money is being sended.", { id: "sendingMoney" });
 
     const sendMoneyInfo = {
-      type: "Send Money",
-      name: user?.displayName,
+      type: "M to P",
+      name: mongoUser?.name,
       email: user?.email,
       amount: amount,
       from: user?.email,
@@ -39,6 +41,7 @@ const MerchantToPersonal = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/merchant-to-personal", {
@@ -56,6 +59,7 @@ const MerchantToPersonal = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "merchantToPersonal");
           toast.success(result.success);
         }
       });

@@ -2,7 +2,10 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import Spinner from "../../../Shared/Spinner/Spinner";
+import useUser from "../../Hooks/useUser";
 
 const MerchantPay = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -12,6 +15,7 @@ const MerchantPay = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const {
     register,
@@ -19,6 +23,9 @@ const MerchantPay = () => {
     reset,
     formState: { errors },
   } = useForm();
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -36,6 +43,7 @@ const MerchantPay = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
     fetch("http://localhost:5000/personal-to-merchant", {
       method: "POST",
@@ -51,6 +59,7 @@ const MerchantPay = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "merchantPay");
           toast.success(result.success);
         }
       });
@@ -74,7 +83,7 @@ const MerchantPay = () => {
             })}
             type="number"
             className="h-12 p-2 w-full rounded"
-            placeholder="How much to send?"
+            placeholder="How much to pay"
             required
           />
           {errors.amount?.message && (
@@ -92,7 +101,7 @@ const MerchantPay = () => {
           <input
             type="submit"
             className="actionButton mt-12 border-0"
-            value="Send"
+            value="Pay"
           />
         </form>
       </div>

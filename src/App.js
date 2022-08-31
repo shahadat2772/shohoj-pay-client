@@ -48,6 +48,17 @@ import BusinessLoan from "./Components/Pages/Merchant/MerchantServices/BusinessL
 import MerchantDashboard from "./Components/Pages/Merchant/MerchantDashboard/MerchantDashboard";
 import { fetchNotifications } from "./app/slices/notificationSlice";
 import { useDispatch } from "react-redux";
+import io from "socket.io-client";
+export const socket = io.connect("http://localhost:5000/");
+
+// Live notification sender
+export const sendNotification = (email, message) => {
+  const data = {
+    email,
+    message,
+  };
+  socket.emit("send_notification", data);
+};
 
 function App() {
   // State for confirming the money request
@@ -56,13 +67,25 @@ function App() {
   const [user, loading] = useAuthState(auth);
   const dispatch = useDispatch();
 
-  // Loading notification on getting user info
+  // Loading notifications and joining a room on socket.io
   useEffect(() => {
     const email = user?.user?.email || user?.email;
     if (email) {
+      socket.emit("join_room", email);
       dispatch(fetchNotifications(email));
     }
   }, [user]);
+
+  // New notification arrived
+  useEffect(() => {
+    socket.on("receive_notification", (data) => {
+      dispatch(fetchNotifications(data.email));
+    });
+
+    return () => {
+      socket.off("receive_notification");
+    };
+  }, [socket]);
 
   if (loading) {
     return <Spinner />;
@@ -292,6 +315,16 @@ function App() {
             <RequireAuth>
               <RequireMerchant>
                 <MerchantDashboard />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/dashboard/allTransaction"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AllTransaction />
               </RequireMerchant>
             </RequireAuth>
           }

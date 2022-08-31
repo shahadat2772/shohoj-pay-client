@@ -14,7 +14,6 @@ const Modal = ({ modalData }) => {
           >
             ✕
           </label>
-
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold">{modalData?.type}</h3>
             <div className="mr-8">
@@ -30,10 +29,7 @@ const Modal = ({ modalData }) => {
             <div className="flex items-center justify-between">
               <div className="flex ">
                 <div className="w-16 rounded-full mr-4">
-                  <img
-                    src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                    alt="User Image"
-                  />
+                  <img src={modalData?.image} alt="User Image" />
                 </div>
                 <div className="w-60">
                   <h6 className="font-bold">
@@ -59,15 +55,16 @@ const Modal = ({ modalData }) => {
                 </div>
               </div>
               <h3
-                className={`text-2xl  font-medium  text-right ${
-                  modalData?.type === "Add Money" ||
-                  modalData?.type === "Receive Money"
+                className={`text-2xl  font-medium  text-right ${modalData?.type === "Add Money" ||
+                    modalData?.type === "Receive Money" ||
+                    modalData?.type === "Transfer Savings"
                     ? "text-green-600"
                     : "text-red-600"
-                }`}
+                  }`}
               >
                 {modalData?.type === "Add Money" ||
-                modalData?.type === "Receive Money"
+                  modalData?.type === "Receive Money" ||
+                  modalData?.type === "Transfer Savings"
                   ? "+" + modalData?.amount
                   : "-" + modalData?.amount}
                 $

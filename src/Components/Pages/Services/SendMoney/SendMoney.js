@@ -1,19 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 import "./SendMoney.css";
-// import emailjs from "@emailjs/browser";
+import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SendMoney = () => {
+  const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
   const fullDate = new Date().toLocaleDateString();
   const date = new Date().toLocaleDateString("en-us", {
     year: "numeric",
     month: "short",
   });
   const time = new Date().toLocaleTimeString();
-  const [user] = useAuthState(auth);
 
   const {
     register,
@@ -21,27 +24,10 @@ const SendMoney = () => {
     reset,
     formState: { errors },
   } = useForm();
-  // EMAIL JS ADDED
-  // const formRef = useRef();
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
 
-  // const sendEmail = (e) => {
-  //   e.preventDefault();
-  //   console.log(formRef);
-  //   console.log(formRef.current);
-
-  //   emailjs
-  //     .sendForm(
-  //       //       // "YOUR_SERVICE_ID",
-  //       // "service_q11i3to",
-  //       //       // "YOUR_TEMPLATE_ID",
-  //       // "template_60e7bmp",
-  //       // formRef.current,
-  //       //       // "YOUR_PUBLIC_KEY"
-  //       // "_BZVGBP7_QzIIrIGO"
-  //     )
-  //     .then((result) => console.log(result.text))
-  //     .catch((error) => console.log(error.text));
-  // };
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -52,7 +38,6 @@ const SendMoney = () => {
     }
 
     toast.loading("Money is being sended.", { id: "sendingMoney" });
-
     const sendMoneyInfo = {
       type: "Send Money",
       name: user?.displayName,
@@ -63,6 +48,7 @@ const SendMoney = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/sendMoney", {
@@ -78,8 +64,8 @@ const SendMoney = () => {
         if (result?.error) {
           toast.error(result.error);
         } else {
-          // eslint-disable-next-line no-unused-expressions
           reset();
+          sendNotification(email, "sendMoney");
           toast.success(result.success);
         }
       });
@@ -89,33 +75,6 @@ const SendMoney = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">Send Money</h2>
-        {/* <form ref={formRef} onSubmit={sendEmail}>
-          <input
-            type="text"
-            name="user_name"
-            className="user"
-            placeholder="Name"
-            required
-          />
-          <input
-            type="email"
-            name="user_email"
-            className="user"
-            placeholder="Email"
-            required
-          />
-          <textarea
-            name="message"
-            className="user"
-            placeholder="Message"
-            required
-          />
-          <input type="submit" value="Send" className="button" />
-          <div
-            className="blur c-blur1"
-            style={{ background: "var(--purple)" }}
-          ></div>
-        </form> */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
@@ -147,7 +106,7 @@ const SendMoney = () => {
           />
           <input
             type="submit"
-            className="actionButton mt-12 border-0"
+            className="actionButton mt-10 border-0"
             value="Send"
           />
         </form>
