@@ -89,8 +89,8 @@ const ECheck = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-11 pl-1">E-Check Payment</h2>
-        <form ref={form} onSubmit={handleSubmit(onSubmit)}>
+        <h2 className="textColor text-[1.70rem] mb-11 pl-1">E-Check</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
               min: {
@@ -104,7 +104,7 @@ const ECheck = () => {
             })}
             type="number"
             className="h-12 p-2 w-full rounded"
-            placeholder="How much to be paid?"
+            placeholder="How much to issue"
             required
             name="amount"
           />
@@ -125,7 +125,7 @@ const ECheck = () => {
             {...register("reference")}
             type="text"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Write reference"
+            placeholder="Reference"
             required
           />
           <input

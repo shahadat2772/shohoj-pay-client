@@ -3,8 +3,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { sendNotification } from "../../../../App";
 import useUser from "../../Hooks/useUser";
+import { sendNotification } from "../../../../App";
 
 const GetPaid = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -14,6 +14,7 @@ const GetPaid = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+
   const [mongoUser] = useUser(user);
 
   const {
@@ -36,7 +37,7 @@ const GetPaid = () => {
     const requestMoneyInfo = {
       type: "getPaid",
       status: "Pending",
-      requesterName: user?.displayName,
+      requesterName: mongoUser?.name,
       amount: amount,
       from: user?.email,
       to: email,
@@ -79,7 +80,7 @@ const GetPaid = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Senders email"
+            placeholder="Who to request from?"
             required
           />
           <div className="flex justify-between items-center mt-4">
