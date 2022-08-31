@@ -118,7 +118,7 @@ const TransactionReport = () => {
         </select>
       </div>
       <div className="max-h-[80vh] overflow-y-auto">
-        {transactionData.map((service) => (
+        {transactionData?.map((service) => (
           <div className="flex items-center justify-between shadow-sm bg-base-100 p-5 rounded mt-4">
             <div className="flex items-center">
               <div className="bg-blue-100 h-8 w-8 flex justify-center items-center rounded">
