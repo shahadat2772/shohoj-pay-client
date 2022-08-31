@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
 import FirstPart from "./FirstPart";
 import SecondPart from "./SecondPart";
+import LastPart from "./LastPart";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -86,18 +87,14 @@ const SignUp = () => {
       });
     }
 
-    const name = data.firstName + " " + data.lastName;
     const userInfo = {
       ...data,
-      name,
       avatar: imgUploadResult.data.url,
       date,
       status: "active",
     };
     delete userInfo.password;
     delete userInfo.ConfirmPassword;
-    delete userInfo.firstName;
-    delete userInfo.lastName;
 
     const userUploadRes = await fetch("http://localhost:5000/createAccount", {
       method: "POST",
@@ -450,12 +447,12 @@ const SignUp = () => {
             />
             {/* ------------------------------- */}
             {/* Password Part  */}
-            <div className={`${showPasswordPart ? "block" : "hidden"}`}>
+            {/* <div className={`${showPasswordPart ? "block" : "hidden"}`}>
               <div className="relative form-control w-full max-w-xs ">
                 <label className="label">
                   <span className="label-password">Password</span>
                 </label>
-                {/* PASSWORD SHOW HIDE */}
+                
                 <div
                   onClick={handleShow}
                   className="absolute inset-y-0 right-3 flex items-center px-2 top-6"
@@ -534,7 +531,17 @@ const SignUp = () => {
                   value="Register"
                 />
               </div>
-            </div>
+            </div> */}
+            <LastPart
+              setShowPasswordPart={setShowPasswordPart}
+              setShowTypePart={setShowTypePart}
+              showPasswordPart={showPasswordPart}
+              handleShow={handleShow}
+              passwordShowRef={passwordShowRef}
+              show={show}
+              register={register}
+              errors={errors}
+            />
             {/* ---------------------------------- */}
           </form>
           <p
