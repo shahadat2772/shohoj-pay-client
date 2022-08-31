@@ -3,6 +3,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useUser from "../../Hooks/useUser";
+import { sendNotification } from "../../../../App";
 
 const GetPaid = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -12,6 +14,7 @@ const GetPaid = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const {
     register,
@@ -33,7 +36,7 @@ const GetPaid = () => {
     const requestMoneyInfo = {
       type: "getPaid",
       status: "Pending",
-      requesterName: user?.displayName,
+      requesterName: mongoUser?.name,
       amount: amount,
       from: user?.email,
       to: email,
@@ -43,6 +46,7 @@ const GetPaid = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/requestMoney", {
@@ -60,6 +64,7 @@ const GetPaid = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "getPaid");
           toast.success(result.success);
         }
       });
@@ -74,7 +79,7 @@ const GetPaid = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Senders email"
+            placeholder="Who to request from?"
             required
           />
           <div className="flex justify-between items-center mt-4">
