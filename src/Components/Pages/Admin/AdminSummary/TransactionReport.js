@@ -96,8 +96,8 @@ const TransactionReport = () => {
       id: 10,
       name: "Withdraw Savings",
       icon: "fa-money-check-dollar",
-      amount: transactionReports?.totalWithdrawSavings,
-      transactionCount: transactionReports?.withdrawSavingsTransactionCount,
+      amount: transactionReports?.totalTransferSavings,
+      transactionCount: transactionReports?.transferSavingsTransactionCount,
     },
   ];
 

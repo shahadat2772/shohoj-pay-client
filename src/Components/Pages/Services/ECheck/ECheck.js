@@ -2,8 +2,11 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { sendNotification } from "../../../../App";
+import { fetchNotifications } from "../../../../app/slices/notificationSlice";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 
 const ECheck = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -13,6 +16,8 @@ const ECheck = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser, loading] = useUser(user);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -28,13 +33,14 @@ const ECheck = () => {
       type: "E-Check",
       email: user?.email,
       amount: amount,
-      name: user?.displayName,
+      name: mongoUser?.name,
       from: user?.email,
       to: email,
       reference: reference,
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/eCheck", {
@@ -52,7 +58,11 @@ const ECheck = () => {
           toast.error(result.error);
         } else {
           reset();
-          sendNotification(email, "eCheck");
+          if (user.email === email) {
+            dispatch(fetchNotifications(email));
+          } else {
+            sendNotification(email, "eCheck");
+          }
           toast.success(result.success);
         }
       });

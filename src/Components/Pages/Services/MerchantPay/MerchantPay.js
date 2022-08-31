@@ -83,7 +83,7 @@ const MerchantPay = () => {
             })}
             type="number"
             className="h-12 p-2 w-full rounded"
-            placeholder="How much to send?"
+            placeholder="How much to pay"
             required
           />
           {errors.amount?.message && (
@@ -98,11 +98,10 @@ const MerchantPay = () => {
             placeholder="Merchant email"
             required
           />
-          <p className="my-3">1% fee will be deducted if using merchant pay.</p>
           <input
             type="submit"
             className="actionButton mt-12 border-0"
-            value="Send"
+            value="Pay"
           />
         </form>
       </div>
