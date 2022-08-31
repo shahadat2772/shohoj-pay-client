@@ -14,6 +14,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
 import FirstPart from "./FirstPart";
+import SecondPart from "./SecondPart";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -181,6 +182,7 @@ const SignUp = () => {
             Sign Up
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+
             {/* Name and Email part  */}
             {/* <div className={`${showNamePart ? "block" : "hidden"}`}>
               <div className="form-control w-full max-w-xs ">
@@ -304,6 +306,7 @@ const SignUp = () => {
                 Next
               </button>
             </div> */}
+
             <FirstPart
               showNamePart={showNamePart}
               setShowNamePart={setShowNamePart}
@@ -315,7 +318,7 @@ const SignUp = () => {
             {/* --------------------------- */}
 
             {/* Account Type  and Address */}
-            <div className={`${showTypePart ? "block" : "hidden"}`}>
+            {/* <div className={`${showTypePart ? "block" : "hidden"}`}>
               <div className="form-control w-full max-w-xs ">
                 <label className="label">
                   <span className="label-name">Address</span>
@@ -434,7 +437,17 @@ const SignUp = () => {
                   Next
                 </button>
               </div>
-            </div>
+            </div> */}
+            <SecondPart
+              showNamePart={showNamePart}
+              showTypePart={showTypePart}
+              setShowNamePart={setShowNamePart}
+              setShowTypePart={setShowTypePart}
+              setShowPasswordPart={setShowPasswordPart}
+              setProgress={setProgress}
+              errors={errors}
+              register={register}
+            />
             {/* ------------------------------- */}
             {/* Password Part  */}
             <div className={`${showPasswordPart ? "block" : "hidden"}`}>
