@@ -59,7 +59,7 @@ const AdminPanel = () => {
           type="checkbox"
           className="drawer-toggle"
         />
-        <div class="drawer-content">
+        <div class="drawer-content px-2 py-3">
           {/* <!-- Page content here --> */}
           <Outlet />
         </div>

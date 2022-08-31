@@ -46,7 +46,7 @@ const TransactionReport = () => {
     {
       id: 3,
       name: "Receive Money",
-      icon: "fa-paper-plane",
+      icon: "fa-circle-dollar-to-slot",
       amount: transactionReports?.totalReceiveMoney,
       transactionCount: transactionReports?.receiveMoneyTransactionCount,
     },
@@ -102,7 +102,7 @@ const TransactionReport = () => {
   ];
 
   return (
-    <div className="px-2 lg:w-96 w-full">
+    <div className="px-2">
       <div className="flex justify-between items-center w-full">
         <h4 className="text-xl ml-2">Transactions</h4>
         <select
@@ -118,7 +118,7 @@ const TransactionReport = () => {
         </select>
       </div>
       <div className="max-h-[80vh] overflow-y-auto">
-        {transactionData.map((service) => (
+        {transactionData?.map((service) => (
           <div className="flex items-center justify-between shadow-sm bg-base-100 p-5 rounded mt-4">
             <div className="flex items-center">
               <div className="bg-blue-100 h-8 w-8 flex justify-center items-center rounded">
