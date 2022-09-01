@@ -11,48 +11,26 @@ const SecondPart = ({
 }) => {
     return (
         <div className={`${showTypePart ? "block" : "hidden"}`}>
+
             <div className="form-control w-full  ">
                 <label className="label">
-                    <span className="label-name">Address</span>
+                    <span className="label-name">Phone</span>
                 </label>
                 <input
-                    type="text"
-                    placeholder="city, country"
-                    className="input input-bordered w-full   "
-                    {...register("address", {
+                    type="tel"
+                    placeholder="Phone Number"
+                    className="input input-bordered w-full"
+                    {...register("phone", {
                         required: {
                             value: true,
-                            message: "Address is Required",
+                            message: "Phone Number is Required",
                         },
                     })}
                 />
                 <label className="label">
-                    {errors.address?.type === "required" && (
+                    {errors.phone?.type === "required" && (
                         <span className="label-text-alt text-red-500">
-                            {errors.address.message}
-                        </span>
-                    )}
-                </label>
-            </div>
-            <div className="form-control w-full  ">
-                <label className="label">
-                    <span className="label-name">Zip Code</span>
-                </label>
-                <input
-                    type="number"
-                    placeholder="Zip or Area code"
-                    className="input input-bordered w-full   "
-                    {...register("zip", {
-                        required: {
-                            value: true,
-                            message: "Zip or Area code is Required",
-                        },
-                    })}
-                />
-                <label className="label">
-                    {errors?.zip?.type === "required" && (
-                        <span className="label-text-alt text-red-500">
-                            {errors?.zip.message}
+                            {errors.phone.message}
                         </span>
                     )}
                 </label>
@@ -86,7 +64,7 @@ const SecondPart = ({
             </div>
             <div className="form-control w-full  ">
                 <label className="label">
-                    <span className="label-name">Avatar</span>
+                    <span className="label-name">Profile Picture</span>
                 </label>
                 <input
                     type="file"
@@ -94,7 +72,7 @@ const SecondPart = ({
                     {...register("avatar", {
                         required: {
                             value: true,
-                            message: "Avatar is Required",
+                            message: "Profile picture is Required",
                         },
                     })}
                 />

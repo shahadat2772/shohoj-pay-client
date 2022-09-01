@@ -69,23 +69,23 @@ const FirstPart = ({
             </div>
             <div className="form-control w-full  ">
                 <label className="label">
-                    <span className="label-name">Phone</span>
+                    <span className="label-name">Address</span>
                 </label>
                 <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    className="input input-bordered w-full"
-                    {...register("phone", {
+                    type="text"
+                    placeholder="city, country"
+                    className="input input-bordered w-full   "
+                    {...register("address", {
                         required: {
                             value: true,
-                            message: "Phone Number is Required",
+                            message: "Address is Required",
                         },
                     })}
                 />
                 <label className="label">
-                    {errors.phone?.type === "required" && (
+                    {errors.address?.type === "required" && (
                         <span className="label-text-alt text-red-500">
-                            {errors.phone.message}
+                            {errors.address.message}
                         </span>
                     )}
                 </label>
