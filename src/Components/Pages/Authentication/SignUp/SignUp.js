@@ -157,17 +157,17 @@ const SignUp = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center w-screen my-10 mt-24 lg:mt-32">
-      <div className=" bg-secondary w-full h-full ">
-        <ul className="steps steps-horizontal">
-          <li className={`step step-primary`}></li>
-          <li className={`step ${progress > 1 && "step-primary"}`}></li>
-          <li className={`step ${progress > 2 && "step-primary"}`}></li>
+    <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-screen my-10 mt-24 lg:mt-32">
+      <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
+        <ul className="steps steps-vertical h-full text-white">
+          <li className={`step step-primary`}>Name and Contact</li>
+          <li className={`step ${progress > 1 ? "step-primary" : "step-white"}`}>Address, Type, Image</li>
+          <li className={`step ${progress > 2 ? "step-primary" : "step-white"}`}>Password</li>
         </ul>
       </div>
-      <div className="w-full p-20">
+      <div className="  lg:p-20 col-span-2 place-self-center">
 
-        <div className="">
+        <div className="lg:w-96 w-full">
           <h2
             data-testid="signUp-heading"
             className="text-center font-bold text-xl"

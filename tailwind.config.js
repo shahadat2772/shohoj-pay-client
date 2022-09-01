@@ -25,6 +25,7 @@ module.exports = {
           warning: "#F7C655",
 
           error: "#EC5569",
+          white: "#fff"
         },
       },
     ],

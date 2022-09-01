@@ -109,6 +109,7 @@ const SecondPart = ({
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => {
+                        setProgress(1)
                         setShowNamePart(true);
                         setShowTypePart(false);
                     }}
