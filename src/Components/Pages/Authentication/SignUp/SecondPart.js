@@ -1,4 +1,6 @@
 import React from 'react';
+import "./Signup.css";
+
 
 const SecondPart = ({
     showTypePart,
@@ -72,21 +74,19 @@ const SecondPart = ({
                 </label>
                 <input
                     type="file"
-                    className="input input-bordered w-full   "
+                    className=" file-input block
+    w-full
+    text-base
+    font-normal
+    text-gray-700
+    bg-white bg-clip-padding
+    rounded-lg
+    " aria-describedby="file_input_help  "
                     {...register("avatar", {
-                        required: {
-                            value: true,
-                            message: "Profile picture is Required",
-                        },
+
                     })}
                 />
-                <label className="label">
-                    {errors.avatar?.type === "required" && (
-                        <span className="label-text-alt text-red-500">
-                            {errors.avatar.message}
-                        </span>
-                    )}
-                </label>
+
             </div>
             <div className="flex justify-between items-center">
                 <button
@@ -101,7 +101,7 @@ const SecondPart = ({
                 </button>
                 <button
                     onClick={() => {
-                        if (!errors?.phone && !errors?.avatar) {
+                        if (!errors?.phone) {
                             setProgress(3);
                             setShowPasswordPart(true);
                             setShowTypePart(false);

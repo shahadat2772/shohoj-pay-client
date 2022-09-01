@@ -68,31 +68,37 @@ const SignUp = () => {
     }
 
     setDbUserCreationLoading(true);
-
+    const defautlAvatar = "https://i.ibb.co/W3KKWsd/default-avatar.png"
     const file = data.avatar[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
-    const imgUploadRes = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    const imgUploadResult = await imgUploadRes.json();
-
-    if (!imgUploadResult.success === true) {
-      dispatch(updateSignUpLoading(false));
-      setDbUserCreationLoading(false);
-      return toast.error("Something went wrong.", {
-        id: "signUpERR",
+    let avatarImg = "";
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
+      const imgUploadRes = await fetch(url, {
+        method: "POST",
+        body: formData,
       });
-    }
+      const imgUploadResult = await imgUploadRes.json();
 
+      if (!imgUploadResult.success === true) {
+        dispatch(updateSignUpLoading(false));
+        setDbUserCreationLoading(false);
+        return toast.error("Something went wrong.", {
+          id: "signUpERR",
+        });
+      }
+      if (imgUploadRes) {
+        avatarImg = imgUploadResult.data.url
+      }
+    }
     const userInfo = {
       ...data,
-      avatar: imgUploadResult.data.url,
+      avatar: avatarImg || defautlAvatar,
       date,
       status: "active",
     };
+    console.log(userInfo)
     delete userInfo.password;
     delete userInfo.ConfirmPassword;
 
@@ -160,8 +166,8 @@ const SignUp = () => {
     <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-screen my-10 mt-24 lg:mt-32">
       <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
         <ul className="steps steps-vertical h-full text-white">
-          <li className={`step step-primary`}>Name and Contact</li>
-          <li className={`step ${progress > 1 ? "step-primary" : "step-white"}`}>Address, Type, Image</li>
+          <li className={`step step-primary`}>Name and Address</li>
+          <li className={`step ${progress > 1 ? "step-primary" : "step-white"}`}>Contact, Type, Image</li>
           <li className={`step ${progress > 2 ? "step-primary" : "step-white"}`}>Password</li>
         </ul>
       </div>
