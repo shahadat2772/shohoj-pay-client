@@ -14,9 +14,11 @@ const Settings = () => {
   const [firebaseUser, loading] = useAuthState(auth);
   const [userName, setUserName] = useState(user?.name);
   const [userAddress, setUserAddress] = useState(user?.address);
-  const [userZip, setUserZip] = useState(user?.zip);
   const [userEmail, setUserEmail] = useState(user?.email);
   const [userPhone, setUserPhone] = useState(user?.phone);
+  const [nameCanSave, setNameCanSave] = useState(false);
+  const [AddressCanSave, setAddressCanSave] = useState(false);
+  const [PhoneCanSave, setPhoneCanSave] = useState(false);
   const navigate = useNavigate();
 
   useState(() => {
@@ -40,7 +42,24 @@ const Settings = () => {
       body: JSON.stringify(updatedUser),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        if (data.modifiedCount) {
+          if (updatedUser.name) {
+            setEditName(false);
+            setNameCanSave(false)
+          }
+          else if (updatedUser.address) {
+            setEditAddress(false);
+            setAddressCanSave(false)
+          }
+          else if (updatedUser.phone) {
+            setEditContact(false);
+            setPhoneCanSave(false)
+          }
+
+
+        }
+      });
   };
 
   if (loading) return <p>loading...</p>;
@@ -69,25 +88,45 @@ const Settings = () => {
                 className="input input-text text-2xl lg:text-3xl lg:text-left text-center bg-white w-full"
                 type="text"
                 value={userName || user?.name}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={(e) => {
+                  setNameCanSave(true);
+                  setUserName(e.target.value)
+                }}
+
               />
             </div>
           </div>
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 right-3 flex items-center space-x-4">
             <div
               onClick={() => setEditName(true)}
               className={`${editName && "hidden"
                 } cursor-pointer col-span-3 place-self-center`}
             >
+              {/* edit  */}
               <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
             </div>
             <div
+              onClick={() => setEditName(false)}
+              className={`${!editName && "hidden"
+                } cursor-pointer col-span-3 px-4 py-2 rounded-lg place-self-center`}
+            >
+              {/* cancel  */}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+            <button
+              disabled={!nameCanSave}
               onClick={() => updateUser({ name: userName })}
               className={`${!editName && "hidden"
-                } cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}
+                }  btn btn-sm btn-primary place-self-center`}
             >
-              save
-            </div>
+              {/* save  */}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+
+            </button>
           </div>
         </div>
 
@@ -111,20 +150,42 @@ const Settings = () => {
         {/* address section */}
         <div className="rounded-lg p-5 w-full lg:w-10/12 place-self-end  bg-white ">
           {/* title div */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center relative">
             <h3 className="text-xl text-left mb-3">Address</h3>
-            <div
-              onClick={() => setEditAddress(true)}
-              className={`${editAddress && "hidden"} cursor-pointer col-span-2`}
-            >
-              <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
-            </div>
-            <div
-              onClick={() => updateUser({ address: userAddress, zip: userZip })}
-              className={`${!editAddress && "hidden"
-                } cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}
-            >
-              save
+
+            <div className="absolute top-3 right-3 flex items-center space-x-4">
+              <div
+                onClick={() => setEditAddress(true)}
+                className={`${editAddress && "hidden"
+                  } cursor-pointer col-span-3 place-self-center`}
+              >
+                {/* edit  */}
+                <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
+              </div>
+              <div
+                onClick={() => setEditAddress(false)}
+                className={`${!editAddress && "hidden"
+                  } cursor-pointer col-span-3 px-4 py-2 rounded-lg place-self-center`}
+              >
+                {/* cancel  */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+
+
+              </div>
+              <button
+                disabled={!AddressCanSave}
+                onClick={() => updateUser({ address: userAddress })}
+                className={`${!editAddress && "hidden"
+                  }  btn btn-sm btn-primary place-self-center`}
+              >
+                {/* save  */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+
+              </button>
             </div>
           </div>
 
@@ -137,7 +198,10 @@ const Settings = () => {
                 Address:
               </label>
               <input
-                onChange={(e) => setUserAddress(e.target.value)}
+                onChange={(e) => {
+                  setUserAddress(e.target.value);
+                  setAddressCanSave(true)
+                }}
                 disabled={!editAddress}
                 className="input input-text  bg-white col-span-5"
                 type="text"
@@ -150,20 +214,42 @@ const Settings = () => {
         {/* contact div */}
         <div className="rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-white ">
           {/* title div */}
-          <div className="flex justify-between items-center ">
+          <div className="flex justify-between items-center relative">
             <h3 className="text-xl text-left mb-3">Contact informations</h3>
-            <div
-              onClick={() => setEditContact(true)}
-              className={`${editContact && "hidden"} cursor-pointer col-span-2`}
-            >
-              <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
-            </div>
-            <div
-              onClick={() => updateUser({ email: userEmail, phone: userPhone })}
-              className={`${!editContact && "hidden"
-                } cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}
-            >
-              save
+
+            <div className="absolute top-3 right-3 flex items-center space-x-4">
+              <div
+                onClick={() => setEditContact(true)}
+                className={`${editContact && "hidden"
+                  } cursor-pointer col-span-3 place-self-center`}
+              >
+                {/* edit  */}
+                <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
+              </div>
+              <div
+                onClick={() => setEditContact(false)}
+                className={`${!editContact && "hidden"
+                  } cursor-pointer col-span-3 px-4 py-2 rounded-lg place-self-center`}
+              >
+                {/* cancel  */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+
+
+              </div>
+              <button
+                disabled={!PhoneCanSave}
+                onClick={() => updateUser({ phone: userPhone })}
+                className={`${!editContact && "hidden"
+                  }  btn btn-sm btn-primary place-self-center`}
+              >
+                {/* save  */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+
+              </button>
             </div>
           </div>
 
@@ -174,7 +260,6 @@ const Settings = () => {
             <form className="grid grid-cols-1 lg:grid-cols-6 gap-3">
               <label className="flex items-center font-semibold ">Email:</label>
               <input
-                onChange={(e) => setUserEmail(e.target.value)}
                 disabled={true}
                 className="input input-text  bg-white col-span-5"
                 type="email"
@@ -189,7 +274,10 @@ const Settings = () => {
                 Phone :
               </label>
               <input
-                onChange={(e) => setUserPhone(e.target.value)}
+                onChange={(e) => {
+                  setUserPhone(e.target.value);
+                  setPhoneCanSave(true)
+                }}
                 disabled={!editContact}
                 className="input input-text  bg-white col-span-5"
                 type={"tel"}
