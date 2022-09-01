@@ -2,7 +2,6 @@ import { faBars, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "firebase/auth";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { Link, Outlet } from "react-router-dom";
 import auth from "../../../firebase.init";
 import "./AdminPanel.css";
