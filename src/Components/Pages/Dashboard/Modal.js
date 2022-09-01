@@ -60,23 +60,22 @@ const Modal = ({ modalData }) => {
               </div>
               <div>
                 <h3
-                  className={`text-2xl  font-medium  text-right ${
-                    modalData?.type === "Add Money" ||
-                    modalData?.type === "Receive Money" ||
-                    modalData?.type === "Transfer Savings"
+                  className={`text-2xl  font-medium  text-right ${modalData?.type === "Add Money" ||
+                      modalData?.type === "Receive Money" ||
+                      modalData?.type === "Transfer Savings"
                       ? "text-green-600"
                       : "text-red-600"
-                  }`}
+                    }`}
                 >
                   {modalData?.type === "Add Money" ||
-                  modalData?.type === "Receive Money" ||
-                  modalData?.type === "Transfer Savings"
+                    modalData?.type === "Receive Money" ||
+                    modalData?.type === "Transfer Savings"
                     ? "+" + modalData?.amount
                     : "-" + modalData?.amount}
                   $
                 </h3>
                 <h6 className="text-right">
-                  <small>Fee: {modalData?.fee}</small>
+                  <small className="gray text-sm">fee: ${modalData?.fee}</small>
                 </h6>
               </div>
             </div>
