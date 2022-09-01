@@ -76,7 +76,7 @@ const Modal = ({ modalData }) => {
                   $
                 </h3>
                 <h6 className="text-right">
-                  <small>Fee: {modalData?.fee}</small>
+                  <small className="gray text-sm">fee: ${modalData?.fee}</small>
                 </h6>
               </div>
             </div>

@@ -96,7 +96,7 @@ const ManageAccounts = () => {
             {/* <!-- row  --> */}
             {users &&
               paginateUsers.map((user) => {
-                const { name, email, avatar, address, number } = user;
+                const { name, email, avatar, address, phone } = user;
                 return (
                   <tr>
                     <td>
@@ -124,7 +124,7 @@ const ManageAccounts = () => {
                       <br />
                       {/* <span className="badge badge-ghost badge-sm">{number}</span> */}
                     </td>
-                    <td>{number && number}</td>
+                    <td>{phone && phone}</td>
                     <th>
                       <button
                         // onClick={() => handleRemove(email)}

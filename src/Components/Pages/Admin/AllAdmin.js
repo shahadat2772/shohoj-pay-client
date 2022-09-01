@@ -59,8 +59,7 @@ const AllAdmin = () => {
             {/* <!-- row  --> */}
             {admins &&
               admins.map((admin) => {
-                const { name, email, avatar, address, number } = admin;
-                console.log(admin);
+                const { name, email, avatar, address, phone } = admin;
                 return (
                   <tr>
                     <td>
@@ -88,11 +87,11 @@ const AllAdmin = () => {
                       <br />
                       {/* <span className="badge badge-ghost badge-sm">{number}</span> */}
                     </td>
-                    <td>{number && number}</td>
+                    <td>{phone && phone}</td>
                     <th>
                       <button
                         onClick={() => handleRemove(email)}
-                        className="btn btn-ghost btn-xs"
+                        className="btn btn-primary btn-xs"
                       >
                         Remove
                       </button>
