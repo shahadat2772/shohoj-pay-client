@@ -5,6 +5,7 @@ import signUpLoadingReducer from "./slices/signUpLoadingSlice";
 import notificationReducer from "./slices/notificationSlice";
 import transactionReportReducer from "./slices/transactionReportSlice";
 import moneyRequestReducer from "./slices/moneyRequestSlice";
+import allAdminReducer from "./slices/allAdminSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     allNotification: notificationReducer,
     transactionReport: transactionReportReducer,
     allRequest: moneyRequestReducer,
+    allAdmin: allAdminReducer,
   },
 });
 export default store;

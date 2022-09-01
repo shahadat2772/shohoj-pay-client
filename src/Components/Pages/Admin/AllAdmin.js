@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAllAdmin } from "../../../app/slices/allAdminSlice";
+import Spinner from "../../Shared/Spinner/Spinner";
 
 const AllAdmin = () => {
-  const [admins, setAdmin] = useState([]);
-
-  const fetchAdmins = () => {
-    fetch("http://localhost:5000/getAllAdmin", {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setAdmin(data));
-  };
+  const dispatch = useDispatch();
+  const { allAdmins, isLoading } = useSelector((state) => state.allAdmin);
 
   useEffect(() => {
-    fetchAdmins();
+    dispatch(fetchAllAdmin());
   }, []);
 
   const handleRemove = (email) => {
@@ -33,7 +27,7 @@ const AllAdmin = () => {
         if (data?.error) {
           toast.error(data?.error, { id: "manageAdmin" });
         } else if (data?.success) {
-          fetchAdmins();
+          dispatch(fetchAllAdmin());
           toast.success(data?.success, { id: "manageAdmin" });
         } else {
           toast.error("Something went wrong.", { id: "manageAdmin" });
@@ -41,9 +35,15 @@ const AllAdmin = () => {
       });
   };
 
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
+
   return (
     <div>
-      <h1 className="text-3xl mt-6 ml-14">All Admins</h1>
+      <h1 className="md:text-3xl lg:text-3xl text-2xl mt-6 ml-14">
+        All Admins
+      </h1>
       <div className="overflow-x-auto w-full mt-6">
         <table className="table w-[90%] mx-auto">
           {/* <!-- head --> */}
@@ -57,8 +57,8 @@ const AllAdmin = () => {
           </thead>
           <tbody>
             {/* <!-- row  --> */}
-            {admins &&
-              admins.map((admin) => {
+            {allAdmins &&
+              allAdmins.map((admin) => {
                 const { name, email, avatar, address, phone } = admin;
                 return (
                   <tr>
@@ -82,11 +82,7 @@ const AllAdmin = () => {
                         </div>
                       </div>
                     </td>
-                    <td>
-                      {address && address}
-                      <br />
-                      {/* <span className="badge badge-ghost badge-sm">{number}</span> */}
-                    </td>
+                    <td>{address && address}</td>
                     <td>{phone && phone}</td>
                     <th>
                       <button

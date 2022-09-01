@@ -56,20 +56,20 @@ const ManageAdmin = () => {
             onClick={() => setAction("add")}
             type="submit"
             className="btn btn-sm btn-primary px-7 mr-2 rounded-lg"
-            value="Remove"
+            value="Add"
           >
             Add
           </button>
           <button
             onClick={() => setAction("remove")}
             type="submit"
-            className="btn btn-sm btn-primary px-7  rounded-lg "
+            className="btn btn-sm btn-primary px-7  rounded-lg"
             value="Remove"
           >
             Remove
           </button>
         </form>
-        <Link className="block mt-7 link" to={"/adminpanel/allAdmin"}>
+        <Link className="block mt-9 link" to={"/adminpanel/allAdmin"}>
           All Admins
         </Link>
       </div>
