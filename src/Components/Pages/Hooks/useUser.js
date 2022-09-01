@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
 
-const useUser = (email) => {
-    const [user, setUser] = useState({});
-    useEffect(() => {
-        if (email) {
-            fetch("http://localhost:5000/getUserInfo", {
-                method: "GET",
-                headers: {
-                    email
-                },
+const useUser = (user) => {
+  const [mongoUser, setMongoUser] = useState(null);
+  const [mongoUserLoading, setMongoUserLoading] = useState(false);
 
-            }).then(res => res.json()).then(data => {
-                console.log("useUser", data)
-                setUser(data)
-            })
-        }
-    }, [email]);
+  useEffect(() => {
+    const email = user?.user?.email || user?.email;
+    if (email) {
+      setMongoUserLoading(true);
+      fetch("http://localhost:5000/getUserInfo", {
+        method: "GET",
+        headers: {
+          email,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setMongoUser(data);
+          setMongoUserLoading(false);
+        });
+    }
+  }, [user]);
 
-    return [user];
+  return [mongoUser, mongoUserLoading];
 };
 
 export default useUser;

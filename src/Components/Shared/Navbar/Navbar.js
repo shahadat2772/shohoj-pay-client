@@ -7,35 +7,34 @@ import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 import useUser from "../../Pages/Hooks/useUser";
+import { useSelector } from "react-redux";
 
-const Navbar = ({ unseenNotification }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const pathName = location?.pathname;
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+  const { signUpLoading } = useSelector((state) => state.signUpLoading);
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
 
   const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
-
   const personalUserRoutes = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
-    { name: "Requests", link: "/moneyRequests" },
   ];
 
   const merchantUserRoutes = [
     { name: "Dashboard", link: "/merchant/dashboard" },
     { name: "Services", link: "/merchant/services" },
-    { name: "Requests", link: "/merchant/money-requests" },
   ];
 
   const commonRoutes = [
     { name: "Notification", link: "/notification" },
     { name: "Settings", link: "/settings" },
   ];
-
-  const [mongoUser] = useUser(user?.email);
 
   // on scroll hide and show navbar functionality
   const controlNavbar = () => {
@@ -74,20 +73,20 @@ const Navbar = ({ unseenNotification }) => {
   };
   const handleSignOut = () => {
     signOut(auth);
-    toast.success("Sign Out Successfully");
+    window.localStorage.clear("accessToken");
   };
-  if (loading || !mongoUser) {
+
+  if (loading || mongoUserLoading || signUpLoading) {
     return;
   }
 
   return (
     <nav
-      className={`active ${show && "hidden"} ${
-        user && mongoUser.type === "admin" && "hidden"
-      }`}
+      className={`active ${show && "hidden"} ${user && mongoUser?.type === "admin" && "hidden"
+        }`}
     >
       <div className="fixed top-0 w-[100%] z-50">
-        <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
+        <div className="nav-active px-4 py-1 lg:p-0">
           <div className="p-1 lg:px-8 md:px-4">
             <nav className="flex items-center justify-between">
               {/* PROJECT LOGO */}
@@ -105,9 +104,8 @@ const Navbar = ({ unseenNotification }) => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
-                    open ? "left-[-10px] top-16" : "left-[-1080px]"
-                  }`}
+                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
+                    }`}
                 >
                   {!user &&
                     unAuthorizedRoutes?.map((item) => (
@@ -140,13 +138,12 @@ const Navbar = ({ unseenNotification }) => {
                           >
                             <NavLink to={item.link}>{item.name}</NavLink>
                             <p
-                              className={`notificationCounter ${
-                                unseenNotification?.length !== 0 &&
+                              className={`notificationCounter ${unseenNotifications?.length !== 0 &&
                                 pathName !== "/notification" &&
                                 "notificationCounterShow"
-                              }`}
+                                }`}
                             >
-                              {unseenNotification?.length}
+                              {unseenNotifications?.length}
                             </p>
                           </li>
                         ) : (

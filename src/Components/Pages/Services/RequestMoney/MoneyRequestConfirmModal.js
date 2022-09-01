@@ -1,11 +1,14 @@
 import React from "react";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 
 const MoneyRequestConfirmModal = ({
   requestInfo,
   setRequestForConfirm,
   fetchRequests,
 }) => {
+  const email = requestInfo?.from;
+  console.log(email);
   const handleApprove = (request) => {
     toast.loading("Request is being confirmed.", {
       id: "moneyRequestLoadingToast",
@@ -23,8 +26,10 @@ const MoneyRequestConfirmModal = ({
         fetchRequests();
         if (data?.success) {
           toast.dismiss("moneyRequestLoadingToast");
+          sendNotification(email, "requestMoney");
           toast.success(data?.success);
         } else {
+          toast.dismiss("moneyRequestLoadingToast");
           toast.error(data?.error);
         }
       });
@@ -41,21 +46,20 @@ const MoneyRequestConfirmModal = ({
         <div className="modal-box relative">
           <h3 className="text-lg font-bold">Approve request?</h3>
           <p className="py-4">
-            You've been selected for a chance to get one year of subscription to
-            use Wikipedia for free!
+            Are you sure to confirm request of ${requestInfo.amount}
           </p>
-          <div className="actionButtons mt-4">
-            <button
-              onClick={() => handleApprove(requestInfo)}
-              className="btn btn-sm btn-outline btn-primary mr-3"
-            >
-              Confirm
-            </button>
+          <div className="actionButtons mt-4 flex space-x-4">
             <button
               onClick={() => setRequestForConfirm([])}
-              className="btn btn-sm btn-outline btn-warning"
+              className="btn btn-sm btn-outline "
             >
               Cancel
+            </button>
+            <button
+              onClick={() => handleApprove(requestInfo)}
+              className="btn btn-sm btn-primary "
+            >
+              Confirm
             </button>
           </div>
         </div>

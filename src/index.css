@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 .active {
-  color: #fff !important;
-  background: #2933c3;
+  color: #2933c3 !important;
+  /* background: #2933c3; */
 }
 body {
   margin: 0;

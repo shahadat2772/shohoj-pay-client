@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
@@ -7,59 +7,67 @@ import toast from "react-hot-toast";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import useToken from "../../Hooks/useToken";
 import useUser from "../../Hooks/useUser";
-
+import { useDispatch } from "react-redux";
+import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [signInWithEmailAndPassword, user, signinLoading, signInError] =
     useSignInWithEmailAndPassword(auth);
-  const [show, setShow] = useState(false);
-  const [token] = useToken(user?.user?.email);
-  const [mongoUser] = useUser(user?.email)
-  const passwordShowRef = useRef("");
-  let navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    resetField,
     formState: { errors },
   } = useForm();
+
+  const [token, tokenLoading] = useToken(user);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+  const [show, setShow] = useState(false);
+  const passwordShowRef = useRef("");
+
+  const onSubmit = async (data) => {
+    dispatch(updateSignUpLoading(true));
+    const email = data.email;
+    const password = data.password;
+    await signInWithEmailAndPassword(email, password);
+  };
+
+  if (signinLoading || tokenLoading || mongoUserLoading) {
+    return <Spinner />;
+  }
+
+  if (user && token && mongoUser) {
+    toast.success("Logged in successfully.", {
+      id: "successfulLogIn",
+    });
+    dispatch(updateSignUpLoading(false));
+    if (mongoUser.type === "admin") {
+      navigate("/adminpanel/summary");
+      // navigate(from ? (from, { replace: true }) : "/adminpanel/summary");
+    } else if (mongoUser?.type === "merchant") {
+      navigate("/merchant/dashboard");
+      // navigate(from ? (from, { replace: true }) : "/merchant/services");
+    } else if (mongoUser.type === "personal") {
+      navigate("/dashboard");
+      // navigate(from ? (from, { replace: true }) : "/dashboard");
+    }
+  }
 
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
     setShow(passShow);
   };
-  useEffect(() => {
-    if (token && mongoUser) {
-      toast.success("User Login SuccessFull");
-      if (mongoUser.type === "admin") {
-        navigate('/adminpanel')
-      }
-      else if (mongoUser?.type === "merchant") {
-        navigate("/merchant/services")
-      }
-      else if (mongoUser.type === "personal") {
-        navigate("/dashboard");
-      }
-    }
-  }, [navigate, token, mongoUser]);
 
-  useEffect(() => {
-    if (signInError) {
-      const error = signInError?.message.split(":")[1];
-      toast.error(error);
-    }
-  }, [signInError]);
-  if (signinLoading || !mongoUser) {
-    return <Spinner />;
+  if (signInError) {
+    dispatch(updateSignUpLoading(false));
+    const error = signInError?.message.split(":")[1];
+    toast.error(error, {
+      id: "signInErr",
+    });
   }
 
-  const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
-    if (user) {
-      resetField("email");
-      resetField("password");
-    }
-  };
   return (
     <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
       <div className="card w-96 bg-base-100 shadow-xl">
@@ -71,7 +79,7 @@ const Login = () => {
             Login
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
               <label htmlFor="inputEmail" className="label">
                 Email
               </label>
@@ -80,7 +88,7 @@ const Login = () => {
                 id="inputEmail"
                 type="email"
                 placeholder="Email"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full "
                 {...register("email", {
                   required: {
                     value: true,
@@ -105,7 +113,7 @@ const Login = () => {
                 )}
               </label>
             </div>
-            <div className="relative form-control w-full max-w-xs ">
+            <div className="relative form-control w-full  ">
               <label htmlFor="inputPass" className="label">
                 Password
               </label>
@@ -124,7 +132,7 @@ const Login = () => {
                 id="inputPass"
                 type={show ? "text" : "password"}
                 placeholder="Password"
-                className="input input-bordered w-full max-w-xs "
+                className="input input-bordered w-full  "
                 style={{ outline: "none" }}
                 {...register("password", {
                   required: {
@@ -158,7 +166,7 @@ const Login = () => {
             <input className="btn w-full" type="submit" value="Login" />
           </form>
           <p className="text-center my-2">
-            New to Shohoj Pay | Portal ?{" "}
+            New to Shohoj Pay ?{" "}
             <Link className="font-bold text-secondary" to="/signUp">
               Register
             </Link>

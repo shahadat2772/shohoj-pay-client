@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
-import {
-  CardElement,
-  Elements,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import "./CardForm.css";
-import { Doughnut } from "react-chartjs-2";
+import useUser from "../../Hooks/useUser";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
   const fullDate = new Date().toLocaleDateString();
@@ -22,16 +16,17 @@ const CardForm = ({ addAmount, setAmountErr }) => {
 
   const [clientSecret, setClientSecret] = useState("");
   const [cardError, setCardError] = useState("");
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const stripe = useStripe();
   const elements = useElements();
 
   useEffect(() => {
-    if (addAmount < 5) {
+    if (addAmount < 10) {
       setClientSecret("");
       setAmountErr("");
-      setAmountErr("$5 is the minimum add amount.");
+      setAmountErr("$10 is the minimum add amount.");
       return;
     }
     if (addAmount > 1000) {
@@ -103,7 +98,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       id: "waitingToast",
     });
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
@@ -116,22 +111,23 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         payment_method: {
           card: card,
           billing_details: {
-            name: `${user?.displayName}`,
+            name: `${mongoUser?.name}`,
             email: `${user?.email}`,
           },
         },
       }
     );
-
+    const image = "https://static.thenounproject.com/png/1109435-200.png";
     if (intentErr) {
       toast.dismiss("waitingToast");
       setCardError(intentErr?.message);
     } else {
       const id = paymentIntent?.id;
       const addMoneyInfo = {
+        image,
         type: "Add Money",
         email: user?.email,
-        name: user?.displayName,
+        name: mongoUser?.name,
         amount: addAmount,
         transactionId: id,
         fullDate,
@@ -187,8 +183,9 @@ const CardForm = ({ addAmount, setAmountErr }) => {
           }}
         />
         <p className="text-xs text-red-500 mt-1">{cardError && cardError}</p>
+        <p className="ml-1 gray text-sm mt-4">Enjoy free add money.</p>
         <button
-          className="actionButton btn mt-11"
+          className="actionButton btn mt-9"
           type="submit"
           disabled={!stripe || !clientSecret}
         >

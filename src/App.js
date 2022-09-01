@@ -22,8 +22,7 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import MoneyRequestConfirmModal from "./Components/Pages/Services/RequestMoney/MoneyRequestConfirmModal";
 import { useEffect, useState } from "react";
 import RequireAdmin from "./Components/Pages/Authentication/RequireAdmin/RequireAdmin";
-import MakeAdmin from "./Components/Pages/Dashboard/Admin/MakeAdmin";
-import AdminPanel from "./Components/Pages/Dashboard/Admin/AdminPanel";
+import AdminPanel from "./Components/Pages/Admin/AdminPanel";
 import RequirePersonal from "./Components/Pages/Authentication/RequirePersonal/RequirePersonal";
 import RequireMerchant from "./Components/Pages/Authentication/RequireMerchant/RequireMerchant";
 import useUser from "./Components/Pages/Hooks/useUser";
@@ -33,51 +32,68 @@ import Spinner from "./Components/Shared/Spinner/Spinner";
 import RestrictAuth from "./Components/Pages/Authentication/RestrictAuth/RestrictAuth";
 import axios from "axios";
 import Notification from "./Components/Pages/Notificaion/Notification";
+import ECheck from "./Components/Pages/Services/ECheck/ECheck";
+import AdminSummary from "./Components/Pages/Admin/AdminSummary/AdminSummary";
+import MerchantServices from "./Components/Pages/Merchant/MerchantServices/MerchantServices";
+import MerchantToPersonal from "./Components/Pages/Merchant/MerchantServices/MerchantToPersonal";
+import ManageAdmin from "./Components/Pages/Admin/ManageAdmin";
+import AllAdmin from "./Components/Pages/Admin/AllAdmin";
+import ManageAccounts from "./Components/Pages/Admin/ManageAccounts";
+import WithdrawSavings from "./Components/Pages/Services/WithdrawSavings/WithdrawSavings";
+import MerchantToMerchant from "./Components/Pages/Merchant/MerchantServices/MerchantToMerchant";
+import GetPaid from "./Components/Pages/Merchant/MerchantServices/GetPaid";
+import MerchantPay from "./Components/Pages/Services/MerchantPay/MerchantPay";
+import MerchantECheck from "./Components/Pages/Merchant/MerchantServices/MerchantECheck";
+import BusinessLoan from "./Components/Pages/Merchant/MerchantServices/BusinessLoan";
+import MerchantDashboard from "./Components/Pages/Merchant/MerchantDashboard/MerchantDashboard";
+import { fetchNotifications } from "./app/slices/notificationSlice";
+import { useDispatch } from "react-redux";
+import io from "socket.io-client";
+export const socket = io.connect("http://localhost:5000");
+
+// Live notification sender
+export const sendNotification = (email, message) => {
+  const data = {
+    email,
+    message,
+  };
+  socket.emit("send_notification", data);
+};
+
 function App() {
   // State for confirming the money request
   const [requestForConfirm, setRequestForConfirm] = useState([]);
   const [request, fetchRequests] = requestForConfirm;
-  const [firebaseUser, loading] = useAuthState(auth);
-  const [user] = useUser(firebaseUser?.email);
+  const [user, loading] = useAuthState(auth);
+  const dispatch = useDispatch();
 
-  // Notification
-  const [allNotification, setAllNotification] = useState([]);
-  const [unseenNotification, setUnseenNotification] = useState([]);
-  const fetchNotification = () => {
-    const email = user.email;
-    if (!email) {
-      return;
-    }
-    try {
-      axios
-        .get("http://localhost:5000/getNotification", {
-          headers: {
-            email: email,
-          },
-        })
-        .then((res) => {
-          const [all, unseen] = res.data;
-          setAllNotification(all.reverse());
-          setUnseenNotification(unseen);
-        });
-    } catch (error) {
-      toast.error(error?.message);
-    }
-  };
+  // Loading notifications and joining a room on socket.io
   useEffect(() => {
-    const email = user?.email;
+    const email = user?.user?.email || user?.email;
     if (email) {
-      fetchNotification();
+      socket.emit("join_room", email);
+      dispatch(fetchNotifications(email));
     }
   }, [user]);
 
-  if (loading || !user) {
+  // New notification arrived
+  useEffect(() => {
+    socket.on("receive_notification", (data) => {
+      dispatch(fetchNotifications(data.email));
+    });
+
+    return () => {
+      socket.off("receive_notification");
+    };
+  }, [socket]);
+
+  if (loading) {
     return <Spinner />;
   }
 
   return (
     <div>
-      <Navbar unseenNotification={unseenNotification}></Navbar>
+      <Navbar></Navbar>
       <Routes>
         <Route
           path="/"
@@ -109,12 +125,7 @@ function App() {
           path="/notification"
           element={
             <RequireAuth>
-              <Notification
-                fetchNotification={fetchNotification}
-                allNotification={allNotification}
-                unseenNotification={unseenNotification}
-                setUnseenNotification={setUnseenNotification}
-              />
+              <Notification />
             </RequireAuth>
           }
         />
@@ -140,11 +151,41 @@ function App() {
           }
         />
         <Route
+          path="/services/withdraw-savings"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <WithdrawSavings />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/eCheck"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <ECheck />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/services/saveMoney"
           element={
             <RequireAuth>
               <RequirePersonal>
                 <SaveMoney />
+              </RequirePersonal>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/services/merchant-pay"
+          element={
+            <RequireAuth>
+              <RequirePersonal>
+                <MerchantPay />
               </RequirePersonal>
             </RequireAuth>
           }
@@ -200,23 +241,50 @@ function App() {
             </RequireAuth>
           }
         />
+        {/* Admin Routes */}
         <Route
           path="/adminpanel"
           exact={true}
           element={
-            <RequireAuth>
-              <RequireAdmin>
-                <AdminPanel />
-              </RequireAdmin>
-            </RequireAuth>
+            <RequireAdmin>
+              <AdminPanel />
+            </RequireAdmin>
           }
         >
           <Route
-            path="makeadmin"
+            path="/adminpanel/summary"
             element={
               <RequireAdmin>
-                <MakeAdmin />
+                <AdminSummary />
               </RequireAdmin>
+            }
+          />
+          <Route
+            path="/adminpanel/manageAdmin"
+            element={
+              <RequireAdmin>
+                <ManageAdmin />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/adminpanel/allAdmin"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AllAdmin />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/adminpanel/manageAccounts"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <ManageAccounts />
+                </RequireAdmin>
+              </RequireAuth>
             }
           />
         </Route>
@@ -236,31 +304,101 @@ function App() {
           element={
             <RequireAuth>
               <RequireMerchant>
-                <MoneyRequests />
+                <MoneyRequests setRequestForConfirm={setRequestForConfirm} />
               </RequireMerchant>
             </RequireAuth>
           }
-        ></Route>
-        <Route
-          path="/merchant/services"
-          element={
-            <RequireAuth>
-              <RequireMerchant>
-                <Services />
-              </RequireMerchant>
-            </RequireAuth>
-          }
-        ></Route>
+        />
         <Route
           path="/merchant/dashboard"
           element={
             <RequireAuth>
               <RequireMerchant>
-                <Dashboard />
+                <MerchantDashboard />
               </RequireMerchant>
             </RequireAuth>
           }
-        ></Route>
+        />
+        <Route
+          path="/merchant/dashboard/allTransaction"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AllTransaction />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantServices />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/add-money"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <AddMoney />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-to-personal"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantToPersonal />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-to-merchant"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantToMerchant />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/get-paid"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <GetPaid />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/merchant-echeck"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <MerchantECheck />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/merchant/services/business-loan"
+          element={
+            <RequireAuth>
+              <RequireMerchant>
+                <BusinessLoan />
+              </RequireMerchant>
+            </RequireAuth>
+          }
+        />
 
         {/* Notfound */}
         <Route path="*" element={<NotFound />} />

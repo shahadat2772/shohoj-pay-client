@@ -14,7 +14,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 import { signOut } from "firebase/auth";
+import useUser from "../Hooks/useUser";
 // SERVICE DATA
 const someServices = [
   {
@@ -29,8 +32,8 @@ const someServices = [
   },
   {
     type: "Request",
-    icon: "fa-hand-holding-dollar",
-    action: "/services/requestMoney",
+    icon: "fa-down-left-and-up-right-to-center",
+    action: "/moneyRequests",
   },
   {
     type: "More",
@@ -38,7 +41,7 @@ const someServices = [
     action: "/services",
   },
 ];
-// FIND TODAY DATE MONTH YEAR
+// GET TODAY DATE MONTH YEAR
 const filterDate = new Date().toLocaleDateString("en-us", {
   year: "numeric",
   month: "short",
@@ -54,26 +57,65 @@ const getPreviousDate = (number) => {
 const todayDate = new Date().toLocaleDateString();
 // WELCOME DASHBOARD SECTION
 const Dashboard = () => {
-  const [balance, setBalance] = useState(0);
-  const [transactionData, setTransactionData] = useState([]);
   const [monthService, setMonthService] = useState([]);
   const [monthServiceFilter, setMonthServiceFilter] = useState(filterDate);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [user] = useAuthState(auth);
+  const [mongoUser] = useUser(user);
   const navigate = useNavigate();
-  // LATEST TRANSACTION
-  const latestTransaction = [...transactionData].splice(
-    transactionData.length - 4,
-    transactionData.length
+  const dispatch = useDispatch();
+  // GET DATA USING REDUX
+  const { isLoading, allInfo, error } = useSelector(
+    (state) => state.userAllEmailData
   );
+
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
+
+  const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
+  const balance = userBalance;
+  const transactionData = userTransactionInfo;
+  useEffect(() => {
+    dispatch(fetchUserEmailInfo(user));
+  }, [navigate, dispatch, user, unseenNotifications]);
+  // GET MONTH SERVICE DATA
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/getServices`, {
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          email: user.email,
+          monthServiceFilter,
+        },
+      })
+      .then((res) => setMonthService(res.data));
+    if (shareLinkCopied) {
+      toast.success("Copied Transaction Information");
+    }
+  }, [user?.email, monthServiceFilter, shareLinkCopied]);
+
+  // HANDLE SPINNER
+  if (isLoading || transactionData == undefined) {
+    return <Spinner />;
+  }
+  // HANDLE ERROR
+  if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
+    toast.error(error?.message);
+    navigate("/");
+  }
+
   // REVERSE TRANSACTION DATA
-  const reverseData = [...latestTransaction].reverse();
+  const reverseData = [...transactionData].reverse();
+  // GET SERVICE INCLUDES TYPE
   const serviceType = (value) =>
     monthService.filter((service) => service.type.includes(value));
   serviceType("Receive Money");
   serviceType("Add Money");
   serviceType("Send Money");
-  serviceType("Request Money");
+  serviceType("Merchant Pay");
+  serviceType("E-Check");
 
   const totlaReceiveMoney = [
     ...serviceType("Receive Money"),
@@ -82,7 +124,10 @@ const Dashboard = () => {
   const totalLossMoney = [
     ...serviceType("Send Money"),
     ...serviceType("Request Money"),
+    ...serviceType("Merchant Pay"),
+    ...serviceType("E-Check"),
   ];
+  // COUNT RECEIVE, EXPENSE, AND SAVINGS MONEY
   const reducerCount = (value) => {
     return value.reduce(
       (previousValue, currentValue) =>
@@ -94,7 +139,7 @@ const Dashboard = () => {
   const TotalCost = reducerCount(totalLossMoney);
   const totalSavings = reducerCount(serviceType("Save Money"));
   // PAICHART DATA
-  const COLORS = ["#066106", "#c30606", "#050566"];
+  const COLORS = ["#224B0C", "#820000", "#002B5B"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -103,7 +148,6 @@ const Dashboard = () => {
     innerRadius,
     outerRadius,
     percent,
-    index,
   }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -123,61 +167,17 @@ const Dashboard = () => {
   };
   const data = [
     {
-      name: "Receive",
+      name: "Income",
       value: TotalRecive ? TotalRecive : 1,
       email: user?.email,
     },
-    { name: "Cost", value: TotalCost ? TotalCost : 1, email: user?.email },
+    { name: "Expense", value: TotalCost ? TotalCost : 1, email: user?.email },
     {
       name: "Savings",
       value: totalSavings ? totalSavings : 1,
       email: user?.email,
     },
   ];
-  useEffect(() => {
-    // USER BALANCE AMOUNT GET
-    axios
-      .get(`http://localhost:5000/getUserBalances/${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => {
-        setBalance(res.data);
-      })
-      .catch((error) => {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        toast.error(error?.message);
-        navigate("/");
-      });
-    // USER TRANSACTION DATA GET
-    axios
-      .get(`http://localhost:5000/transactionStatus/${user.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => setTransactionData(res.data))
-      .catch((error) => {
-        toast.error(error?.message);
-        signOut(auth);
-        localStorage.removeItem("accessToken");
-        navigate("/");
-      });
-    axios
-      .get(`http://localhost:5000/getServices`, {
-        headers: {
-          "content-type": "application/json",
-          email: user.email,
-          monthServiceFilter,
-        },
-      })
-      .then((res) => setMonthService(res.data));
-    if (shareLinkCopied) {
-      toast.success("Copied Transaction Information");
-    }
-  }, [user?.email, shareLinkCopied, navigate, monthServiceFilter]);
 
   // COPY TEXT FUNCTION
   const onShare = (data) => {
@@ -197,9 +197,7 @@ const Dashboard = () => {
       setShareLinkCopied(false);
     }, 2000);
   };
-  if (transactionData === 0) {
-    return <Spinner />;
-  }
+
   return (
     <div className="container mx-auto lg:mt-28 lg:px-10 py-10">
       {/* START USER INFORMATION AND TRANSACTION */}
@@ -212,7 +210,7 @@ const Dashboard = () => {
                 data-testid="user-name"
                 className="text-left text-3xl font-bold mb-3"
               >
-                Hi, {user?.displayName}
+                Hi, {mongoUser?.name}
               </h1>
               <div className="text-left">
                 <h4 className="">Total Balance</h4>
@@ -223,9 +221,9 @@ const Dashboard = () => {
           {/* SOME SERVICE */}
           <div className="mt-10 px-2">
             <h2 className="border-b-4 border-black w-48 font-bold text-xl">
-              Get Service
+              Get Started
             </h2>
-            <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
+            <div className="flex align-center justify-between bg-base-200 rounded-md lg:px-16 py-10 my-8 px-3">
               {someServices.map((service, index) => {
                 const { type, icon, action } = service;
                 return (
@@ -271,10 +269,7 @@ const Dashboard = () => {
                       </div>
                       <div className="avatar">
                         <div className="w-14 rounded-full md-img-responsive">
-                          <img
-                            src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
-                            alt="User Image"
-                          />
+                          <img src={transAction?.image} alt="User Image" />
                         </div>
                       </div>
                       <div className="ml-5 flex items-center justify-between w-full">
@@ -301,24 +296,36 @@ const Dashboard = () => {
                             </h6>
                           )}
                         </div>
-                        <div className="" onClick={() => onShare(transAction)}>
-                          <i className="fa-solid fa-copy cursor-pointer gray"></i>
-                        </div>
-                        <div>
-                          <h3
-                            className={`text-2xl font-medium text-right md-amount-responsive ${
-                              transAction.type === "Add Money" ||
-                              transAction.type === "Receive Money"
-                                ? "text-green-600"
-                                : "text-red-600"
-                            }`}
+                        <div className="flex align-items-center ">
+                          <div
+                            className=""
+                            onClick={() => onShare(transAction)}
                           >
-                            {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money"
-                              ? "+" + transAction.amount
-                              : "-" + transAction.amount}
-                            $
-                          </h3>
+                            <i className="fa-solid fa-copy cursor-pointer"></i>
+                          </div>
+                          <div>
+                            <h3
+                              className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
+                                transAction.type === "Add Money" ||
+                                transAction.type === "Receive Money" ||
+                                transAction.type === "Transfer Savings"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              {transAction.type === "Add Money" ||
+                              transAction.type === "Receive Money" ||
+                              transAction.type === "Transfer Savings"
+                                ? "+" + transAction.amount
+                                : "-" + transAction.amount}
+                              $
+                            </h3>
+                            <h6 className="text-right">
+                              <small className="gray text-sm">
+                                fee: ${transAction.fee}
+                              </small>
+                            </h6>
+                          </div>
                         </div>
                       </div>
                     </li>
@@ -327,7 +334,7 @@ const Dashboard = () => {
                     {transactionData.length >= 1 && (
                       <button
                         onClick={() => navigate("/dashboard/allTransAction")}
-                        className="btn btn-primary btn-sm mt-5 p-2"
+                        className="btn btn-link mt-4"
                       >
                         View All Transaction
                       </button>
@@ -357,6 +364,7 @@ const Dashboard = () => {
               </select>
             </div>
             <div className=" flex justify-center h-22 ">
+              {/* START PAICHART */}
               <div className="w-full lg:w-96 h-72">
                 <ResponsiveContainer>
                   <PieChart>
@@ -381,6 +389,31 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </div>
             </div>
+          </div>
+          <ul className="mt-8">
+            {!isLoading ? (
+              <>
+                <li className="text-2xl font-bold list-disc	">
+                  Income: {TotalRecive ? TotalRecive : 1}$
+                </li>
+                <li className="text-2xl font-bold list-disc	mt-2">
+                  Expense: {TotalCost ? TotalCost : 1}$
+                </li>
+                <li className="text-2xl font-bold list-disc mt-2">
+                  Savings: {totalSavings ? totalSavings : 1}$
+                </li>
+              </>
+            ) : (
+              <h3 className="text-xm">Loading..</h3>
+            )}
+          </ul>
+          {/* START SAVINGS */}
+          <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">
+            Savings
+          </h3>
+          <div className="bg-base-200 rounded-md lg:px-9 py-10 px-3">
+            <h4>Total Savings</h4>
+            <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>
         </div>
       </div>
