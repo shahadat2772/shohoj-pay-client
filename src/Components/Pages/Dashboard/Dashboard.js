@@ -394,13 +394,13 @@ const Dashboard = () => {
             {!isLoading ? (
               <>
                 <li className="text-2xl font-bold list-disc	">
-                  Income: {TotalRecive ? TotalRecive : 1}$
+                  Income: {TotalRecive ? TotalRecive : 0}$
                 </li>
                 <li className="text-2xl font-bold list-disc	mt-2">
-                  Expense: {TotalCost ? TotalCost : 1}$
+                  Expense: {TotalCost ? TotalCost : 0}$
                 </li>
                 <li className="text-2xl font-bold list-disc mt-2">
-                  Savings: {totalSavings ? totalSavings : 1}$
+                  Savings: {totalSavings ? totalSavings : 0}$
                 </li>
               </>
             ) : (
