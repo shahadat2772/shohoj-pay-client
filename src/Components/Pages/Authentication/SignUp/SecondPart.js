@@ -26,11 +26,7 @@ const SecondPart = ({
                         required: {
                             value: true,
                             message: "Phone Number is Required",
-                        },
-                        pattern: {
-                            value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
-                            message: "Please input a valid number",
-                        },
+                        }
                     })}
                 />
                 <label className="label">
