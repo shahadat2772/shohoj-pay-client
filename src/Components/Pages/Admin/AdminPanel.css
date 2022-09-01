@@ -12,3 +12,7 @@
   background: rgb(182, 182, 182);
   border-radius: 5px;
 }
+
+.navIcon {
+  background-color: transparent;
+}

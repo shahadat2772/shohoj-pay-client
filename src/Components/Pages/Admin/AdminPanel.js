@@ -37,7 +37,7 @@ const AdminPanel = () => {
     <div className="">
       <div className="absolute top-3 left-3 md:left-7 bg-base-100 z-20 navIcon lg:hidden">
         {/* NavButton Icon */}
-        <label htmlFor="my-drawer-2" className="navBtn">
+        <label htmlFor="my-drawer-2" className="">
           {checked ? (
             <FontAwesomeIcon
               style={{ width: "23px", height: "23px", color: "#909096" }}
