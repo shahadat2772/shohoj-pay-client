@@ -28,8 +28,12 @@ const Modal = ({ modalData }) => {
           <div className="mt-6">
             <div className="flex items-center justify-between">
               <div className="flex ">
-                <div className="w-16 rounded-full mr-4">
-                  <img src={modalData?.image} alt="User Image" />
+                <div className=" mr-4">
+                  <img
+                    className="w-16 h-16 rounded-full"
+                    src={modalData?.image}
+                    alt="User Image"
+                  />
                 </div>
                 <div className="w-60">
                   <h6 className="font-bold">
@@ -54,22 +58,27 @@ const Modal = ({ modalData }) => {
                   )}
                 </div>
               </div>
-              <h3
-                className={`text-2xl  font-medium  text-right ${
-                  modalData?.type === "Add Money" ||
+              <div>
+                <h3
+                  className={`text-2xl  font-medium  text-right ${
+                    modalData?.type === "Add Money" ||
+                    modalData?.type === "Receive Money" ||
+                    modalData?.type === "Transfer Savings"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {modalData?.type === "Add Money" ||
                   modalData?.type === "Receive Money" ||
                   modalData?.type === "Transfer Savings"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                {modalData?.type === "Add Money" ||
-                modalData?.type === "Receive Money" ||
-                modalData?.type === "Transfer Savings"
-                  ? "+" + modalData?.amount
-                  : "-" + modalData?.amount}
-                $
-              </h3>
+                    ? "+" + modalData?.amount
+                    : "-" + modalData?.amount}
+                  $
+                </h3>
+                <h6 className="text-right">
+                  <small>Fee: {modalData?.fee}</small>
+                </h6>
+              </div>
             </div>
             <div></div>
           </div>

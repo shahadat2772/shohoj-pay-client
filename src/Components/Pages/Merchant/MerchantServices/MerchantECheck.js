@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import ReactSignatureCanvas from "react-signature-canvas";
 import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 
 const MerchantECheck = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -14,6 +15,7 @@ const MerchantECheck = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser] = useUser(user);
   const [signature, setSignature] = useState("");
   const {
     register,

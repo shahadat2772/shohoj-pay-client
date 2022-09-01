@@ -14,7 +14,8 @@ const GetPaid = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
-  const [mongoUser, mongoUserLoading] = useUser(user);
+
+  const [mongoUser] = useUser(user);
 
   const {
     register,
@@ -24,7 +25,7 @@ const GetPaid = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { email, amount, payFor, productOrServiceName, description } = data;
+    const { email, amount, payFor, productOrServiceName, reference } = data;
 
     if (amount.slice(0, 1) === "0") {
       toast.error("Invalid amount");
@@ -42,7 +43,7 @@ const GetPaid = () => {
       to: email,
       payFor,
       productOrServiceName,
-      description,
+      reference,
       fullDate,
       date,
       time,
@@ -136,7 +137,14 @@ const GetPaid = () => {
               {errors.amount?.message}
             </span>
           )}
-          <textarea
+          <input
+            {...register("reference")}
+            type="text"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Reference"
+            required
+          />
+          {/* <textarea
             {...register("description")}
             type="text"
             className="textarea textarea-bordered textarea-ghost h-32 p-2 mt-4 w-full rounded"
@@ -144,7 +152,7 @@ const GetPaid = () => {
             placeholder="Description"
             // minLength={12}
             required
-          />
+          /> */}
           <input
             type="submit"
             className="actionButton mt-8 border-0"
