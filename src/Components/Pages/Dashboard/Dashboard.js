@@ -31,9 +31,9 @@ const someServices = [
     action: "/services/sendMoney",
   },
   {
-    type: "Withdraw",
-    icon: "fa-money-bill-transfer",
-    action: "/services/withdraw-savings",
+    type: "Request",
+    icon: "fa-down-left-and-up-right-to-center",
+    action: "/moneyRequests",
   },
   {
     type: "More",
@@ -223,7 +223,7 @@ const Dashboard = () => {
             <h2 className="border-b-4 border-black w-48 font-bold text-xl">
               Get Started
             </h2>
-            <div className="flex align-center justify-between bg-base-200 shadow-lg rounded-md lg:px-16 py-10 my-8 px-3">
+            <div className="flex align-center justify-between bg-base-200 rounded-md lg:px-16 py-10 my-8 px-3">
               {someServices.map((service, index) => {
                 const { type, icon, action } = service;
                 return (
@@ -303,22 +303,29 @@ const Dashboard = () => {
                           >
                             <i className="fa-solid fa-copy cursor-pointer"></i>
                           </div>
-                          <h3
-                            className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
-                              transAction.type === "Add Money" ||
+                          <div>
+                            <h3
+                              className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
+                                transAction.type === "Add Money" ||
+                                transAction.type === "Receive Money" ||
+                                transAction.type === "Transfer Savings"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              {transAction.type === "Add Money" ||
                               transAction.type === "Receive Money" ||
                               transAction.type === "Transfer Savings"
-                                ? "text-green-600"
-                                : "text-red-600"
-                            }`}
-                          >
-                            {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money" ||
-                            transAction.type === "Transfer Savings"
-                              ? "+" + transAction.amount
-                              : "-" + transAction.amount}
-                            $
-                          </h3>
+                                ? "+" + transAction.amount
+                                : "-" + transAction.amount}
+                              $
+                            </h3>
+                            <h6 className="text-right">
+                              <small className="gray text-sm">
+                                fee: ${transAction.fee}
+                              </small>
+                            </h6>
+                          </div>
                         </div>
                       </div>
                     </li>
@@ -327,7 +334,7 @@ const Dashboard = () => {
                     {transactionData.length >= 1 && (
                       <button
                         onClick={() => navigate("/dashboard/allTransAction")}
-                        className="btn btn-primary btn-sm mt-5 p-2"
+                        className="btn btn-link mt-4"
                       >
                         View All Transaction
                       </button>
@@ -404,7 +411,7 @@ const Dashboard = () => {
           <h3 className="font-bold text-xl border-b-4 border-black pb-2 w-48 mt-8 mb-3">
             Savings
           </h3>
-          <div className="bg-base-200 shadow-lg rounded-md lg:px-9 py-10 px-3">
+          <div className="bg-base-200 rounded-md lg:px-9 py-10 px-3">
             <h4>Total Savings</h4>
             <h1 className="text-5xl font-bold">$ {userSavingsInfo?.saving}</h1>
           </div>

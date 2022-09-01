@@ -187,27 +187,38 @@ const AllTransaction = () => {
                           {transAction.transactionId}
                         </h6>
                       )}
+
+                      <h6 className="gray md-trx-responsive">
+                        {transAction?.type === "E-Check" && transAction.to}
+                      </h6>
                     </div>
                     <div className="flex align-items-center ">
                       <div className="" onClick={() => onShare(transAction)}>
                         <i className="fa-solid fa-copy cursor-pointer"></i>
                       </div>
-                      <h3
-                        className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
-                          transAction.type === "Add Money" ||
+                      <div>
+                        <h3
+                          className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
+                            transAction.type === "Add Money" ||
+                            transAction.type === "Receive Money" ||
+                            transAction.type === "Transfer Savings"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {transAction.type === "Add Money" ||
                           transAction.type === "Receive Money" ||
                           transAction.type === "Transfer Savings"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {transAction.type === "Add Money" ||
-                        transAction.type === "Receive Money" ||
-                        transAction.type === "Transfer Savings"
-                          ? "+" + transAction.amount
-                          : "-" + transAction.amount}
-                        $
-                      </h3>
+                            ? "+" + transAction.amount
+                            : "-" + transAction.amount}
+                          $
+                        </h3>
+                        <h6 className="text-right">
+                          <small className="gray text-sm">
+                            fee: ${transAction.fee}
+                          </small>
+                        </h6>
+                      </div>
                     </div>
                   </div>
                 </li>

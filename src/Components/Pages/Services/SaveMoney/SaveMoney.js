@@ -96,7 +96,7 @@ const SaveMoney = () => {
               className="btn btn-link"
               onClick={() => navigate("/services/withdraw-savings")}
             >
-              Withdraw Savings
+              Transfer Savings
             </button>
           </div>
         </form>

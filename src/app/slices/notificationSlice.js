@@ -7,6 +7,7 @@ export const fetchNotifications = createAsyncThunk(
     const res = await axios.get("http://localhost:5000/getNotification", {
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         email,
       },
     });

@@ -20,9 +20,7 @@ const MerchantDashboard = () => {
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
-
   const { unseenNotifications } = useSelector((state) => state.allNotification);
-
   const { userBalance, userTransactionInfo } = allInfo;
   const transactionData = userTransactionInfo;
   useEffect(() => {
@@ -130,20 +128,27 @@ const MerchantDashboard = () => {
                         <div className="" onClick={() => onShare(transAction)}>
                           <i className="fa-solid fa-copy cursor-pointer"></i>
                         </div>
-                        <h3
-                          className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
-                            transAction.type === "Add Money" ||
+                        <div>
+                          <h3
+                            className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
+                              transAction.type === "Add Money" ||
+                              transAction.type === "Receive Money"
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {transAction.type === "Add Money" ||
                             transAction.type === "Receive Money"
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {transAction.type === "Add Money" ||
-                          transAction.type === "Receive Money"
-                            ? "+" + transAction.amount
-                            : "-" + transAction.amount}
-                          $
-                        </h3>
+                              ? "+" + transAction.amount
+                              : "-" + transAction.amount}
+                            $
+                          </h3>
+                          <h6 className="text-right">
+                            <small className="gray text-sm">
+                              fee: ${transAction.fee}
+                            </small>
+                          </h6>
+                        </div>
                       </div>
                     </div>
                   </li>
@@ -154,7 +159,7 @@ const MerchantDashboard = () => {
                       onClick={() =>
                         navigate("/merchant/dashboard/allTransaction")
                       }
-                      className="btn btn-primary btn-sm mt-5 p-2"
+                      className="btn btn-link mt-5"
                     >
                       View All Transaction
                     </button>
