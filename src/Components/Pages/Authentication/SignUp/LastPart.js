@@ -12,7 +12,7 @@ const LastPart = ({
 }) => {
     return (
         <div className={`${showPasswordPart ? "block" : "hidden"}`}>
-            <div className="relative form-control w-full max-w-xs ">
+            <div className="relative form-control w-full  ">
                 <label className="label">
                     <span className="label-password">Password</span>
                 </label>
@@ -30,7 +30,7 @@ const LastPart = ({
                 <input
                     type={show ? "text" : "password"}
                     placeholder="Password"
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full "
                     {...register("password", {
                         required: {
                             value: true,
@@ -55,7 +55,7 @@ const LastPart = ({
                     )}
                 </label>
             </div>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-password">Confirm Password</span>
                 </label>
@@ -63,7 +63,7 @@ const LastPart = ({
                 <input
                     type={show ? "text" : "password"}
                     placeholder="Confirm Password"
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full "
                     {...register("ConfirmPassword", {
                         required: {
                             value: true,

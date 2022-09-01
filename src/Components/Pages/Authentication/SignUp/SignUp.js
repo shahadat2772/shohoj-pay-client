@@ -157,14 +157,17 @@ const SignUp = () => {
   }
 
   return (
-    <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
-      <div className="card w-96 bg-base-100 shadow-xl">
+    <div className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center w-screen my-10 mt-24 lg:mt-32">
+      <div className=" bg-secondary w-full h-full ">
         <ul className="steps steps-horizontal">
           <li className={`step step-primary`}></li>
           <li className={`step ${progress > 1 && "step-primary"}`}></li>
           <li className={`step ${progress > 2 && "step-primary"}`}></li>
         </ul>
-        <div className="card-body">
+      </div>
+      <div className="w-full p-20">
+
+        <div className="">
           <h2
             data-testid="signUp-heading"
             className="text-center font-bold text-xl"
@@ -221,6 +224,7 @@ const SignUp = () => {
             </Link>
           </p>
         </div>
+
       </div>
     </div>
   );

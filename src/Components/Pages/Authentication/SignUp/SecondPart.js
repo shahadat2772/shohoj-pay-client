@@ -11,14 +11,14 @@ const SecondPart = ({
 }) => {
     return (
         <div className={`${showTypePart ? "block" : "hidden"}`}>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-name">Address</span>
                 </label>
                 <input
                     type="text"
                     placeholder="city, country"
-                    className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                    className="input input-bordered w-full   "
                     {...register("address", {
                         required: {
                             value: true,
@@ -34,14 +34,14 @@ const SecondPart = ({
                     )}
                 </label>
             </div>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-name">Zip Code</span>
                 </label>
                 <input
                     type="number"
                     placeholder="Zip or Area code"
-                    className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                    className="input input-bordered w-full   "
                     {...register("zip", {
                         required: {
                             value: true,
@@ -84,13 +84,13 @@ const SecondPart = ({
                     <label htmlFor="merchant">Merchant</label>
                 </div>
             </div>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-name">Avatar</span>
                 </label>
                 <input
                     type="file"
-                    className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                    className="input input-bordered w-full   "
                     {...register("avatar", {
                         required: {
                             value: true,

@@ -79,7 +79,7 @@ const Login = () => {
             Login
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
               <label htmlFor="inputEmail" className="label">
                 Email
               </label>
@@ -88,7 +88,7 @@ const Login = () => {
                 id="inputEmail"
                 type="email"
                 placeholder="Email"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full "
                 {...register("email", {
                   required: {
                     value: true,
@@ -113,7 +113,7 @@ const Login = () => {
                 )}
               </label>
             </div>
-            <div className="relative form-control w-full max-w-xs ">
+            <div className="relative form-control w-full  ">
               <label htmlFor="inputPass" className="label">
                 Password
               </label>
@@ -132,7 +132,7 @@ const Login = () => {
                 id="inputPass"
                 type={show ? "text" : "password"}
                 placeholder="Password"
-                className="input input-bordered w-full max-w-xs "
+                className="input input-bordered w-full  "
                 style={{ outline: "none" }}
                 {...register("password", {
                   required: {

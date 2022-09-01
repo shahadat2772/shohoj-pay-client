@@ -11,14 +11,14 @@ const FirstPart = ({
 
     return (
         <div className={`${showNamePart ? "block" : "hidden"}`}>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-name">Full Name</span>
                 </label>
                 <input
                     type="text"
                     placeholder="Full Name"
-                    className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                    className="input input-bordered w-full"
                     {...register("name", {
                         required: {
                             value: true,
@@ -35,14 +35,14 @@ const FirstPart = ({
                 </label>
             </div>
 
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-email">Email</span>
                 </label>
                 <input
                     type="email"
                     placeholder="Email"
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full "
                     {...register("email", {
                         required: {
                             value: true,
@@ -67,14 +67,14 @@ const FirstPart = ({
                     )}
                 </label>
             </div>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
                 <label className="label">
                     <span className="label-name">Phone</span>
                 </label>
                 <input
                     type="tel"
                     placeholder="Phone Number"
-                    className="input input-bordered w-full max-w-xs lg:max-w-sm"
+                    className="input input-bordered w-full"
                     {...register("phone", {
                         required: {
                             value: true,
@@ -92,7 +92,6 @@ const FirstPart = ({
             </div>
             <button
                 onClick={() => {
-                    console.log(errors)
                     if (Object.keys(errors).length !== 0) {
                         if (
                             !errors.firstName &&
@@ -106,7 +105,7 @@ const FirstPart = ({
                         }
                     }
                 }}
-                className="btn w-full"
+                className="btn w-full "
             >
                 Next
             </button>
