@@ -35,7 +35,7 @@ const ResetPassword = () => {
             Reset Password
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control w-full max-w-xs ">
+            <div className="form-control w-full  ">
               <label htmlFor="inputEmail" className="label">
                 Email
               </label>
@@ -43,7 +43,7 @@ const ResetPassword = () => {
                 id="inputEmail"
                 type="email"
                 placeholder="Email"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full "
                 {...register("email", {
                   required: {
                     value: true,

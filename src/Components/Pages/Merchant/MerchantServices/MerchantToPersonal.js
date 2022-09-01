@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import Spinner from "../../../Shared/Spinner/Spinner";
 import useUser from "../../Hooks/useUser";
 const MerchantToPersonal = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -65,6 +66,7 @@ const MerchantToPersonal = () => {
         }
       });
   };
+  if (!user || mongoUserLoading) return <Spinner />
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
