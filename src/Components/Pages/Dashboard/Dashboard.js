@@ -31,7 +31,7 @@ const someServices = [
     action: "/services/sendMoney",
   },
   {
-    type: "Request",
+    type: "Requests",
     icon: "fa-down-left-and-up-right-to-center",
     action: "/moneyRequests",
   },
