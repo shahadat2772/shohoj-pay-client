@@ -94,10 +94,9 @@ const FirstPart = ({
                 onClick={() => {
                     if (Object.keys(errors).length !== 0) {
                         if (
-                            !errors.firstName &&
-                            !errors.lastName &&
+                            !errors.name &&
                             !errors.email &&
-                            !errors.phone
+                            !errors.address
                         ) {
                             setProgress(2);
                             setShowTypePart(true);
