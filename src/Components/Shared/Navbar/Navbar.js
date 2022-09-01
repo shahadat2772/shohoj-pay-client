@@ -24,13 +24,11 @@ const Navbar = () => {
   const personalUserRoutes = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
-    { name: "Requests", link: "/moneyRequests" },
   ];
 
   const merchantUserRoutes = [
     { name: "Dashboard", link: "/merchant/dashboard" },
     { name: "Services", link: "/merchant/services" },
-    { name: "Requests", link: "/merchant/money-requests" },
   ];
 
   const commonRoutes = [

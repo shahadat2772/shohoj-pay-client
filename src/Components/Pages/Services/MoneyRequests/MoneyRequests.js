@@ -1,36 +1,56 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { fetchMoneyRequest } from "../../../../app/slices/moneyRequestSlice";
 import auth from "../../../../firebase.init";
+import Spinner from "../../../Shared/Spinner/Spinner";
 import RequestDetailsModal from "./RequestDetailsModal";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user] = useAuthState(auth);
   const email = user?.email;
 
-  const [requests, setRequests] = useState([]);
+  // const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState([]);
   const [type, setType] = useState("incoming");
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading, requests, error } = useSelector(
+    (state) => state.allRequest
+  );
   const fetchRequests = () => {
-    fetch("http://localhost:5000/getRequests", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        email: email,
-        type: type,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const mData = data?.reverse();
-        setRequests(mData);
-      });
+    dispatch(fetchMoneyRequest(email, type));
+    //   fetch("http://localhost:5000/getRequests", {
+    //     method: "GET",
+    //     headers: {
+    //       "content-type": "application/json",
+    //       email: email,
+    //       type: type,
+    //     },
+    //   })
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       const mData = data?.reverse();
+    //       setRequests(mData);
+    //     });
   };
 
   useEffect(() => {
+    dispatch(fetchMoneyRequest(email, type));
     fetchRequests();
   }, [user, type]);
-
+  if (isLoading) {
+    return <Spinner />;
+  }
+  if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
+    toast.error(error?.message);
+    navigate("/");
+  }
   return (
     <div className="min-h-screen">
       <h2 className="mt-24 text-[1.70rem] text-center textColor">
