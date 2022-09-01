@@ -16,3 +16,7 @@
 .navIcon {
   background-color: transparent;
 }
+
+.addressData {
+  word-wrap: break-word;
+}

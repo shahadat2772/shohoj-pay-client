@@ -79,7 +79,7 @@ const ManageAccounts = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-x-auto w-full md:mt-4 lg:mt-4 mt-2">
+      <div className="overflow-x-auto md:mt-4 lg:mt-4 mt-2">
         {isLoading && <Spinner />}
         {!isLoading && allUsers?.length !== 0 && (
           <table className="table w-[90%] mx-auto">
@@ -87,6 +87,7 @@ const ManageAccounts = () => {
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Type</th>
                 <th>Address</th>
                 <th>Number</th>
                 <th>Action</th>
@@ -95,7 +96,7 @@ const ManageAccounts = () => {
             <tbody>
               {allUsers &&
                 paginateUsers.map((user) => {
-                  const { name, email, avatar, address, phone } = user;
+                  const { name, email, avatar, address, phone, type } = user;
                   return (
                     <tr>
                       <td>
@@ -118,11 +119,8 @@ const ManageAccounts = () => {
                           </div>
                         </div>
                       </td>
-                      <td>
-                        {address && address}
-                        <br />
-                        {/* <span className="badge badge-ghost badge-sm">{number}</span> */}
-                      </td>
+                      <td>{type && type}</td>
+                      <td>{address && address}</td>
                       <td>{phone && phone}</td>
                       <th>
                         <button
