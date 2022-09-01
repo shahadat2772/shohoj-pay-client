@@ -94,8 +94,8 @@ const TransactionReport = () => {
     },
     {
       id: 10,
-      name: "Withdraw Savings",
-      icon: "fa-money-check-dollar",
+      name: "Transfer Savings",
+      icon: "fa-arrow-down",
       amount: transactionReports?.totalTransferSavings,
       transactionCount: transactionReports?.transferSavingsTransactionCount,
     },
@@ -123,7 +123,7 @@ const TransactionReport = () => {
             <div className="flex items-center">
               <div className="bg-blue-100 h-8 w-8 flex justify-center items-center rounded">
                 <i
-                  class={`fa-solid text-secondary  text-xl ${service?.icon}`}
+                  class={`fa-solid text-secondary text-xl ${service?.icon}`}
                 ></i>
               </div>
               <div>
