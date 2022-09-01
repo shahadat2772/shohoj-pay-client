@@ -123,24 +123,17 @@ const ManageAccounts = () => {
                       <td>{address && address}</td>
                       <td>{phone && phone}</td>
                       <th>
-                        <button
-                          // onClick={() => handleRemove(email)}
-                          className="btn btn-ghost btn-xs"
-                        >
-                          Details
-                        </button>
-                        <br />
                         {user.status === "active" ? (
                           <button
                             onClick={() => updateUserStatus(email, "deactive")}
-                            className="btn btn-ghost btn-xs"
+                            className="btn btn-primary btn-xs"
                           >
                             Deactivate
                           </button>
                         ) : (
                           <button
                             onClick={() => updateUserStatus(email, "active")}
-                            className="btn btn-ghost btn-xs"
+                            className="btn btn-primary btn-xs"
                           >
                             Activate
                           </button>

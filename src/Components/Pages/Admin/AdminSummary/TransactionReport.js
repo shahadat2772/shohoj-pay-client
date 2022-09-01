@@ -112,7 +112,7 @@ const TransactionReport = () => {
           <option selected value={"all"}>
             Select Month
           </option>
-          {availableMonths.map((month) => (
+          {availableMonths?.map((month) => (
             <option value={month}>{month}</option>
           ))}
         </select>
