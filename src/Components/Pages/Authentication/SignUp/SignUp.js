@@ -37,6 +37,7 @@ const SignUp = () => {
 
   const [token, tokenLoading] = useToken(user);
   const [mongoUser, mongoUserLoading] = useUser(user);
+  const { signUpLoading } = useSelector((state) => state.signUpLoading);
 
   const {
     register,

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useUser from "../../Hooks/useUser";
 import Spinner from "../../../Shared/Spinner/Spinner";
+import { sendNotification } from "../../../../App";
 
 const RequestMoney = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -26,7 +27,7 @@ const RequestMoney = () => {
     return <Spinner />;
   }
   const onSubmit = (data) => {
-    const { email, amount, note } = data;
+    const { email, amount, reference } = data;
 
     if (amount.slice(0, 1) === "0") {
       toast.error("Invalid amount");
@@ -38,11 +39,11 @@ const RequestMoney = () => {
     const requestMoneyInfo = {
       type: "Request Money",
       status: "Pending",
-      requesterName: user?.displayName,
+      requesterName: mongoUser?.name,
       amount: amount,
       from: user?.email,
       to: email,
-      note,
+      reference: reference,
       fullDate,
       date,
       time,
@@ -64,6 +65,7 @@ const RequestMoney = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "requestMoney");
           toast.success(result.success);
         }
       });
@@ -72,7 +74,7 @@ const RequestMoney = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-11 pl-1">Request Money</h2>
+        <h2 className="textColor text-[1.70rem] mb-9 pl-1">Request Money</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
@@ -99,21 +101,19 @@ const RequestMoney = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Senders email"
+            placeholder="Who to request"
             required
           />
           <input
-            {...register("note")}
+            {...register("reference")}
             type="text"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Write a note"
+            placeholder="Reference"
           />
-          <p className="my-3">
-            If you add money through request money, 1% fee will be deducted.
-          </p>
+          <p className="ml-1 gray text-sm mt-4">No fee while requesting.</p>
           <input
             type="submit"
-            className="actionButton mt-10 border-0"
+            className="actionButton mt-9 border-0"
             value="Request"
           />
         </form>

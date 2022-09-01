@@ -14,7 +14,6 @@ const Modal = ({ modalData }) => {
           >
             ✕
           </label>
-
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold">{modalData?.type}</h3>
             <div className="mr-8">
@@ -29,9 +28,10 @@ const Modal = ({ modalData }) => {
           <div className="mt-6">
             <div className="flex items-center justify-between">
               <div className="flex ">
-                <div className="w-16 rounded-full mr-4">
+                <div className=" mr-4">
                   <img
-                    src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png"
+                    className="w-16 h-16 rounded-full"
+                    src={modalData?.image}
                     alt="User Image"
                   />
                 </div>
@@ -58,20 +58,27 @@ const Modal = ({ modalData }) => {
                   )}
                 </div>
               </div>
-              <h3
-                className={`text-2xl  font-medium  text-right ${
-                  modalData?.type === "Add Money" ||
-                  modalData?.type === "Receive Money"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                {modalData?.type === "Add Money" ||
-                modalData?.type === "Receive Money"
-                  ? "+" + modalData?.amount
-                  : "-" + modalData?.amount}
-                $
-              </h3>
+              <div>
+                <h3
+                  className={`text-2xl  font-medium  text-right ${
+                    modalData?.type === "Add Money" ||
+                    modalData?.type === "Receive Money" ||
+                    modalData?.type === "Transfer Savings"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {modalData?.type === "Add Money" ||
+                  modalData?.type === "Receive Money" ||
+                  modalData?.type === "Transfer Savings"
+                    ? "+" + modalData?.amount
+                    : "-" + modalData?.amount}
+                  $
+                </h3>
+                <h6 className="text-right">
+                  <small>Fee: {modalData?.fee}</small>
+                </h6>
+              </div>
             </div>
             <div></div>
           </div>

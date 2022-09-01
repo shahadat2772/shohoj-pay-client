@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 
 const MerchantToMerchant = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -13,6 +14,7 @@ const MerchantToMerchant = () => {
   });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser] = useUser(user);
 
   const {
     register,
@@ -41,6 +43,7 @@ const MerchantToMerchant = () => {
       fullDate,
       date,
       time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/merchant-to-merchant", {
