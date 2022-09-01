@@ -29,6 +29,7 @@ const Settings = () => {
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, []);
+
   const updateUser = (updatedUser) => {
     fetch("http://localhost:5000/updateUserInfo", {
       method: "PUT",
@@ -75,17 +76,15 @@ const Settings = () => {
           <div className="absolute top-3 right-3">
             <div
               onClick={() => setEditName(true)}
-              className={`${
-                editName && "hidden"
-              } cursor-pointer col-span-3 place-self-center`}
+              className={`${editName && "hidden"
+                } cursor-pointer col-span-3 place-self-center`}
             >
               <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
             </div>
             <div
               onClick={() => updateUser({ name: userName })}
-              className={`${
-                !editName && "hidden"
-              } cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}
+              className={`${!editName && "hidden"
+                } cursor-pointer col-span-3 bg-primary px-4 py-2 text-white rounded place-self-center`}
             >
               save
             </div>
@@ -122,9 +121,8 @@ const Settings = () => {
             </div>
             <div
               onClick={() => updateUser({ address: userAddress, zip: userZip })}
-              className={`${
-                !editAddress && "hidden"
-              } cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}
+              className={`${!editAddress && "hidden"
+                } cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}
             >
               save
             </div>
@@ -146,18 +144,6 @@ const Settings = () => {
                 value={userAddress || user?.address}
               />
             </form>
-            <hr />
-            {/* zip code */}
-            <form className="grid grid-cols-1 lg:grid-cols-6 gap-3">
-              <label className="flex items-center font-semibold ">Zip:</label>
-              <input
-                onChange={(e) => setUserZip(e.target.value)}
-                disabled={!editAddress}
-                className="input bg-white col-span-5"
-                type="number"
-                value={userZip || user?.zip}
-              />
-            </form>
           </div>
         </div>
 
@@ -174,9 +160,8 @@ const Settings = () => {
             </div>
             <div
               onClick={() => updateUser({ email: userEmail, phone: userPhone })}
-              className={`${
-                !editContact && "hidden"
-              } cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}
+              className={`${!editContact && "hidden"
+                } cursor-pointer col-span-2 bg-primary px-4 py-2 text-white rounded`}
             >
               save
             </div>
