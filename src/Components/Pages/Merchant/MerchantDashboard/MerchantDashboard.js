@@ -20,9 +20,7 @@ const MerchantDashboard = () => {
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
-
   const { unseenNotifications } = useSelector((state) => state.allNotification);
-
   const { userBalance, userTransactionInfo } = allInfo;
   const transactionData = userTransactionInfo;
   useEffect(() => {
