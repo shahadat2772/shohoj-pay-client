@@ -68,7 +68,7 @@ const SignUp = () => {
     }
 
     setDbUserCreationLoading(true);
-    const defautlAvatar = "https://i.ibb.co/W3KKWsd/default-avatar.png"
+    const defautlAvatar = "https://i.ibb.co/W3KKWsd/default-avatar.png";
     const file = data.avatar[0];
     let avatarImg = "";
     if (file) {
@@ -89,7 +89,7 @@ const SignUp = () => {
         });
       }
       if (imgUploadRes) {
-        avatarImg = imgUploadResult.data.url
+        avatarImg = imgUploadResult.data.url;
       }
     }
     const userInfo = {
@@ -98,7 +98,7 @@ const SignUp = () => {
       date,
       status: "active",
     };
-    console.log(userInfo)
+    console.log(userInfo);
     delete userInfo.password;
     delete userInfo.ConfirmPassword;
 
@@ -135,9 +135,6 @@ const SignUp = () => {
   }
 
   if (user && token && mongoUser) {
-    toast.success("Signed up successfully.", {
-      id: "successfulSignUp",
-    });
     dispatch(updateSignUpLoading(false));
     if (mongoUser.type === "admin") {
       navigate("/adminpanel/summary");
@@ -167,12 +164,19 @@ const SignUp = () => {
       <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
         <ul className="steps steps-vertical h-full text-white">
           <li className={`step step-primary`}>Name and Address</li>
-          <li className={`step ${progress > 1 ? "step-primary" : "step-white"}`}>Contact, Type, Image</li>
-          <li className={`step ${progress > 2 ? "step-primary" : "step-white"}`}>Password</li>
+          <li
+            className={`step ${progress > 1 ? "step-primary" : "step-white"}`}
+          >
+            Contact, Type, Image
+          </li>
+          <li
+            className={`step ${progress > 2 ? "step-primary" : "step-white"}`}
+          >
+            Password
+          </li>
         </ul>
       </div>
       <div className="  lg:p-20 col-span-2 place-self-center">
-
         <div className="lg:w-96 w-full">
           <h2
             data-testid="signUp-heading"
@@ -181,7 +185,6 @@ const SignUp = () => {
             Sign Up
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-
             {/* Name and Email part  */}
 
             <FirstPart
@@ -230,7 +233,6 @@ const SignUp = () => {
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );
