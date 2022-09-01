@@ -214,7 +214,9 @@ const AllTransaction = () => {
                           $
                         </h3>
                         <h6 className="text-right">
-                          <small>Fee: {transAction.fee}</small>
+                          <small className="gray text-sm">
+                            fee: ${transAction.fee}
+                          </small>
                         </h6>
                       </div>
                     </div>
