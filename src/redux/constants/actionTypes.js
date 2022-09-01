@@ -1,7 +1,0 @@
-export const ActionTypes = {
-    REGISTER_USER: "REGISTER_USER",
-    SET_USER: "SET_USER",
-    DELETE_USER: "DELETE_USER",
-    SEND_MONEY: "SEND_MONEY",
-    ADD_MONEY: "ADD_MONEY"
-}

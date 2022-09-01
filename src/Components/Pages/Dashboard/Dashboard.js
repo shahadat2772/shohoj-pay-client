@@ -31,9 +31,9 @@ const someServices = [
     action: "/services/sendMoney",
   },
   {
-    type: "Transfer",
-    icon: "fa-money-bill-transfer",
-    action: "/services/withdraw-savings",
+    type: "Request",
+    icon: "fa-down-left-and-up-right-to-center",
+    action: "/moneyRequests",
   },
   {
     type: "More",
