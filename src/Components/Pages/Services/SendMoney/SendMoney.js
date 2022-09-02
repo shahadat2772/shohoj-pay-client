@@ -40,7 +40,7 @@ const SendMoney = () => {
     toast.loading("Money is being sended.", { id: "sendingMoney" });
     const sendMoneyInfo = {
       type: "Send Money",
-      name: user?.displayName,
+      name: mongoUser?.name,
       email: user?.email,
       amount: amount,
       from: user?.email,
