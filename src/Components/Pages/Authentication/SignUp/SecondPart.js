@@ -39,22 +39,32 @@ const SecondPart = ({
             </div>
 
             <label className="label ">Account Type</label>
-            <div className="flex justify-between items-center mt-2 mb-7 px-1">
+            <div className="flex justify-between items-center mt-2 px-1">
                 <div className="flex space-x-2 items-center">
                     <input
-                        {...register("type", { required: true })}
+                        {...register("type", {
+                            required: {
+                                value: true,
+                                message: "Type Number is Required",
+                            }
+                        })}
                         type="radio"
                         name="type"
                         value="personal"
                         className="radio radio-primary"
                         id="personal"
-                        checked
+
                     />
                     <label htmlFor="personal">Personal</label>
                 </div>
                 <div className="flex space-x-2 items-center">
                     <input
-                        {...register("type", { required: true })}
+                        {...register("type", {
+                            required: {
+                                value: true,
+                                message: "Type Number is Required",
+                            }
+                        })}
                         type="radio"
                         name="type"
                         value="merchant"
@@ -64,27 +74,25 @@ const SecondPart = ({
                     <label htmlFor="merchant">Merchant</label>
                 </div>
             </div>
-            <div className="form-control w-full  ">
+            <label className="label">
+                {errors.type?.type === "required" && (
+                    <span className="label-text-alt text-red-500">
+                        {errors.type.message}
+                    </span>
+                )}
+            </label>
+            <div className="form-control w-full mt-2 mb-5">
                 <label className="label">
                     <span className="label-name">Profile Picture</span>
                 </label>
                 <input
                     type="file"
-                    className=" file-input block
-    w-full
-    text-base
-    font-normal
-    text-gray-700
-    bg-white bg-clip-padding
-    rounded-lg
-    " aria-describedby="file_input_help  "
-                    {...register("avatar", {
-
-                    })}
+                    className=" file-input block w-full text-basefont-normaltext-gray-700bg-white bg-clip-padding rounded-lg" aria-describedby="file_input_help"
+                    {...register("avatar")}
                 />
 
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center ">
                 <button
                     onClick={() => {
                         setProgress(1)
@@ -97,7 +105,7 @@ const SecondPart = ({
                 </button>
                 <button
                     onClick={() => {
-                        if (!errors?.phone) {
+                        if (!errors?.phone && !errors.type) {
                             setProgress(3);
                             setShowPasswordPart(true);
                             setShowTypePart(false);
