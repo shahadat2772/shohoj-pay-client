@@ -3,7 +3,8 @@ import axios from "axios";
 
 export const fetchMoneyRequest = createAsyncThunk(
   "allMoneyRequest/getMoneyRequest",
-  async (email, type) => {
+  async ({ email, type }) => {
+    console.log(email, type);
     const res = await axios.get("http://localhost:5000/getRequests", {
       headers: {
         "content-type": "application/json",
