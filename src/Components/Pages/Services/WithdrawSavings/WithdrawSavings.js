@@ -7,7 +7,7 @@ import useUser from "../../Hooks/useUser";
 
 const WithdrawSavings = () => {
   const [user] = useAuthState(auth);
-  const [mongoUser, mongoUserLoading] = useUser(user);
+  const [mongoUser] = useUser(user);
   const fullDate = new Date().toLocaleDateString();
   const date = new Date().toLocaleDateString("en-us", {
     year: "numeric",

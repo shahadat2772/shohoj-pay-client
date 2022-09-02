@@ -13,7 +13,6 @@ const AllAdmin = () => {
   }, []);
 
   const handleRemove = (email) => {
-    console.log(email);
     fetch("http://localhost:5000/manageAdmin", {
       method: "PUT",
       headers: {

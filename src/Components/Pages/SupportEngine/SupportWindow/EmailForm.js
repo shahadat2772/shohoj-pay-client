@@ -46,15 +46,6 @@ const EmailForm = (props) => {
     getOrCreateUser((user) => {
       getOrCreateChat((chat) => console.log("success", chat));
     });
-    // getOrCreateUser(
-    //     user => {
-    //         props.setUser && props.setUser(user)
-    //         getOrCreateChat(chat => {
-    //             setLoading(false)
-    //             props.setChat && props.setChat(chat)
-    //         })
-    //     }
-    // )
   }
 
   return (

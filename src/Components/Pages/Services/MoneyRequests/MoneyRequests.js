@@ -1,13 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { fetchMoneyRequest } from "../../../../app/slices/moneyRequestSlice";
 import auth from "../../../../firebase.init";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import RequestDetailsModal from "./RequestDetailsModal";
-import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Pagination from "../../../Shared/Pagination/Pagination";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
@@ -53,8 +49,6 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
     const lastPageIndex = firstPageIndex + PageSize;
     return requests.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, requests, PageSize]);
-
-  console.log(requestData);
 
   return (
     <div className="min-h-screen">

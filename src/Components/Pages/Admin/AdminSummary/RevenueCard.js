@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
 
 const RevenueCard = () => {
   const date = new Date().toLocaleDateString("en-us", {
@@ -8,10 +7,6 @@ const RevenueCard = () => {
     month: "long",
     year: "numeric",
   });
-
-  const { isLoading, transactionReports, error } = useSelector(
-    (state) => state.transactionReport
-  );
 
   const [shohojPayInfo, setShohojPayInfo] = useState(null);
   const [infoLoading, setInfoLoading] = useState(false);
