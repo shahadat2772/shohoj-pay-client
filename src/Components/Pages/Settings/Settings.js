@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./settings.css";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -7,33 +7,45 @@ import auth from "../../../firebase.init";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 const Settings = () => {
   const [editAddress, setEditAddress] = useState(false);
   const [editContact, setEditContact] = useState(false);
   const [editName, setEditName] = useState(false);
-  const [user, setUser] = useState({});
+  const { isLoading, allInfo, error } = useSelector(
+    (state) => state.userAllEmailData
+  );
+  const { generalInfo } = allInfo;
   const [firebaseUser, loading] = useAuthState(auth);
-  const [userName, setUserName] = useState(user?.name);
-  const [userAddress, setUserAddress] = useState(user?.address);
-  const [userEmail,] = useState(user?.email);
-  const [userPhone, setUserPhone] = useState(user?.phone);
+  const [userName, setUserName] = useState(generalInfo?.name);
+  const [userAddress, setUserAddress] = useState(generalInfo?.address);
+  const [userEmail,] = useState(generalInfo?.email);
+  const [userPhone, setUserPhone] = useState(generalInfo?.phone);
   const [nameCanSave, setNameCanSave] = useState(false);
   const [AddressCanSave, setAddressCanSave] = useState(false);
   const [PhoneCanSave, setPhoneCanSave] = useState(false);
-  const [updatedImg, setUpdatedImg] = useState(user?.avatar);
+  const [updatedImg, setUpdatedImg] = useState(generalInfo?.avatar);
   const navigate = useNavigate();
   const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
+  const dispatch = useDispatch();
 
-  useState(() => {
-    fetch("http://localhost:5000/getUserInfo", {
-      method: "GET",
-      headers: {
-        email: firebaseUser.email,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setUser(data));
+
+  useEffect(() => {
+    // fetch("http://localhost:5000/getUserInfo", {
+    //   method: "GET",
+    //   headers: {
+    //     email: firebaseUser.email,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => setUser(data));
+    dispatch(fetchUserEmailInfo(firebaseUser));
+    console.log(generalInfo);
+
   }, []);
+
+
   const uploadImg = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -64,7 +76,7 @@ const Settings = () => {
       method: "PUT",
       headers: {
         "content-type": "application/json",
-        email: user.email,
+        email: generalInfo.email,
       },
       body: JSON.stringify(updatedUser),
     })
@@ -87,7 +99,7 @@ const Settings = () => {
       });
   };
 
-  if (loading || !user) return <Spinner />
+  if (loading || isLoading) return <Spinner />
   return (
     <section className="px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full">
       {/* right part */}
@@ -97,7 +109,7 @@ const Settings = () => {
           <div className="w-full flex-col items-center ">
             <div>
               <figure className="flex justify-start items-end  relative ">
-                <img src={updatedImg || user?.avatar} alt="profile " className="h-44 w-44 mask mask-circle" />
+                <img src={updatedImg || generalInfo?.avatar} alt="profile " className="h-44 w-44 mask mask-circle" />
                 <label htmlFor="imgInput" title="upload new picture" className={`${editName ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full" : "hidden"}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
                     <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
@@ -113,7 +125,7 @@ const Settings = () => {
                 disabled={!editName}
                 className="input input-text text-2xl lg:text-3xl lg:text-left text-center bg-white w-full"
                 type="text"
-                value={userName || user?.name}
+                value={userName || generalInfo?.name}
                 onChange={(e) => {
                   setNameCanSave(true);
                   setUserName(e.target.value)
@@ -134,7 +146,7 @@ const Settings = () => {
             <div
               onClick={() => {
                 setEditName(false)
-                setUpdatedImg(user?.avatar)
+                setUpdatedImg(generalInfo?.avatar)
               }}
               className={`${!editName && "hidden"
                 } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
@@ -147,10 +159,10 @@ const Settings = () => {
             <button
               disabled={!nameCanSave}
               onClick={() => {
-                if (user.avatar !== updatedImg && userName) {
+                if (generalInfo.avatar !== updatedImg && userName) {
                   updateUser({ name: userName, avatar: updatedImg })
                 }
-                else if (user.avatar !== updatedImg) {
+                else if (generalInfo.avatar !== updatedImg) {
                   updateUser({ avatar: updatedImg })
                 }
                 else {
@@ -244,7 +256,7 @@ const Settings = () => {
                 disabled={!editAddress}
                 className="input input-text  bg-white col-span-5"
                 type="text"
-                value={userAddress || user?.address}
+                value={userAddress || generalInfo?.address}
               />
             </form>
           </div>
@@ -302,7 +314,7 @@ const Settings = () => {
                 disabled={true}
                 className="input input-text  bg-white col-span-5"
                 type="email"
-                value={userEmail || user?.email}
+                value={userEmail || generalInfo?.email}
               />
             </form>
             <hr />
@@ -320,7 +332,7 @@ const Settings = () => {
                 disabled={!editContact}
                 className="input input-text  bg-white col-span-5"
                 type={"tel"}
-                value={userPhone || user?.phone}
+                value={userPhone || generalInfo?.phone}
               />
             </form>
           </div>
