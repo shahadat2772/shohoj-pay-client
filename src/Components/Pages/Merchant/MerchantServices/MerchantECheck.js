@@ -6,6 +6,8 @@ import ReactSignatureCanvas from "react-signature-canvas";
 import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
 import useUser from "../../Hooks/useUser";
+import emailjs from "@emailjs/browser";
+import { v4 as uuidv4 } from "uuid";
 
 const MerchantECheck = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -17,12 +19,14 @@ const MerchantECheck = () => {
   const [user] = useAuthState(auth);
   const [mongoUser] = useUser(user);
   const [signature, setSignature] = useState("");
+  const seriulNumber = uuidv4();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+  const form = useRef();
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -31,7 +35,7 @@ const MerchantECheck = () => {
       type: "E-Check",
       email: user?.email,
       amount: amount,
-      name: user?.displayName,
+      name: mongoUser?.name,
       from: user?.email,
       to: email,
       reference: reference,
@@ -39,6 +43,8 @@ const MerchantECheck = () => {
       fullDate,
       date,
       time,
+      serialNumber: seriulNumber,
+      image: mongoUser?.avatar,
     };
     if (!signature) return toast.error("please signature first");
 
@@ -60,6 +66,24 @@ const MerchantECheck = () => {
           clear();
           setSignature("");
           sendNotification(email, "merchantECheck");
+          emailjs
+            .sendForm(
+              // "YOUR_SERVICE_ID",
+              "service_q11i3to",
+              // "YOUR_TEMPLATE_ID",
+              "template_60e7bmp",
+              form.current,
+              // "YOUR_PUBLIC_KEY"
+              "_BZVGBP7_QzIIrIGO"
+            )
+            .then(
+              (result) => {
+                console.log(result.text);
+              },
+              (error) => {
+                console.log(error.text);
+              }
+            );
           toast.success(result.success);
         }
       });
@@ -97,6 +121,7 @@ const MerchantECheck = () => {
             className="h-12 p-2 w-full rounded"
             placeholder="How much to be paid?"
             required
+            name="user_amount"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
@@ -109,6 +134,7 @@ const MerchantECheck = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Who to issue"
             required
+            name="user_email"
           />
           <input
             {...register("reference")}
@@ -116,7 +142,23 @@ const MerchantECheck = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Write reference"
             required
+            name="user_reference"
           />
+          <div className="hidden">
+            <input
+              name="sender_name"
+              type="text"
+              defaultValue={mongoUser?.name}
+            />
+            <input name="sender_email" type="text" defaultValue={user?.email} />
+
+            <input
+              name="user_serialNumber"
+              type="text"
+              defaultValue={seriulNumber}
+            />
+            <input name="user_date" type="text" defaultValue={fullDate} />
+          </div>
           <label className="mt-4 inline-block ">E-Signature</label>
           <ReactSignatureCanvas
             ref={signatureRef}

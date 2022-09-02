@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { fetchMoneyRequest } from "../../../../app/slices/moneyRequestSlice";
 import auth from "../../../../firebase.init";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../../Shared/Pagination/Pagination";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user] = useAuthState(auth);
@@ -15,6 +16,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
 
   // const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [type, setType] = useState("incoming");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,25 +25,20 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
   );
   const fetchRequests = () => {
     dispatch(fetchMoneyRequest(email, type));
-    //   fetch("http://localhost:5000/getRequests", {
-    //     method: "GET",
-    //     headers: {
-    //       "content-type": "application/json",
-    //       email: email,
-    //       type: type,
-    //     },
-    //   })
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       const mData = data?.reverse();
-    //       setRequests(mData);
-    //     });
   };
 
   useEffect(() => {
     dispatch(fetchMoneyRequest(email, type));
     fetchRequests();
-  }, [user, type]);
+  }, [type, email, dispatch]);
+  // START PAGINATION
+  let PageSize = 10;
+  const requestData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return requests.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, requests, PageSize]);
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -51,6 +48,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
     toast.error(error?.message);
     navigate("/");
   }
+
   return (
     <div className="min-h-screen">
       <h2 className="mt-24 text-[1.70rem] text-center textColor">
@@ -100,7 +98,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
               </thead>
               <tbody>
                 {/* Each request */}
-                {requests?.map((request, index) => (
+                {requestData?.map((request, index) => (
                   <tr key={index}>
                     <td>
                       {type === "incoming"
@@ -212,6 +210,16 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
             </table>
           )}
         </div>
+      </div>
+      <div className={`mt-12 ${requests.length < 10 && "hidden"}`}>
+        {/* START PAGINATION */}
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={requests.length}
+          pageSize={PageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
       <RequestDetailsModal request={request} />
     </div>

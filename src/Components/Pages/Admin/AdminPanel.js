@@ -2,7 +2,6 @@ import { faBars, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "firebase/auth";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { Link, Outlet } from "react-router-dom";
 import auth from "../../../firebase.init";
 import "./AdminPanel.css";
@@ -37,7 +36,7 @@ const AdminPanel = () => {
     <div className="">
       <div className="absolute top-3 left-3 md:left-7 bg-base-100 z-20 navIcon lg:hidden">
         {/* NavButton Icon */}
-        <label htmlFor="my-drawer-2" className="navBtn">
+        <label htmlFor="my-drawer-2" className="">
           {checked ? (
             <FontAwesomeIcon
               style={{ width: "23px", height: "23px", color: "#909096" }}
