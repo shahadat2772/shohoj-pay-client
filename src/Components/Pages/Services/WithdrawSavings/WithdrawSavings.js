@@ -3,9 +3,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 
 const WithdrawSavings = () => {
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
   const fullDate = new Date().toLocaleDateString();
   const date = new Date().toLocaleDateString("en-us", {
     year: "numeric",
@@ -22,14 +24,11 @@ const WithdrawSavings = () => {
 
   const onSubmit = (data) => {
     const amount = data?.amount;
-    console.log(amount);
-
     toast.loading("Money is being Withdraw.", { id: "withdraw-savings" });
-
     const withdrawInfo = {
       type: "Transfer Savings",
       email: user?.email,
-      name: user?.displayName,
+      name: mongoUser?.name,
       amount: amount,
       fullDate,
       date,
@@ -40,6 +39,7 @@ const WithdrawSavings = () => {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify({ withdrawInfo }),
     })
