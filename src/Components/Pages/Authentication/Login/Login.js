@@ -93,7 +93,7 @@ const Login = () => {
                   },
                   pattern: {
                     value: /[a-z0-9]+@.[a-z]{3}/,
-                    message: "Your Email Have Must Be A Special characters",
+                    message: "Invalid email",
                   },
                 })}
               />
