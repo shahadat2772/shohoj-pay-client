@@ -25,6 +25,7 @@ const MerchantDashboard = () => {
   const transactionData = userTransactionInfo;
   useEffect(() => {
     dispatch(fetchUserEmailInfo(user));
+
   }, [navigate, dispatch, user, unseenNotifications]);
   useEffect(() => {
     if (shareLinkCopied) {
@@ -50,9 +51,8 @@ const MerchantDashboard = () => {
     Amount: ${data.amount}$
     Email: ${data.email}
     Name: ${data.userName ? data.userName : data.name}
-    TRX ID: ${
-      data.transactionId ? data.transactionId : "Transaction Id Not Available"
-    }
+    TRX ID: ${data.transactionId ? data.transactionId : "Transaction Id Not Available"
+      }
     Date: ${data.fullDate}
     Time: ${data.time}
     Type: ${data.type}
@@ -130,15 +130,14 @@ const MerchantDashboard = () => {
                         </div>
                         <div>
                           <h3
-                            className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${
-                              transAction.type === "Add Money" ||
+                            className={`text-2xl amount-style font-medium  text-right md-amount-responsive ${transAction.type === "Add Money" ||
                               transAction.type === "Receive Money"
-                                ? "text-green-600"
-                                : "text-red-600"
-                            }`}
+                              ? "text-green-600"
+                              : "text-red-600"
+                              }`}
                           >
                             {transAction.type === "Add Money" ||
-                            transAction.type === "Receive Money"
+                              transAction.type === "Receive Money"
                               ? "+" + transAction.amount
                               : "-" + transAction.amount}
                             $
@@ -174,7 +173,7 @@ const MerchantDashboard = () => {
 
       {/* right part  */}
       <div className="grid lg:col-span-5 gap-5">
-        <Statistic />
+        <Statistic user={user} />
       </div>
     </div>
   );
