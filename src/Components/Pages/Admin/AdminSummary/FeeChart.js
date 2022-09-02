@@ -18,35 +18,34 @@ const FeeChart = () => {
   const data = [
     {
       name: "Send Money",
-      Fees: transactionReports.totalSendMoneyFees,
+      Fees: Number(transactionReports?.totalSendMoneyFees),
     },
     {
       name: "Request Money",
-      Fees: transactionReports.totalRequestMoneyFees,
+      Fees: Number(transactionReports?.totalRequestMoneyFees),
     },
     {
       name: "E-Check",
-      Fees: transactionReports.totalECheckFees,
+      Fees: Number(transactionReports?.totalECheckFees),
     },
     {
       name: "Merchant Pay",
-      Fees: transactionReports.totalMerchantPayFees,
+      Fees: Number(transactionReports?.totalMerchantPayFees),
     },
     {
       name: "M to M",
-      Fees: transactionReports.totalMtoMFees,
+      Fees: Number(transactionReports?.totalMtoMFees),
     },
     {
       name: "M to P",
-      Fees: transactionReports.totalMtoPFees,
+      Fees: Number(transactionReports?.totalMtoPFees),
     },
   ];
+
   return (
     <div className="lg:h-[300px] md:h-[300px] h-[200px] w-full feeChartContainer lg:mb-0 lg:mt-4 mt-10 mb-12 md:mb-12">
       <ResponsiveContainer>
         <AreaChart
-          width={500}
-          height={400}
           data={data}
           margin={{
             top: 10,

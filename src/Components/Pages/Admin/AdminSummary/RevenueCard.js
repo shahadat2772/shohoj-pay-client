@@ -48,7 +48,9 @@ const RevenueCard = () => {
             ${shohojPayInfo?.revenue}
           </h1>
         ) : (
-          <h1 className="text-6xl font-medium">Loading...</h1>
+          <h1 className="lg:text-6xl md:text-6xl text-5xl font-medium">
+            Loading...
+          </h1>
         )}
         <div className="mt-6 ml-2 flex justify-between">
           <p className="">{date}</p>
