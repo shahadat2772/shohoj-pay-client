@@ -11,46 +11,51 @@ import { useNavigate } from "react-router-dom";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user] = useAuthState(auth);
-  const email = user?.email;
+  const email = user?.user?.email || user?.email;
 
   // const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState([]);
   const [type, setType] = useState("incoming");
+  console.log(type);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { isLoading, requests, error } = useSelector(
     (state) => state.allRequest
   );
+
   const fetchRequests = () => {
     dispatch(fetchMoneyRequest(email, type));
-    //   fetch("http://localhost:5000/getRequests", {
-    //     method: "GET",
-    //     headers: {
-    //       "content-type": "application/json",
-    //       email: email,
-    //       type: type,
-    //     },
-    //   })
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       const mData = data?.reverse();
-    //       setRequests(mData);
-    //     });
+    // fetch("http://localhost:5000/getRequests", {
+    //   method: "GET",
+    //   headers: {
+    //     "content-type": "application/json",
+    //     email: email,
+    //     type: type,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     const mData = data?.reverse();
+    //     setRequests(mData);
+    //   });
   };
 
   useEffect(() => {
+    console.log(email, type);
     dispatch(fetchMoneyRequest(email, type));
-    fetchRequests();
+    // fetchRequests();
   }, [user, type]);
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (error) {
-    localStorage.removeItem("accessToken");
-    signOut(auth);
-    toast.error(error?.message);
-    navigate("/");
-  }
+  // if (isLoading) {
+  //   return <Spinner />;
+  // }
+  // if (error) {
+  //   localStorage.removeItem("accessToken");
+  //   signOut(auth);
+  //   toast.error(error?.message);
+  //   navigate("/");
+  // }
+
   return (
     <div className="min-h-screen">
       <h2 className="mt-24 text-[1.70rem] text-center textColor">
