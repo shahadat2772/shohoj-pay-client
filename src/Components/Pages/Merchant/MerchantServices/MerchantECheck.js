@@ -20,6 +20,9 @@ const MerchantECheck = () => {
   const [mongoUser] = useUser(user);
   const [signature, setSignature] = useState("");
   const seriulNumber = uuidv4();
+  const [receiverEmail, setReceiverEmail] = useState("");
+  const [receiverAmount, setReceiverAmount] = useState("");
+  const [receiverReference, setReceiverReference] = useState("");
   const {
     register,
     handleSubmit,
@@ -29,8 +32,11 @@ const MerchantECheck = () => {
   const form = useRef();
   const onSubmit = (data) => {
     const amount = data?.amount;
+    setReceiverAmount(amount);
     const email = data?.email;
+    setReceiverEmail(email);
     const reference = data?.reference;
+    setReceiverReference(reference);
     const eCheckInfo = {
       type: "E-Check",
       email: user?.email,
@@ -105,7 +111,7 @@ const MerchantECheck = () => {
     <div className="min-h-screen flex justify-center items-center mt-20">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem] relative">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">E-Check</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form ref={form} onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
               min: {
@@ -121,7 +127,6 @@ const MerchantECheck = () => {
             className="h-12 p-2 w-full rounded"
             placeholder="How much to be paid?"
             required
-            name="user_amount"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
@@ -134,7 +139,6 @@ const MerchantECheck = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Who to issue"
             required
-            name="user_email"
           />
           <input
             {...register("reference")}
@@ -142,9 +146,19 @@ const MerchantECheck = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Write reference"
             required
-            name="user_reference"
           />
           <div className="hidden">
+            <input
+              name="user_amount"
+              type="text"
+              defaultValue={receiverAmount}
+            />
+            <input name="user_email" type="text" defaultValue={receiverEmail} />
+            <input
+              name="user_reference"
+              type="text"
+              defaultValue={receiverReference}
+            />
             <input
               name="sender_name"
               type="text"
@@ -166,7 +180,6 @@ const MerchantECheck = () => {
             canvasProps={{ className: "sigCanvas border mt-3 h-24 w-full" }}
             required
           />
-
           <input
             type="submit"
             className="actionButton mt-12 border-0"
