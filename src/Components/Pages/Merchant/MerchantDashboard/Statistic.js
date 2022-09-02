@@ -1,22 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-const data = [
-  { name: "From Card", value: 400, color: "#0088FE" },
-  { name: "Got Paid", value: 300, color: "#00C49F" },
-  { name: "Loan", value: 300, color: "#FFBB28" },
-];
+import Spinner from "../../../Shared/Spinner/Spinner";
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-const Statistic = () => {
+const Statistic = (user) => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch(`http://localhost:5000/get-transaction-amount-by-type/${user?.email}`,
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    ).then(res => res.json()).then(data => setData(data));
+  }, [])
+  console.log(data);
+  if (!data) return <Spinner />
   return (
     <div className="rounded-lg w-full p-10">
       <div className="flex justify-between items-center w-full">
         <h4 className="text-2xl font-semibold">Statistic</h4>
-        <select className=" select select-ghost text-gray-700  ">
-          <option selected> Aug, 2022</option>
-          <option>Jul, 2022</option>
-          <option>Jun, 2022</option>
-          <option>May, 2022</option>
-        </select>
       </div>
 
       <div className="flex items-center">
