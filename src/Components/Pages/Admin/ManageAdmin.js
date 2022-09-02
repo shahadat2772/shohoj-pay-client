@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import auth from "../../../firebase.init";
 
 const ManageAdmin = () => {
-  const [user] = useAuthState(auth);
   const [action, setAction] = useState();
 
   const {

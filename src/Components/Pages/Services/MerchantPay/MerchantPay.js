@@ -29,7 +29,6 @@ const MerchantPay = () => {
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
-    console.log(amount, email);
 
     toast.loading("Money is being sended.", { id: "sendingMoney" });
 

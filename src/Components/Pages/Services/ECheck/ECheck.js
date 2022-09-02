@@ -39,7 +39,6 @@ const ECheck = () => {
     setReceiverEmail(email);
     const reference = data?.reference;
     setReceiverReference(reference);
-    console.log(data);
     toast.loading("Money is being Process.", { id: "apply-eCheck" });
     const eCheckInfo = {
       type: "E-Check",

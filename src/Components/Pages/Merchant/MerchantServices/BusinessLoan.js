@@ -45,7 +45,6 @@ const BusinessLoan = () => {
       .then((res) => res.json())
       .then((data) => {
         toast.dismiss("progressToast");
-        console.log(data);
         const { success, error } = data;
         success ? toast.success(success) : toast.error(error);
       })
