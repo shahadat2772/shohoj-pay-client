@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import Spinner from "../../../Shared/Spinner/Spinner";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-const Statistic = (user) => {
+const Statistic = ({ user }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     fetch(`http://localhost:5000/get-transaction-amount-by-type/${user?.email}`,
@@ -14,7 +14,6 @@ const Statistic = (user) => {
       }
     ).then(res => res.json()).then(data => setData(data));
   }, [])
-  console.log(data);
   if (!data) return <Spinner />
   return (
     <div className="rounded-lg w-full p-10">
@@ -58,7 +57,7 @@ const Statistic = (user) => {
                   className={`w-3 h-3 rounded-full  `}
                 ></div>
                 <div>
-                  <p className="text-xl font-medium">{d.value / 10}%</p>
+                  <p className="text-xl font-medium">{d.value}</p>
                   <small className="text-gray-400">{d.name}</small>
                 </div>
               </li>
