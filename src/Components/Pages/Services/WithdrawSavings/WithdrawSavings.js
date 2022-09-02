@@ -22,10 +22,7 @@ const WithdrawSavings = () => {
 
   const onSubmit = (data) => {
     const amount = data?.amount;
-    console.log(amount);
-
     toast.loading("Money is being Withdraw.", { id: "withdraw-savings" });
-
     const withdrawInfo = {
       type: "Transfer Savings",
       email: user?.email,
@@ -40,6 +37,7 @@ const WithdrawSavings = () => {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify({ withdrawInfo }),
     })

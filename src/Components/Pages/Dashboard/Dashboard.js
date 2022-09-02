@@ -68,9 +68,7 @@ const Dashboard = () => {
   const { isLoading, allInfo, error } = useSelector(
     (state) => state.userAllEmailData
   );
-
   const { unseenNotifications } = useSelector((state) => state.allNotification);
-
   const { userBalance, userSavingsInfo, userTransactionInfo } = allInfo;
   const balance = userBalance;
   const transactionData = userTransactionInfo;
@@ -95,7 +93,7 @@ const Dashboard = () => {
   }, [user?.email, monthServiceFilter, shareLinkCopied]);
 
   // HANDLE SPINNER
-  if (isLoading || transactionData == undefined) {
+  if (transactionData == undefined) {
     return <Spinner />;
   }
   // HANDLE ERROR
@@ -205,18 +203,22 @@ const Dashboard = () => {
         {/* USER INFORMATION */}
         <div className="w-full mt-10 lg:mt-0">
           <div className="md:mx-10 lg:mx-0 card  rounded ">
-            <div className="card-body py-0">
-              <h1
-                data-testid="user-name"
-                className="text-left text-3xl font-bold mb-3"
-              >
-                Hi, {mongoUser?.name}
-              </h1>
-              <div className="text-left">
-                <h4 className="">Total Balance</h4>
-                <h1 className="text-6xl font-bold">$ {balance?.balance}</h1>
+            {balance?.balance ? (
+              <div className="card-body py-0">
+                <h1
+                  data-testid="user-name"
+                  className="text-left text-3xl font-bold mb-3"
+                >
+                  Hi, {mongoUser?.name}
+                </h1>
+                <div className="text-left">
+                  <h4 className="">Total Balance</h4>
+                  <h1 className="text-6xl font-bold">$ {balance?.balance}</h1>
+                </div>
               </div>
-            </div>
+            ) : (
+              <h2>Loading...</h2>
+            )}
           </div>
           {/* SOME SERVICE */}
           <div className="mt-10 px-2">
