@@ -27,8 +27,13 @@ const Settings = () => {
   const [userPhone, setUserPhone] = useState(user?.phone);
   const [nameCanSave, setNameCanSave] = useState(false);
   const [AddressCanSave, setAddressCanSave] = useState(false);
-  const [city, setCity] = useState(user?.city);
+  // address
+  // console.log(user);
   const [country, setCountry] = useState(user?.country);
+  const [city, setCity] = useState(user?.city);
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+  // -----------
   const [PhoneCanSave, setPhoneCanSave] = useState(false);
   const [updatedImg, setUpdatedImg] = useState(user?.avatar);
   const navigate = useNavigate();
@@ -39,8 +44,15 @@ const Settings = () => {
   useEffect(() => {
     dispatch(fetchUserEmailInfo(firebaseUser));
     dispatch(fetchCountries());
-    console.log(allCountries)
+    const uniqueData = [...new Set(allCountries.map((item) => item.country))];
+    setCountries(uniqueData);
   }, []);
+
+  useEffect(() => {
+
+    const cities = allCountries.filter(c => c.country === country);
+    setCities(cities.map(c => c.name).sort());
+  }, [allCountries, country])
 
 
   const uploadImg = async (e) => {
@@ -65,7 +77,7 @@ const Settings = () => {
       toast.error("something went wrong!")
     }
   }
-
+  // console.log(user, country, city)
 
   const updateUser = (updatedUser) => {
     console.log(updatedUser)
@@ -79,12 +91,13 @@ const Settings = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (data.modifiedCount) {
           if (updatedUser.name || updatedUser.avatar) {
             setEditName(false);
             setNameCanSave(false)
           }
-          else if (updatedUser.address) {
+          else if (updatedUser.city || updatedUser.country) {
             setEditAddress(false);
             setAddressCanSave(false)
           }
@@ -195,9 +208,110 @@ const Settings = () => {
 
       {/* left part  */}
       <div className=" w-full lg:w-1/2 grid grid-cols-1 gap-5 p-5">
+
         {/* address section */}
+        <div className="rounded-lg p-5 w-full lg:w-10/12 place-self-end  bg-white ">
+          {/* title div */}
+          <div className="flex justify-between items-center relative">
+            <h3 className="text-xl text-left ">Address</h3>
+
+            <div className=" flex items-center justify-around">
+              <div
+                onClick={() => setEditAddress(true)}
+                className={`${editAddress && "hidden"
+                  } cursor-pointer place-self-center`}
+              >
+                {/* edit  */}
+                <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
+              </div>
+
+              <div
+                onClick={() => {
+                  setEditAddress(false);
+                  setCity(user?.city);
+                  setCountry(user?.country);
+                }}
+                className={`${!editAddress && "hidden"
+                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+              >
+                {/* cancel  */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
 
 
+              </div>
+              <button
+                disabled={!AddressCanSave}
+                onClick={() => {
+                  if (country && city) {
+                    updateUser({ country: country, city: city })
+                  }
+                  else if (country) {
+                    updateUser({ city: city })
+                  }
+                  else {
+                    updateUser({ country: country })
+                  }
+                }}
+                className={`${!editAddress && "hidden"
+                  }  btn btn-sm btn-primary place-self-center`}
+              >
+                {/* save  */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-5 grid grid-cols-1 gap-2">
+            {/* country  */}
+            <form className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+              <label className="flex items-center font-semibold ">Country:</label>
+              <select
+                disabled={!editAddress}
+                className='select select-bordered col-span-5'
+                onChange={(e) => {
+                  setCountry(e.target.value);
+                  setAddressCanSave(true)
+                }}
+                value={country}
+              >
+                {
+                  countries.map((c) => (
+                    <option key={c} value={c} >
+                      {c}
+                    </option>
+                  ))
+                }
+              </select>
+            </form>
+            <hr />
+
+            <form className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+              <label className="flex items-center font-semibold ">City:</label>
+              <select
+                disabled={!editAddress}
+                className='select select-bordered col-span-5'
+                onChange={(e) => {
+                  setCity(e.target.value);
+                  setAddressCanSave(true)
+                }}
+                value={city}
+              >
+                {
+                  cities.map((c) => (
+                    <option key={c} value={c} >
+                      {c}
+                    </option>
+                  ))
+                }
+              </select>
+            </form>
+          </div>
+        </div>
         {/* contact div */}
         <div className="rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 bg-white ">
           {/* title div */}
