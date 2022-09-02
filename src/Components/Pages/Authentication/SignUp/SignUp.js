@@ -161,23 +161,15 @@ const SignUp = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-full ">
-
       <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
         <ul className="steps steps-vertical h-full text-white">
           <li className={`step step-primary`}>Name and Address</li>
-          <li
-            className={`step ${progress > 1 && "step-primary"}`}
-          >
+          <li className={`step ${progress > 1 && "step-primary"}`}>
             Contact, Type, Image
           </li>
-          <li
-            className={`step ${progress > 2 && "step-primary"}`}
-          >
-            Password
-          </li>
+          <li className={`step ${progress > 2 && "step-primary"}`}>Password</li>
         </ul>
       </div>
-
 
       <div className=" lg:p-24 px-5 py-16 col-span-2 place-self-center">
         <div className="lg:w-96 w-full">
@@ -239,8 +231,16 @@ const SignUp = () => {
 
           <div className="grid grid-cols-3 gap-3 w-full mt-10 mb-5 lg:hidden">
             <div className={`h-2 rounded-full bg-primary`} />
-            <div className={`h-2 rounded-full ${progress > 1 ? "bg-primary" : "bg-white"}`} />
-            <div className={`h-2 rounded-full ${progress > 2 ? "bg-primary" : "bg-white "}`} />
+            <div
+              className={`h-2 rounded-full ${
+                progress > 1 ? "bg-primary" : "bg-white"
+              }`}
+            />
+            <div
+              className={`h-2 rounded-full ${
+                progress > 2 ? "bg-primary" : "bg-white "
+              }`}
+            />
           </div>
         </div>
       </div>
