@@ -66,7 +66,7 @@ const MerchantToPersonal = () => {
         }
       });
   };
-  if (!user || mongoUserLoading) return <Spinner />
+  if (!user || mongoUserLoading) return <Spinner />;
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
