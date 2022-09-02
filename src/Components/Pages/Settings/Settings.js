@@ -156,7 +156,8 @@ const Settings = () => {
             <div
               onClick={() => {
                 setEditName(false)
-                setUpdatedImg(user?.avatar)
+                setUpdatedImg(user?.avatar);
+                setUserName(user?.name)
               }}
               className={`${!editName && "hidden"
                 } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
@@ -328,7 +329,10 @@ const Settings = () => {
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
               </div>
               <div
-                onClick={() => setEditContact(false)}
+                onClick={() => {
+                  setEditContact(false);
+                  setUserPhone(user?.phone);
+                }}
                 className={`${!editContact && "hidden"
                   } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
