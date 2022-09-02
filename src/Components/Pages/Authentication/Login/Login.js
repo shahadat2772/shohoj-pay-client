@@ -39,9 +39,6 @@ const Login = () => {
   }
 
   if (user && token && mongoUser) {
-    toast.success("Logged in successfully.", {
-      id: "successfulLogIn",
-    });
     dispatch(updateSignUpLoading(false));
     if (mongoUser.type === "admin") {
       navigate("/adminpanel/summary");

@@ -35,7 +35,7 @@ const MerchantToMerchant = () => {
 
     const sendMoneyInfo = {
       type: "M to M",
-      name: user?.displayName,
+      name: mongoUser?.name,
       email: user?.email,
       amount: amount,
       from: user?.email,
@@ -66,7 +66,7 @@ const MerchantToMerchant = () => {
         }
       });
   };
-  if (!user || mongoUserLoading) return <Spinner />
+  if (!user || mongoUserLoading) return <Spinner />;
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">

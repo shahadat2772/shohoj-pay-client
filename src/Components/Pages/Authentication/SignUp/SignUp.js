@@ -68,7 +68,7 @@ const SignUp = () => {
     }
 
     setDbUserCreationLoading(true);
-    const defautlAvatar = "https://i.ibb.co/W3KKWsd/default-avatar.png"
+    const defautlAvatar = "https://i.ibb.co/W3KKWsd/default-avatar.png";
     const file = data.avatar[0];
     let avatarImg = "";
     if (file) {
@@ -89,7 +89,7 @@ const SignUp = () => {
         });
       }
       if (imgUploadRes) {
-        avatarImg = imgUploadResult.data.url
+        avatarImg = imgUploadResult.data.url;
       }
     }
     const userInfo = {
@@ -98,7 +98,7 @@ const SignUp = () => {
       date,
       status: "active",
     };
-    console.log(userInfo)
+    console.log(userInfo);
     delete userInfo.password;
     delete userInfo.ConfirmPassword;
 
@@ -135,9 +135,6 @@ const SignUp = () => {
   }
 
   if (user && token && mongoUser) {
-    toast.success("Signed up successfully.", {
-      id: "successfulSignUp",
-    });
     dispatch(updateSignUpLoading(false));
     if (mongoUser.type === "admin") {
       navigate("/adminpanel/summary");
@@ -163,16 +160,26 @@ const SignUp = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-screen my-10 mt-24 lg:mt-32">
+    <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-full ">
+
       <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
         <ul className="steps steps-vertical h-full text-white">
           <li className={`step step-primary`}>Name and Address</li>
-          <li className={`step ${progress > 1 ? "step-primary" : "step-white"}`}>Contact, Type, Image</li>
-          <li className={`step ${progress > 2 ? "step-primary" : "step-white"}`}>Password</li>
+          <li
+            className={`step ${progress > 1 && "step-primary"}`}
+          >
+            Contact, Type, Image
+          </li>
+          <li
+            className={`step ${progress > 2 && "step-primary"}`}
+          >
+            Password
+          </li>
         </ul>
       </div>
-      <div className="  lg:p-20 col-span-2 place-self-center">
 
+
+      <div className=" lg:p-24 px-5 py-16 col-span-2 place-self-center">
         <div className="lg:w-96 w-full">
           <h2
             data-testid="signUp-heading"
@@ -180,8 +187,7 @@ const SignUp = () => {
           >
             Sign Up
           </h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-
+          <form autoComplete="new-off" onSubmit={handleSubmit(onSubmit)}>
             {/* Name and Email part  */}
 
             <FirstPart
@@ -210,6 +216,7 @@ const SignUp = () => {
             {/* Password Part  */}
 
             <LastPart
+              setProgress={setProgress}
               setShowPasswordPart={setShowPasswordPart}
               setShowTypePart={setShowTypePart}
               showPasswordPart={showPasswordPart}
@@ -229,8 +236,13 @@ const SignUp = () => {
               Login
             </Link>
           </p>
-        </div>
 
+          <div className="grid grid-cols-3 gap-3 w-full mt-10 mb-5 lg:hidden">
+            <div className={`h-2 rounded-full bg-primary`} />
+            <div className={`h-2 rounded-full ${progress > 1 ? "bg-primary" : "bg-white"}`} />
+            <div className={`h-2 rounded-full ${progress > 2 ? "bg-primary" : "bg-white "}`} />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,8 @@ import { sendNotification } from "../../../../App";
 import { fetchNotifications } from "../../../../app/slices/notificationSlice";
 import auth from "../../../../firebase.init";
 import useUser from "../../Hooks/useUser";
-// import emailjs from "@emailjs/browser";
+import emailjs from "@emailjs/browser";
+import { v4 as uuidv4 } from "uuid";
 
 const ECheck = () => {
   const fullDate = new Date().toLocaleDateString();
@@ -19,6 +20,7 @@ const ECheck = () => {
   const [user] = useAuthState(auth);
   const [mongoUser] = useUser(user);
   const dispatch = useDispatch();
+  const seriulNumber = uuidv4();
   const {
     register,
     handleSubmit,
@@ -27,7 +29,6 @@ const ECheck = () => {
   } = useForm();
   // USE EMAIL JS
   const form = useRef();
-
   const onSubmit = (data) => {
     const amount = data?.amount;
     const email = data?.email;
@@ -44,23 +45,10 @@ const ECheck = () => {
       fullDate,
       date,
       time,
+      serialNumber: seriulNumber,
       image: mongoUser?.avatar,
     };
-    // emailjs
-    //   .sendForm(
-    //     "service_q11i3to",
-    //     "service_q11i3to",
-    //     form.current,
-    //     "_BZVGBP7_QzIIrIGO"
-    //   )
-    //   .then(
-    //     (result) => {
-    //       console.log(result.text);
-    //     },
-    //     (error) => {
-    //       toast.error(error.message);
-    //     }
-    //   );
+
     fetch("http://localhost:5000/eCheck", {
       method: "POST",
       headers: {
@@ -81,7 +69,24 @@ const ECheck = () => {
           } else {
             sendNotification(email, "eCheck");
           }
-
+          emailjs
+            .sendForm(
+              // "YOUR_SERVICE_ID",
+              "service_q11i3to",
+              // "YOUR_TEMPLATE_ID",
+              "template_60e7bmp",
+              form.current,
+              // "YOUR_PUBLIC_KEY"
+              "_BZVGBP7_QzIIrIGO"
+            )
+            .then(
+              (result) => {
+                console.log(result.text);
+              },
+              (error) => {
+                console.log(error.text);
+              }
+            );
           toast.success(result.success);
         }
       });
@@ -90,7 +95,7 @@ const ECheck = () => {
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
         <h2 className="textColor text-[1.70rem] mb-11 pl-1">E-Check</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form ref={form} onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
               min: {
@@ -106,20 +111,36 @@ const ECheck = () => {
             className="h-12 p-2 w-full rounded"
             placeholder="How much to issue"
             required
-            name="amount"
+            name="user_amount"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
               {errors.amount?.message}
             </span>
           )}
+          <div className="hidden">
+            <input
+              name="sender_name"
+              type="text"
+              defaultValue={mongoUser?.name}
+            />
+            <input name="sender_email" type="text" defaultValue={user?.email} />
+
+            <input
+              name="user_serialNumber"
+              type="text"
+              defaultValue={seriulNumber}
+            />
+            <input name="user_date" type="text" defaultValue={fullDate} />
+          </div>
+
           <input
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Who to issue"
             required
-            name="email"
+            name="user_email"
           />
           <input
             {...register("reference")}
@@ -127,6 +148,7 @@ const ECheck = () => {
             className="h-12 p-2 mt-4 w-full rounded"
             placeholder="Reference"
             required
+            name="user_reference"
           />
           <input
             type="submit"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { fetchMoneyRequest } from "../../../../app/slices/moneyRequestSlice";
 import auth from "../../../../firebase.init";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../../Shared/Pagination/Pagination";
 
 const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user] = useAuthState(auth);
@@ -15,6 +16,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
 
   // const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [type, setType] = useState("incoming");
   console.log(type);
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
 
   const fetchRequests = () => {
     dispatch(fetchMoneyRequest(email, type));
+<<<<<<< HEAD
     // fetch("http://localhost:5000/getRequests", {
     //   method: "GET",
     //   headers: {
@@ -39,11 +42,14 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
     //     const mData = data?.reverse();
     //     setRequests(mData);
     //   });
+=======
+>>>>>>> f1a14de1ed0412b5d77dd084ddf6933f371093a1
   };
 
   useEffect(() => {
     console.log(email, type);
     dispatch(fetchMoneyRequest(email, type));
+<<<<<<< HEAD
     // fetchRequests();
   }, [user, type]);
   // if (isLoading) {
@@ -55,6 +61,27 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
   //   toast.error(error?.message);
   //   navigate("/");
   // }
+=======
+    fetchRequests();
+  }, [type, email, dispatch]);
+  // START PAGINATION
+  let PageSize = 10;
+  const requestData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return requests.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, requests, PageSize]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+  if (error) {
+    localStorage.removeItem("accessToken");
+    signOut(auth);
+    toast.error(error?.message);
+    navigate("/");
+  }
+>>>>>>> f1a14de1ed0412b5d77dd084ddf6933f371093a1
 
   return (
     <div className="min-h-screen">
@@ -105,7 +132,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
               </thead>
               <tbody>
                 {/* Each request */}
-                {requests?.map((request, index) => (
+                {requestData?.map((request, index) => (
                   <tr key={index}>
                     <td>
                       {type === "incoming"
@@ -217,6 +244,16 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
             </table>
           )}
         </div>
+      </div>
+      <div className={`mt-12 ${requests.length < 10 && "hidden"}`}>
+        {/* START PAGINATION */}
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={requests.length}
+          pageSize={PageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
       <RequestDetailsModal request={request} />
     </div>

@@ -35,7 +35,7 @@ const MerchantPay = () => {
 
     const merchantPayInfo = {
       type: "Merchant Pay",
-      name: user?.displayName,
+      name: mongoUser?.name,
       email: user?.email,
       amount: amount,
       from: user?.email,
