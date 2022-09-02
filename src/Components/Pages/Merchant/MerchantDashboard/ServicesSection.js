@@ -36,21 +36,23 @@ const ServicesSection = () => {
             onClick={() => navigate(`/merchant/services/${service.id}`)}
             className="eachService cursor-pointer flex items-center justify-center flex-col"
           >
-            <div className="icon bg-blue-100 rounded-full p-5">
+            <div className="icon bg-blue-100 rounded-full p-3 lg:p-5 md:p-5">
               <FontAwesomeIcon
-                className="lg:text-4xl md:text-4xl text-3xl text-secondary"
+                className="lg:text-4xl md:text-4xl text-2xl text-secondary"
                 icon={service.serviceIcon}
               />
             </div>
-            <h3 className="serviceName  text-xl mt-4">{service.serviceName}</h3>
+            <h3 className="serviceName text-center lg:text-xl md:text-xl mt-4">
+              {service.serviceName}
+            </h3>
           </div>
         ))}
         <div
           onClick={() => navigate(`/merchant/money-requests`)}
           className="eachService cursor-pointer flex items-center justify-center flex-col"
         >
-          <div className="icon bg-blue-100 rounded-full p-5">
-            <i class="fa-solid fa-down-left-and-up-right-to-center lg:text-4xl md:text-4xl text-3xl text-secondary"></i>
+          <div className="icon bg-blue-100 rounded-full p-3 lg:p-5 md:p-5">
+            <i class="fa-solid fa-down-left-and-up-right-to-center lg:text-4xl md:text-4xl text-2xl text-secondary"></i>
           </div>
           <h3 className="serviceName text-xl mt-4">Request</h3>
         </div>

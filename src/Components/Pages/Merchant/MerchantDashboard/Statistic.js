@@ -6,15 +6,18 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 const Statistic = ({ user }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/get-transaction-amount-by-type/${user?.email}`,
+    fetch(
+      `http://localhost:5000/get-transaction-amount-by-type/${user?.email}`,
       {
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }
-    ).then(res => res.json()).then(data => setData(data));
-  }, [])
-  if (!data) return <Spinner />
+    )
+      .then((res) => res.json())
+      .then((data) => setData(data));
+  }, []);
+  if (!data) return <Spinner />;
   return (
     <div className="rounded-lg w-full p-10">
       <div className="flex justify-between items-center w-full">
@@ -23,7 +26,7 @@ const Statistic = ({ user }) => {
 
       <div className="flex items-center">
         {/* chart */}
-        <div className="w-full lg:w-72 h-72">
+        <div className="w-[220px] md:w-72 lg:w-72 h-72">
           <ResponsiveContainer>
             <PieChart>
               <Pie
@@ -51,10 +54,13 @@ const Statistic = ({ user }) => {
         <div>
           <ul>
             {data.map((d, i) => (
-              <li key={d.name} className="flex items-center space-x-8 my-4">
+              <li
+                key={d.name}
+                className="flex items-center space-x-4 lg:space-x-8 md:space-x-8 my-4"
+              >
                 <div
                   style={{ backgroundColor: d.color }}
-                  className={`w-3 h-3 rounded-full  `}
+                  className={`w-3 h-3 rounded-full`}
                 ></div>
                 <div>
                   <p className="text-xl font-medium">{d.value}</p>
