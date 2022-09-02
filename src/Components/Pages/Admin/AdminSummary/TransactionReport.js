@@ -46,7 +46,7 @@ const TransactionReport = () => {
     {
       id: 3,
       name: "Receive Money",
-      icon: "fa-circle-dollar-to-slot",
+      icon: "fa-arrow-down",
       amount: transactionReports?.totalReceiveMoney,
       transactionCount: transactionReports?.receiveMoneyTransactionCount,
     },
@@ -60,14 +60,14 @@ const TransactionReport = () => {
     {
       id: 5,
       name: "Request Money",
-      icon: "fa-circle-dollar-to-slot",
+      icon: "fa-arrow-up-right-from-square",
       amount: transactionReports?.totalRequestMoney,
       transactionCount: transactionReports?.requestMoneyTransactionCount,
     },
     {
       id: 6,
       name: "Merchant Pay",
-      icon: "fa-money-bill-trend-up",
+      icon: "fa-basket-shopping",
       amount: transactionReports?.totalMerchantPay,
       transactionCount: transactionReports?.merchantPayTransactionCount,
     },
@@ -81,23 +81,23 @@ const TransactionReport = () => {
     {
       id: 8,
       name: "M to M",
-      icon: "fa-money-check-dollar",
+      icon: "fa-money-bill-transfer",
       amount: transactionReports?.totalMtoM,
       transactionCount: transactionReports?.mtoMTransactionCount,
     },
     {
       id: 9,
-      name: "M to P",
-      icon: "fa-money-check-dollar",
-      amount: transactionReports?.totalMtoP,
-      transactionCount: transactionReports?.mtoPTransactionCount,
+      name: "Transfer Savings",
+      icon: "fa-right-left",
+      amount: transactionReports?.totalTransferSavings,
+      transactionCount: transactionReports?.transferSavingsTransactionCount,
     },
     {
       id: 10,
-      name: "Transfer Savings",
-      icon: "fa-arrow-down",
-      amount: transactionReports?.totalTransferSavings,
-      transactionCount: transactionReports?.transferSavingsTransactionCount,
+      name: "M to P",
+      icon: "fa-money-bill-transfer",
+      amount: transactionReports?.totalMtoP,
+      transactionCount: transactionReports?.mtoPTransactionCount,
     },
   ];
 

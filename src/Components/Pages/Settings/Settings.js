@@ -15,7 +15,7 @@ const Settings = () => {
   const [firebaseUser, loading] = useAuthState(auth);
   const [userName, setUserName] = useState(user?.name);
   const [userAddress, setUserAddress] = useState(user?.address);
-  const [userEmail,] = useState(user?.email);
+  const [userEmail] = useState(user?.email);
   const [userPhone, setUserPhone] = useState(user?.phone);
   const [nameCanSave, setNameCanSave] = useState(false);
   const [AddressCanSave, setAddressCanSave] = useState(false);
@@ -39,7 +39,7 @@ const Settings = () => {
     const formData = new FormData();
     formData.append("image", file);
     const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
-    toast.loading("image is being uploaded", { id: "img-upload-loading" })
+    toast.loading("image is being uploaded", { id: "img-upload-loading" });
     const imgUploadRes = await fetch(url, {
       method: "POST",
       body: formData,
@@ -50,16 +50,14 @@ const Settings = () => {
       console.log(imgUploadResult.data.url);
       setUpdatedImg(imgUploadResult.data.url);
       setNameCanSave(true);
-      toast.success("press save to keep change")
+      toast.success("press save to keep change");
+    } else {
+      toast.error("something went wrong!");
     }
-    else {
-      toast.error("something went wrong!")
-    }
-  }
-
+  };
 
   const updateUser = (updatedUser) => {
-    console.log(updatedUser)
+    console.log(updatedUser);
     fetch("http://localhost:5000/updateUserInfo", {
       method: "PUT",
       headers: {
@@ -73,21 +71,19 @@ const Settings = () => {
         if (data.modifiedCount) {
           if (updatedUser.name || updatedUser.avatar) {
             setEditName(false);
-            setNameCanSave(false)
-          }
-          else if (updatedUser.address) {
+            setNameCanSave(false);
+          } else if (updatedUser.address) {
             setEditAddress(false);
-            setAddressCanSave(false)
-          }
-          else if (updatedUser.phone) {
+            setAddressCanSave(false);
+          } else if (updatedUser.phone) {
             setEditContact(false);
-            setPhoneCanSave(false)
+            setPhoneCanSave(false);
           }
         }
       });
   };
 
-  if (loading || !user) return <Spinner />
+  if (loading || !user) return <Spinner />;
   return (
     <section className="px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full">
       {/* right part */}
@@ -97,15 +93,41 @@ const Settings = () => {
           <div className="w-full flex-col items-center ">
             <div>
               <figure className="flex justify-start items-end  relative ">
-                <img src={updatedImg || user?.avatar} alt="profile " className="h-44 w-44 mask mask-circle" />
-                <label htmlFor="imgInput" title="upload new picture" className={`${editName ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full" : "hidden"}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+                <img
+                  src={updatedImg || user?.avatar}
+                  alt="profile "
+                  className="h-44 w-44 mask mask-circle"
+                />
+                <label
+                  htmlFor="imgInput"
+                  title="upload new picture"
+                  className={`${
+                    editName
+                      ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full"
+                      : "hidden"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-8 h-8"
+                  >
                     <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
-                    <path fillRule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 01-3 3h-15a3 3 0 01-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 001.11-.71l.822-1.315a2.942 2.942 0 012.332-1.39zM6.75 12.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0zm12-1.5a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 01-3 3h-15a3 3 0 01-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 001.11-.71l.822-1.315a2.942 2.942 0 012.332-1.39zM6.75 12.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0zm12-1.5a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </label>
-                <input className="hidden" id="imgInput" type={"file"} accept="image/*" onChange={(e) => uploadImg(e)} />
-
+                <input
+                  className="hidden"
+                  id="imgInput"
+                  type={"file"}
+                  accept="image/*"
+                  onChange={(e) => uploadImg(e)}
+                />
               </figure>
             </div>
             <div className="w-full">
@@ -116,55 +138,76 @@ const Settings = () => {
                 value={userName || user?.name}
                 onChange={(e) => {
                   setNameCanSave(true);
-                  setUserName(e.target.value)
+                  setUserName(e.target.value);
                 }}
-
               />
             </div>
           </div>
           <div className="absolute top-4 right-4 flex items-center justify-around">
             <div
               onClick={() => setEditName(true)}
-              className={`${editName && "hidden"
-                } cursor-pointer place-self-center`}
+              className={`${
+                editName && "hidden"
+              } cursor-pointer place-self-center`}
             >
               {/* edit  */}
               <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
             </div>
             <div
               onClick={() => {
-                setEditName(false)
-                setUpdatedImg(user?.avatar)
+                setEditName(false);
+                setUpdatedImg(user?.avatar);
               }}
-              className={`${!editName && "hidden"
-                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+              className={`${
+                !editName && "hidden"
+              } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
             >
               {/* cancel  */}
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
             <button
               disabled={!nameCanSave}
               onClick={() => {
                 if (user.avatar !== updatedImg && userName) {
-                  updateUser({ name: userName, avatar: updatedImg })
-                }
-                else if (user.avatar !== updatedImg) {
-                  updateUser({ avatar: updatedImg })
-                }
-                else {
-                  updateUser({ name: userName })
+                  updateUser({ name: userName, avatar: updatedImg });
+                } else if (user.avatar !== updatedImg) {
+                  updateUser({ avatar: updatedImg });
+                } else {
+                  updateUser({ name: userName });
                 }
               }}
-              className={`${!editName && "hidden"
-                }  btn btn-sm btn-primary place-self-center`}
+              className={`${
+                !editName && "hidden"
+              }  btn btn-sm btn-primary place-self-center`}
             >
               {/* save  */}
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
               </svg>
-
             </button>
           </div>
         </div>
@@ -195,35 +238,57 @@ const Settings = () => {
             <div className=" flex items-center justify-around">
               <div
                 onClick={() => setEditAddress(true)}
-                className={`${editAddress && "hidden"
-                  } cursor-pointer place-self-center`}
+                className={`${
+                  editAddress && "hidden"
+                } cursor-pointer place-self-center`}
               >
                 {/* edit  */}
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
               </div>
               <div
                 onClick={() => setEditAddress(false)}
-                className={`${!editAddress && "hidden"
-                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+                className={`${
+                  !editAddress && "hidden"
+                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
                 {/* cancel  */}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
-
-
               </div>
               <button
                 disabled={!AddressCanSave}
                 onClick={() => updateUser({ address: userAddress })}
-                className={`${!editAddress && "hidden"
-                  }  btn btn-sm btn-primary place-self-center`}
+                className={`${
+                  !editAddress && "hidden"
+                }  btn btn-sm btn-primary place-self-center`}
               >
                 {/* save  */}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 12.75l6 6 9-13.5"
+                  />
                 </svg>
-
               </button>
             </div>
           </div>
@@ -239,7 +304,7 @@ const Settings = () => {
               <input
                 onChange={(e) => {
                   setUserAddress(e.target.value);
-                  setAddressCanSave(true)
+                  setAddressCanSave(true);
                 }}
                 disabled={!editAddress}
                 className="input input-text  bg-white col-span-5"
@@ -259,35 +324,57 @@ const Settings = () => {
             <div className=" flex items-center justify-around">
               <div
                 onClick={() => setEditContact(true)}
-                className={`${editContact && "hidden"
-                  } cursor-pointer place-self-center`}
+                className={`${
+                  editContact && "hidden"
+                } cursor-pointer place-self-center`}
               >
                 {/* edit  */}
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
               </div>
               <div
                 onClick={() => setEditContact(false)}
-                className={`${!editContact && "hidden"
-                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+                className={`${
+                  !editContact && "hidden"
+                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
                 {/* cancel  */}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
-
-
               </div>
               <button
                 disabled={!PhoneCanSave}
                 onClick={() => updateUser({ phone: userPhone })}
-                className={`${!editContact && "hidden"
-                  }  btn btn-sm btn-primary place-self-center`}
+                className={`${
+                  !editContact && "hidden"
+                }  btn btn-sm btn-primary place-self-center`}
               >
                 {/* save  */}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 12.75l6 6 9-13.5"
+                  />
                 </svg>
-
               </button>
             </div>
           </div>
@@ -315,7 +402,7 @@ const Settings = () => {
               <input
                 onChange={(e) => {
                   setUserPhone(e.target.value);
-                  setPhoneCanSave(true)
+                  setPhoneCanSave(true);
                 }}
                 disabled={!editContact}
                 className="input input-text  bg-white col-span-5"
