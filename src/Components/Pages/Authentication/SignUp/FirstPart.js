@@ -1,3 +1,4 @@
+import { async } from '@firebase/util';
 import React from 'react';
 
 const FirstPart = ({
@@ -42,6 +43,7 @@ const FirstPart = ({
                 <input
                     type="email"
                     placeholder="Email"
+                    autoComplete="new-password"
                     className="input input-bordered w-full "
                     {...register("email", {
                         required: {
@@ -92,17 +94,17 @@ const FirstPart = ({
             </div>
             <button
                 onClick={() => {
-                    if (Object.keys(errors).length !== 0) {
-                        if (
-                            !errors.name &&
-                            !errors.email &&
-                            !errors.address
-                        ) {
-                            setProgress(2);
-                            setShowTypePart(true);
-                            setShowNamePart(false);
-                        }
+                    if (
+                        errors &&
+                        !errors.name &&
+                        !errors.address &&
+                        !errors.email
+                    ) {
+                        setProgress(2);
+                        setShowTypePart(true);
+                        setShowNamePart(false);
                     }
+
                 }}
                 className="btn w-full "
             >

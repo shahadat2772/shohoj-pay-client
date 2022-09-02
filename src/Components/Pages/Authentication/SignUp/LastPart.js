@@ -1,6 +1,7 @@
 import React from 'react';
 
 const LastPart = ({
+    setProgress,
     setShowPasswordPart,
     setShowTypePart,
     showPasswordPart,
@@ -82,6 +83,7 @@ const LastPart = ({
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => {
+                        setProgress(2)
                         setShowPasswordPart(false);
                         setShowTypePart(true);
                     }}
