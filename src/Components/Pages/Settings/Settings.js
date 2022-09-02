@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 import { fetchCountries } from "../../../app/slices/countryCitySlice";
+import useUser from "../Hooks/useUser";
 const Settings = () => {
   const [editAddress, setEditAddress] = useState(false);
   const [editContact, setEditContact] = useState(false);
@@ -23,7 +24,7 @@ const Settings = () => {
   const { generalInfo: user } = allInfo;
   const [firebaseUser, loading] = useAuthState(auth);
   const [userName, setUserName] = useState(user?.name);
-  const [userEmail,] = useState(user?.email);
+  const [userEmail] = useState(user?.email);
   const [userPhone, setUserPhone] = useState(user?.phone);
   const [nameCanSave, setNameCanSave] = useState(false);
   const [AddressCanSave, setAddressCanSave] = useState(false);
@@ -40,7 +41,6 @@ const Settings = () => {
   const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     dispatch(fetchUserEmailInfo(firebaseUser));
     dispatch(fetchCountries());
@@ -49,11 +49,9 @@ const Settings = () => {
   }, []);
 
   useEffect(() => {
-
-    const cities = allCountries.filter(c => c.country === country);
-    setCities(cities.map(c => c.name).sort());
-  }, [allCountries, country])
-
+    const cities = allCountries.filter((c) => c.country === country);
+    setCities(cities.map((c) => c.name).sort());
+  }, [allCountries, country]);
 
   const uploadImg = async (e) => {
     const file = e.target.files[0];
@@ -75,8 +73,7 @@ const Settings = () => {
     } else {
       toast.error("something went wrong!");
     }
-
-  }
+  };
   // console.log(user, country, city)
 
   const updateUser = (updatedUser) => {
@@ -91,13 +88,12 @@ const Settings = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
         if (data.modifiedCount) {
           if (updatedUser.name || updatedUser.avatar) {
             setEditName(false);
-            setNameCanSave(false)
-          }
-          else if (updatedUser.city || updatedUser.country) {
+            setNameCanSave(false);
+          } else if (updatedUser.city || updatedUser.country) {
             setEditAddress(false);
             setAddressCanSave(false);
           } else if (updatedUser.phone) {
@@ -108,7 +104,7 @@ const Settings = () => {
       });
   };
 
-  if (isCountryLoading || loading || isLoading) return <Spinner />
+  if (isCountryLoading || loading || isLoading) return <Spinner />;
   return (
     <section className="px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full">
       {/* right part */}
@@ -126,10 +122,11 @@ const Settings = () => {
                 <label
                   htmlFor="imgInput"
                   title="upload new picture"
-                  className={`${editName
-                    ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full"
-                    : "hidden"
-                    }`}
+                  className={`${
+                    editName
+                      ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full"
+                      : "hidden"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -170,20 +167,22 @@ const Settings = () => {
           <div className="absolute top-4 right-4 flex items-center justify-around">
             <div
               onClick={() => setEditName(true)}
-              className={`${editName && "hidden"
-                } cursor-pointer place-self-center`}
+              className={`${
+                editName && "hidden"
+              } cursor-pointer place-self-center`}
             >
               {/* edit  */}
               <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
             </div>
             <div
               onClick={() => {
-                setEditName(false)
+                setEditName(false);
                 setUpdatedImg(user?.avatar);
-                setUserName(user?.name)
+                setUserName(user?.name);
               }}
-              className={`${!editName && "hidden"
-                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+              className={`${
+                !editName && "hidden"
+              } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
             >
               {/* cancel  */}
               <svg
@@ -212,8 +211,9 @@ const Settings = () => {
                   updateUser({ name: userName });
                 }
               }}
-              className={`${!editName && "hidden"
-                }  btn btn-sm btn-primary place-self-center`}
+              className={`${
+                !editName && "hidden"
+              }  btn btn-sm btn-primary place-self-center`}
             >
               {/* save  */}
               <svg
@@ -251,7 +251,6 @@ const Settings = () => {
 
       {/* left part  */}
       <div className=" w-full lg:w-1/2 grid grid-cols-1 gap-5 p-5">
-
         {/* address section */}
         <div className="rounded-lg p-5 w-full lg:w-10/12 place-self-end  bg-white ">
           {/* title div */}
@@ -261,8 +260,9 @@ const Settings = () => {
             <div className=" flex items-center justify-around">
               <div
                 onClick={() => setEditAddress(true)}
-                className={`${editAddress && "hidden"
-                  } cursor-pointer place-self-center`}
+                className={`${
+                  editAddress && "hidden"
+                } cursor-pointer place-self-center`}
               >
                 {/* edit  */}
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
@@ -274,8 +274,9 @@ const Settings = () => {
                   setCity(user?.city);
                   setCountry(user?.country);
                 }}
-                className={`${!editAddress && "hidden"
-                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+                className={`${
+                  !editAddress && "hidden"
+                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
                 {/* cancel  */}
                 <svg
@@ -297,17 +298,16 @@ const Settings = () => {
                 disabled={!AddressCanSave}
                 onClick={() => {
                   if (country && city) {
-                    updateUser({ country: country, city: city })
-                  }
-                  else if (country) {
-                    updateUser({ city: city })
-                  }
-                  else {
-                    updateUser({ country: country })
+                    updateUser({ country: country, city: city });
+                  } else if (country) {
+                    updateUser({ city: city });
+                  } else {
+                    updateUser({ country: country });
                   }
                 }}
-                className={`${!editAddress && "hidden"
-                  }  btn btn-sm btn-primary place-self-center`}
+                className={`${
+                  !editAddress && "hidden"
+                }  btn btn-sm btn-primary place-self-center`}
               >
                 {/* save  */}
                 <svg
@@ -331,23 +331,23 @@ const Settings = () => {
           <div className="mt-5 grid grid-cols-1 gap-2">
             {/* country  */}
             <form className="grid grid-cols-1 lg:grid-cols-6 gap-3">
-              <label className="flex items-center font-semibold ">Country:</label>
+              <label className="flex items-center font-semibold ">
+                Country:
+              </label>
               <select
                 disabled={!editAddress}
-                className='select select-bordered col-span-5'
+                className="select select-bordered col-span-5"
                 onChange={(e) => {
                   setCountry(e.target.value);
-                  setAddressCanSave(true)
+                  setAddressCanSave(true);
                 }}
                 value={country}
               >
-                {
-                  countries.map((c) => (
-                    <option key={c} value={c} >
-                      {c}
-                    </option>
-                  ))
-                }
+                {countries.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
               </select>
             </form>
             <hr />
@@ -356,20 +356,18 @@ const Settings = () => {
               <label className="flex items-center font-semibold ">City:</label>
               <select
                 disabled={!editAddress}
-                className='select select-bordered col-span-5'
+                className="select select-bordered col-span-5"
                 onChange={(e) => {
                   setCity(e.target.value);
-                  setAddressCanSave(true)
+                  setAddressCanSave(true);
                 }}
                 value={city}
               >
-                {
-                  cities.map((c) => (
-                    <option key={c} value={c} >
-                      {c}
-                    </option>
-                  ))
-                }
+                {cities.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
               </select>
             </form>
           </div>
@@ -383,8 +381,9 @@ const Settings = () => {
             <div className=" flex items-center justify-around">
               <div
                 onClick={() => setEditContact(true)}
-                className={`${editContact && "hidden"
-                  } cursor-pointer place-self-center`}
+                className={`${
+                  editContact && "hidden"
+                } cursor-pointer place-self-center`}
               >
                 {/* edit  */}
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
@@ -394,8 +393,9 @@ const Settings = () => {
                   setEditContact(false);
                   setUserPhone(user?.phone);
                 }}
-                className={`${!editContact && "hidden"
-                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+                className={`${
+                  !editContact && "hidden"
+                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
                 {/* cancel  */}
                 <svg
@@ -416,8 +416,9 @@ const Settings = () => {
               <button
                 disabled={!PhoneCanSave}
                 onClick={() => updateUser({ phone: userPhone })}
-                className={`${!editContact && "hidden"
-                  }  btn btn-sm btn-primary place-self-center`}
+                className={`${
+                  !editContact && "hidden"
+                }  btn btn-sm btn-primary place-self-center`}
               >
                 {/* save  */}
                 <svg
