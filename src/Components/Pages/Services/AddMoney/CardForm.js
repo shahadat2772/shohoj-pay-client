@@ -53,6 +53,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
           method: "POST",
           headers: {
             "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           body: JSON.stringify({ addAmount }),
         })
@@ -139,6 +140,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ addMoneyInfo }),
       })

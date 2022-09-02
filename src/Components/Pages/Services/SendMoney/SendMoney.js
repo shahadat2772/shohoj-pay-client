@@ -55,6 +55,7 @@ const SendMoney = () => {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify({ sendMoneyInfo }),
     })
