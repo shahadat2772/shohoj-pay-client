@@ -96,7 +96,16 @@ const ManageAccounts = () => {
             <tbody>
               {allUsers &&
                 paginateUsers.map((user) => {
-                  const { name, email, avatar, address, phone, type } = user;
+                  const {
+                    name,
+                    email,
+                    avatar,
+                    address,
+                    phone,
+                    type,
+                    city,
+                    country,
+                  } = user;
                   return (
                     <tr>
                       <td>
@@ -120,7 +129,7 @@ const ManageAccounts = () => {
                         </div>
                       </td>
                       <td>{type && type}</td>
-                      <td>{address && address}</td>
+                      <td>{country && city && city + "," + " " + country}</td>
                       <td>{phone && phone}</td>
                       <th>
                         {user.status === "active" ? (

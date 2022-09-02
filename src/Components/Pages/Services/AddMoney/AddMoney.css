@@ -18,14 +18,13 @@ input {
   font-weight: 500;
   color: white;
   border-radius: 30px;
-  background-color: #b9b0f5;
-  box-shadow: 1px 2px 3px rgb(129, 129, 129);
+  background-color: #414cda;
   cursor: pointer;
   border: 0;
 }
 
 .actionButton:hover {
-  background-color: #b1a6fc;
+  background-color: #2f3ac9;
 }
 
 #addAmountInput::-webkit-outer-spin-button,

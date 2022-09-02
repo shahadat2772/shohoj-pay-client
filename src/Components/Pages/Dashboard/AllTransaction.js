@@ -93,11 +93,9 @@ const AllTransaction = () => {
       }
     }
     const getdate = fullMonth + "/" + fullDate + "/" + year;
-    console.log(getdate);
     const getMonth = transactionData.filter((data) =>
       data?.fullDate.includes(getdate)
     );
-    console.log(getMonth);
     setFilterData(getMonth);
   };
   //   COPY TRANSACTION DATA FUNCTION
@@ -147,7 +145,7 @@ const AllTransaction = () => {
           <select
             onChange={handleFilterMonth}
             name="option"
-            className="select select-ghost max-w-xs mb-50 text-lg"
+            className="select select-ghost max-w-xs mb-50 lg:text-lg"
           >
             <option value="">Select Month</option>
             <option value={`Jan ${getYear}`}>January {getYear}</option>

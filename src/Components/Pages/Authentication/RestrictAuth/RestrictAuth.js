@@ -1,6 +1,6 @@
 import React from "react";
-import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
 import auth from "../../../../firebase.init";
 import Spinner from "../../../Shared/Spinner/Spinner";
 import useUser from "../../Hooks/useUser";

@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import ReactSignatureCanvas from "react-signature-canvas";
 import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
 import useUser from "../../Hooks/useUser";
@@ -18,7 +17,6 @@ const MerchantECheck = () => {
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
   const [mongoUser] = useUser(user);
-  const [signature, setSignature] = useState("");
   const seriulNumber = uuidv4();
   const [receiverEmail, setReceiverEmail] = useState("");
   const [receiverAmount, setReceiverAmount] = useState("");
@@ -45,19 +43,18 @@ const MerchantECheck = () => {
       from: user?.email,
       to: email,
       reference: reference,
-      signature,
       fullDate,
       date,
       time,
       serialNumber: seriulNumber,
       image: mongoUser?.avatar,
     };
-    if (!signature) return toast.error("please signature first");
 
     fetch("http://localhost:5000/eCheck", {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify({ eCheckInfo }),
     })
@@ -69,8 +66,6 @@ const MerchantECheck = () => {
           toast.error(result.error);
         } else {
           reset();
-          clear();
-          setSignature("");
           sendNotification(email, "merchantECheck");
           emailjs
             .sendForm(
@@ -90,21 +85,10 @@ const MerchantECheck = () => {
                 console.log(error.text);
               }
             );
+          console.log(result);
           toast.success(result.success);
         }
       });
-  };
-
-  const signatureRef = useRef(null);
-  const clear = () => {
-    signatureRef.current.clear();
-    setSignature("");
-  };
-  const trim = () => {
-    const signatureData = signatureRef.current
-      .getTrimmedCanvas()
-      .toDataURL("image/png");
-    setSignature(signatureData);
   };
 
   return (
@@ -173,35 +157,12 @@ const MerchantECheck = () => {
             />
             <input name="user_date" type="text" defaultValue={fullDate} />
           </div>
-          <label className="mt-4 inline-block ">E-Signature</label>
-          <ReactSignatureCanvas
-            ref={signatureRef}
-            onEnd={trim}
-            canvasProps={{ className: "sigCanvas border mt-3 h-24 w-full" }}
-            required
-          />
           <input
             type="submit"
             className="actionButton mt-12 border-0"
             value="Issue"
           />
         </form>
-        <button className="absolute bottom-48 right-12" onClick={clear}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.5 12c0-1.232.046-2.453.138-3.662a4.006 4.006 0 013.7-3.7 48.678 48.678 0 017.324 0 4.006 4.006 0 013.7 3.7c.017.22.032.441.046.662M4.5 12l-3-3m3 3l3-3m12 3c0 1.232-.046 2.453-.138 3.662a4.006 4.006 0 01-3.7 3.7 48.657 48.657 0 01-7.324 0 4.006 4.006 0 01-3.7-3.7c-.017-.22-.032-.441-.046-.662M19.5 12l-3 3m3-3l3 3"
-            />
-          </svg>
-        </button>
       </div>
     </div>
   );
