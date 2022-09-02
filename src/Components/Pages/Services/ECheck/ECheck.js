@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -21,6 +21,9 @@ const ECheck = () => {
   const [mongoUser] = useUser(user);
   const dispatch = useDispatch();
   const seriulNumber = uuidv4();
+  const [receiverEmail, setReceiverEmail] = useState("");
+  const [receiverAmount, setReceiverAmount] = useState("");
+  const [receiverReference, setReceiverReference] = useState("");
   const {
     register,
     handleSubmit,
@@ -31,8 +34,12 @@ const ECheck = () => {
   const form = useRef();
   const onSubmit = (data) => {
     const amount = data?.amount;
+    setReceiverAmount(amount);
     const email = data?.email;
+    setReceiverEmail(email);
     const reference = data?.reference;
+    setReceiverReference(reference);
+    console.log(data);
     toast.loading("Money is being Process.", { id: "apply-eCheck" });
     const eCheckInfo = {
       type: "E-Check",
@@ -53,6 +60,7 @@ const ECheck = () => {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify({ eCheckInfo }),
     })
@@ -99,26 +107,50 @@ const ECheck = () => {
           <input
             {...register("amount", {
               min: {
-                value: 5,
-                message: "$5 is the minimum amount.",
+                value: 10,
+                message: "$10 is the minimum send amount.",
               },
               max: {
                 value: 1000,
-                message: "$1000 is the maximum amount at a time.",
+                message: "$1000 is the maximum send amount at a time.",
               },
             })}
             type="number"
             className="h-12 p-2 w-full rounded"
-            placeholder="How much to issue"
+            placeholder="How much to send?"
             required
-            name="user_amount"
           />
           {errors.amount?.message && (
             <span className="text-[12px] text-red-600">
               {errors.amount?.message}
             </span>
           )}
+          <input
+            {...register("email")}
+            type="email"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Receivers email"
+            required
+          />
+          <input
+            {...register("reference")}
+            type="text"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Receivers email"
+            required
+          />
           <div className="hidden">
+            <input
+              name="user_amount"
+              type="text"
+              defaultValue={receiverAmount}
+            />
+            <input name="user_email" type="text" defaultValue={receiverEmail} />
+            <input
+              name="user_reference"
+              type="text"
+              defaultValue={receiverReference}
+            />
             <input
               name="sender_name"
               type="text"
@@ -133,27 +165,10 @@ const ECheck = () => {
             />
             <input name="user_date" type="text" defaultValue={fullDate} />
           </div>
-
-          <input
-            {...register("email")}
-            type="email"
-            className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Who to issue"
-            required
-            name="user_email"
-          />
-          <input
-            {...register("reference")}
-            type="text"
-            className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Reference"
-            required
-            name="user_reference"
-          />
           <input
             type="submit"
-            className="actionButton mt-12 border-0"
-            value="Issue"
+            className="actionButton mt-10 border-0"
+            value="Send"
           />
         </form>
       </div>

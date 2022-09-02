@@ -12,6 +12,12 @@ import Pagination from "../../Shared/Pagination/Pagination";
 import Modal from "./Modal";
 
 const AllTransaction = () => {
+  // GET TODAY DATE
+  const todayDate = new Date().toLocaleDateString();
+  // GET FULL YEAR
+  const getYear = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+  });
   // ALL STATE
   const [filterData, setFilterData] = useState([]);
   const [modalData, setModalData] = useState(null);
@@ -20,12 +26,7 @@ const AllTransaction = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // GET TODAY DATE
-  const todayDate = new Date().toLocaleDateString();
-  // GET FULL YEAR
-  const getYear = new Date().toLocaleDateString("en-us", {
-    year: "numeric",
-  });
+
   // REVERSE TRANSACTION DATA
   const reverseData = [...filterData].reverse();
   // GET TRANSACTION DATA USING REDUX
@@ -64,7 +65,7 @@ const AllTransaction = () => {
   // FILTER TRANSACTION DATA
   // FILTER MONTH
   const handleFilterMonth = (e) => {
-    const getMonth = transactionData.filter((data) =>
+    const getMonth = allTransactionData.filter((data) =>
       data.date.includes(e.target.value)
     );
     setFilterData(getMonth);
@@ -74,6 +75,7 @@ const AllTransaction = () => {
     const date = e.target.value;
     const [year, month, day] = date.substring(0, 10).split("-");
     let fullMonth;
+    let fullDate;
     if (month) {
       const [none, value] = month.split("");
       if (none == 0) {
@@ -82,10 +84,20 @@ const AllTransaction = () => {
         fullMonth = month;
       }
     }
-    const getdate = fullMonth + "/" + day + "/" + year;
+    if (day) {
+      const [none, value] = day.split("");
+      if (none == 0) {
+        fullDate = value;
+      } else {
+        fullDate = day;
+      }
+    }
+    const getdate = fullMonth + "/" + fullDate + "/" + year;
+    console.log(getdate);
     const getMonth = transactionData.filter((data) =>
-      data.fullDate.includes(getdate)
+      data?.fullDate.includes(getdate)
     );
+    console.log(getMonth);
     setFilterData(getMonth);
   };
   //   COPY TRANSACTION DATA FUNCTION
