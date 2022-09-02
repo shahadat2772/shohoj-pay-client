@@ -121,7 +121,7 @@ const SignUp = () => {
     }
     await setDbUserCreationLoading(false);
     await createUserWithEmailAndPassword(email, password);
-    await updateProfile({ displayName: data.firstName + " " + data.lastName });
+    await updateProfile({ displayName: data.name });
   };
 
   if (
