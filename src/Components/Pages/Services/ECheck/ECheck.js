@@ -135,7 +135,7 @@ const ECheck = () => {
             {...register("reference")}
             type="text"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Receivers email"
+            placeholder="Reference"
             required
           />
           <div className="hidden">
