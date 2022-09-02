@@ -14,56 +14,38 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
   const [user] = useAuthState(auth);
   const email = user?.user?.email || user?.email;
 
-  // const [requests, setRequests] = useState([]);
+  const [requestLoading, setRequestLoading] = useState(false);
+  const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [type, setType] = useState("incoming");
-  console.log(type);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { isLoading, requests, error } = useSelector(
-    (state) => state.allRequest
+  const { isLoading, unseenNotifications, error } = useSelector(
+    (state) => state.allNotification
   );
 
   const fetchRequests = () => {
-    dispatch(fetchMoneyRequest(email, type));
-<<<<<<< HEAD
-    // fetch("http://localhost:5000/getRequests", {
-    //   method: "GET",
-    //   headers: {
-    //     "content-type": "application/json",
-    //     email: email,
-    //     type: type,
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     const mData = data?.reverse();
-    //     setRequests(mData);
-    //   });
-=======
->>>>>>> f1a14de1ed0412b5d77dd084ddf6933f371093a1
+    setRequestLoading(true);
+    fetch("http://localhost:5000/getRequests", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        email: email,
+        type: type,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const mData = data?.reverse();
+        setRequests(mData);
+        setRequestLoading(false);
+      });
   };
 
   useEffect(() => {
-    console.log(email, type);
-    dispatch(fetchMoneyRequest(email, type));
-<<<<<<< HEAD
-    // fetchRequests();
-  }, [user, type]);
-  // if (isLoading) {
-  //   return <Spinner />;
-  // }
-  // if (error) {
-  //   localStorage.removeItem("accessToken");
-  //   signOut(auth);
-  //   toast.error(error?.message);
-  //   navigate("/");
-  // }
-=======
     fetchRequests();
-  }, [type, email, dispatch]);
+  }, [user, type, unseenNotifications]);
+
   // START PAGINATION
   let PageSize = 10;
   const requestData = useMemo(() => {
@@ -72,16 +54,7 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
     return requests.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, requests, PageSize]);
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (error) {
-    localStorage.removeItem("accessToken");
-    signOut(auth);
-    toast.error(error?.message);
-    navigate("/");
-  }
->>>>>>> f1a14de1ed0412b5d77dd084ddf6933f371093a1
+  console.log(requestData);
 
   return (
     <div className="min-h-screen">
@@ -108,14 +81,19 @@ const MoneyRequests = ({ setRequestForConfirm }) => {
               Outgoing
             </button>
           </div>
-          {requests.length === 0 ? (
+          {/* Spinner here */}
+          {requestLoading && <Spinner />}
+          {/* Not request mess */}
+          {!requestLoading && requestData.length === 0 && (
             <div className="min-h-[60vh] flex justify-center items-center">
               <h2 className="text-2xl">
                 You have no {`${type === "incoming" ? "incoming" : "outgoing"}`}{" "}
                 requests ;(
               </h2>
             </div>
-          ) : (
+          )}
+          {/* Table here */}
+          {!requestLoading && requestData.length !== 0 && (
             <table className="table w-full">
               {/* <!-- head --> */}
               <thead>
