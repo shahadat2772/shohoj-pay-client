@@ -11,7 +11,7 @@ const Home = () => {
       <Banner />
       <UserFlow></UserFlow>
       <YouHavePower></YouHavePower>
-      <Countdown></Countdown>
+      {/* <Countdown></Countdown> */}
       <SignUp></SignUp>
     </div>
   );

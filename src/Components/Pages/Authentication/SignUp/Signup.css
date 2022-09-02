@@ -1,0 +1,6 @@
+.file-input::-webkit-file-upload-button{
+    background-color: #241E2A;
+    border: none;
+    color: white;
+    padding: 10px;
+}

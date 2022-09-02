@@ -1,25 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useUser from "../../Hooks/useUser";
+import Spinner from "../../../Shared/Spinner/Spinner";
+import { sendNotification } from "../../../../App";
 
 const RequestMoney = () => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
   const time = new Date().toLocaleTimeString();
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm();
-
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
   const onSubmit = (data) => {
-    const amount = data?.amount;
-    const email = data?.email;
+    const { email, amount, reference } = data;
 
     if (amount.slice(0, 1) === "0") {
       toast.error("Invalid amount");
@@ -29,11 +37,17 @@ const RequestMoney = () => {
     toast.loading("Money is being requested.", { id: "requestingMoney" });
 
     const requestMoneyInfo = {
-      name: user?.displayName,
+      type: "Request Money",
+      status: "Pending",
+      requesterName: mongoUser?.name,
       amount: amount,
-      email: user?.email,
       from: user?.email,
       to: email,
+      reference: reference,
+      fullDate,
+      date,
+      time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/requestMoney", {
@@ -51,6 +65,7 @@ const RequestMoney = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "requestMoney");
           toast.success(result.success);
         }
       });
@@ -59,7 +74,7 @@ const RequestMoney = () => {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="eachServicesContainer md:w-[25rem] lg:w-[30rem] w-[22rem]">
-        <h2 className="textColor text-[1.70rem] mb-11 pl-1">Request Money</h2>
+        <h2 className="textColor text-[1.70rem] mb-9 pl-1">Request Money</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("amount", {
@@ -86,12 +101,19 @@ const RequestMoney = () => {
             {...register("email")}
             type="email"
             className="h-12 p-2 mt-4 w-full rounded"
-            placeholder="Senders email"
+            placeholder="Who to request"
             required
           />
           <input
+            {...register("reference")}
+            type="text"
+            className="h-12 p-2 mt-4 w-full rounded"
+            placeholder="Reference"
+          />
+          <p className="ml-1 gray text-sm mt-4">No fee while requesting.</p>
+          <input
             type="submit"
-            className="actionButton mt-12 border-0"
+            className="actionButton mt-9 border-0"
             value="Request"
           />
         </form>

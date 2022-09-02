@@ -1,225 +1,247 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import useToken from "../../Hooks/useToken";
 import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
-import GoogleLogin from "../GoogleLogin/GoogleLogin";
 import Spinner from "../../../Shared/Spinner/Spinner";
+import useUser from "../../Hooks/useUser";
+import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../../../redux/actions/userActions";
+import { updateSignUpLoading } from "../../../../app/slices/signUpLoadingSlice";
+import FirstPart from "./FirstPart";
+import SecondPart from "./SecondPart";
+import LastPart from "./LastPart";
 
 const SignUp = () => {
-  const date = new Date().toLocaleDateString();
-
-  const passwordShowRef = useRef("");
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [showNamePart, setShowNamePart] = useState(true);
+  const [showPasswordPart, setShowPasswordPart] = useState(false);
+  const [showTypePart, setShowTypePart] = useState(false);
+  const [progress, setProgress] = useState(1);
+  const [dbUserCreationLoading, setDbUserCreationLoading] = useState(false);
+  const imageStorageKey = `d65dd17739f3377d4d967e0dcbdfac26`;
+  const passwordShowRef = useRef("");
+  const date = new Date().toLocaleDateString();
+  const dispatch = useDispatch();
+
   const [
     createUserWithEmailAndPassword,
     user,
     userCreatLoading,
     userCreateError,
   ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
-  const navigate = useNavigate();
-  const [updateProfile] = useUpdateProfile(auth);
+  const [updateProfile, updating, uerror] = useUpdateProfile(auth);
+
+  const [token, tokenLoading] = useToken(user);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+  // const { signUpLoading } = useSelector((state) => state.signUpLoading);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (userCreateError) {
-      const error = userCreateError?.message.split(":")[1];
-      toast.error(error);
-    }
-  }, [userCreateError]);
-  useEffect(() => {
-    console.log(user);
-    if (user?.user?.displayName) {
-      const userInfo = {
-        type: "personal",
-        name: user.user.displayName,
-        email: user?.user?.email,
-        date,
-      };
-      const createAccount = async () => {
-        fetch("http://localhost:5000/createAccount", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({ userInfo }),
-        })
-          .then((res) => res.json())
-          .then((data) => data?.acknowledged && dispatch(setUser({ email: userInfo.email })));
-      };
-
-      createAccount();
-
-      setTimeout(() => {
-        toast.success("Create Account SuccessFully");
-      }, 1000);
-      navigate("/");
-    }
-  }, [user, navigate, user?.user?.displayName, date]);
-  if (userCreatLoading) {
-    return <Spinner />;
-  }
   const onSubmit = async (data) => {
+    dispatch(updateSignUpLoading(true));
+    const email = data.email;
+    const password = data.password;
     if (data.password !== data.ConfirmPassword) {
+      dispatch(updateSignUpLoading(false));
       return toast.error("Opps Password Not Match");
     }
-    await createUserWithEmailAndPassword(data?.email, data?.password);
-    await updateProfile({ displayName: data.name });
+
+    const emailCheckResponse = await axios.get(
+      `http://localhost:5000/checkemailexists/${email}`
+    );
+    if (emailCheckResponse?.data?.error) {
+      dispatch(updateSignUpLoading(false));
+      return toast.error(emailCheckResponse.data.error, {
+        id: "emailExistsErr",
+      });
+    }
+
+    setDbUserCreationLoading(true);
+    const defautlAvatar = "https://i.ibb.co/W3KKWsd/default-avatar.png";
+    const file = data.avatar[0];
+    let avatarImg = "";
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
+      const imgUploadRes = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+      const imgUploadResult = await imgUploadRes.json();
+
+      if (!imgUploadResult.success === true) {
+        dispatch(updateSignUpLoading(false));
+        setDbUserCreationLoading(false);
+        return toast.error("Something went wrong.", {
+          id: "signUpERR",
+        });
+      }
+      if (imgUploadRes) {
+        avatarImg = imgUploadResult.data.url;
+      }
+    }
+    const userInfo = {
+      ...data,
+      avatar: avatarImg || defautlAvatar,
+      date,
+      status: "active",
+    };
+    console.log(userInfo);
+    delete userInfo.password;
+    delete userInfo.ConfirmPassword;
+
+    const userUploadRes = await fetch("http://localhost:5000/createAccount", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ userInfo }),
+    });
+
+    const userUploadResult = await userUploadRes.json();
+
+    if (!userUploadResult?.userResult?.insertedId) {
+      dispatch(updateSignUpLoading(false));
+      setDbUserCreationLoading(false);
+      return toast.error("Something went wrong.", {
+        id: "signUpERR",
+      });
+    }
+    await setDbUserCreationLoading(false);
+    await createUserWithEmailAndPassword(email, password);
+    await updateProfile({ displayName: data.firstName + " " + data.lastName });
   };
+
+  if (
+    userCreatLoading ||
+    tokenLoading ||
+    mongoUserLoading ||
+    dbUserCreationLoading ||
+    updating
+  ) {
+    return <Spinner />;
+  }
+
+  if (user && token && mongoUser) {
+    dispatch(updateSignUpLoading(false));
+    if (mongoUser.type === "admin") {
+      navigate("/adminpanel/summary");
+    } else if (mongoUser?.type === "merchant") {
+      navigate("/merchant/dashboard");
+    } else if (mongoUser.type === "personal") {
+      navigate("/dashboard");
+    }
+  }
+
   const handleShow = () => {
     const passShow = passwordShowRef.current.checked;
     setShow(passShow);
   };
-  return (
-    <div className="flex items-center justify-center w-screen my-10 mt-24 lg:mt-32">
-      <div className="card w-96 bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h2 className="text-center font-bold text-xl">Sign Up</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-name">Name</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Name"
-                className="input input-bordered w-full max-w-xs"
-                {...register("name", {
-                  required: {
-                    value: true,
-                    message: "Name Is Required",
-                  },
-                })}
-              />
-              <label className="label">
-                {errors.name?.type === "required" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.name.message}
-                  </span>
-                )}
-              </label>
-            </div>
-            <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-email">Email</span>
-              </label>
-              <input
-                type="email"
-                placeholder="Email"
-                className="input input-bordered w-full max-w-xs"
-                {...register("email", {
-                  required: {
-                    value: true,
-                    message: "Email Is Required",
-                  },
-                  pattern: {
-                    value: /[a-z0-9]+@.[a-z]{3}/,
-                    message: "Your Email Have Must Be A Special characters",
-                  },
-                })}
-              />
-              <label className="label">
-                {errors.email?.type === "required" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.email.message}
-                  </span>
-                )}
-                {errors.email?.type === "pattern" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.email.message}
-                  </span>
-                )}
-              </label>
-            </div>
-            <div className="relative form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-password">Password</span>
-              </label>
-              {/* PASSWORD SHOW HIDE */}
-              <div
-                onClick={handleShow}
-                className="absolute inset-y-0 right-3 flex items-center px-2 top-6"
-              >
-                <label className="swap swap-rotate">
-                  <input ref={passwordShowRef} type="checkbox" />
-                  <i className="fa-solid fa-eye-low-vision swap-on fill-current"></i>
-                  <i className="fa-solid fa-eye swap-off fill-current"></i>
-                </label>
-              </div>
-              <input
-                type={show ? "text" : "password"}
-                // type="password"
-                placeholder="Password"
-                className="input input-bordered w-full max-w-xs"
-                {...register("password", {
-                  required: {
-                    value: true,
-                    message: "Password Is Required",
-                  },
-                  minLength: {
-                    value: 6,
-                    message: "Password Must Be 6 characters",
-                  },
-                })}
-              />
-              <label className="label">
-                {errors.password?.type === "required" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.password.message}
-                  </span>
-                )}
-                {errors.password?.type === "minLength" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.password.message}
-                  </span>
-                )}
-              </label>
-            </div>
-            <div className="form-control w-full max-w-xs ">
-              <label className="label">
-                <span className="label-password">Confirm Password</span>
-              </label>
 
-              <input
-                type={show ? "text" : "password"}
-                placeholder="Confirm Password"
-                className="input input-bordered w-full max-w-xs"
-                {...register("ConfirmPassword", {
-                  required: {
-                    value: true,
-                    message: "Please Type A Confirm Password",
-                  },
-                })}
-              />
-              <label className="label">
-                {errors.ConfirmPassword?.type === "required" && (
-                  <span className="label-text-alt text-red-500">
-                    {errors.ConfirmPassword.message}
-                  </span>
-                )}
-              </label>
-            </div>
-            <input className="btn w-full" type="submit" value="Register" />
+  if (userCreateError || uerror) {
+    dispatch(updateSignUpLoading(false));
+    const error =
+      userCreateError?.message.split(":")[1] || uerror?.message.split(":")[1];
+    toast.error(error, {
+      id: "userCreationToast",
+    });
+  }
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-full ">
+
+      <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
+        <ul className="steps steps-vertical h-full text-white">
+          <li className={`step step-primary`}>Name and Address</li>
+          <li
+            className={`step ${progress > 1 && "step-primary"}`}
+          >
+            Contact, Type, Image
+          </li>
+          <li
+            className={`step ${progress > 2 && "step-primary"}`}
+          >
+            Password
+          </li>
+        </ul>
+      </div>
+
+
+      <div className=" lg:p-24 px-5 py-16 col-span-2 place-self-center">
+        <div className="lg:w-96 w-full">
+          <h2
+            data-testid="signUp-heading"
+            className="text-center font-bold text-xl"
+          >
+            Sign Up
+          </h2>
+          <form autoComplete="new-off" onSubmit={handleSubmit(onSubmit)}>
+            {/* Name and Email part  */}
+
+            <FirstPart
+              showNamePart={showNamePart}
+              setShowNamePart={setShowNamePart}
+              setShowTypePart={setShowTypePart}
+              setProgress={setProgress}
+              errors={errors}
+              register={register}
+            />
+            {/* --------------------------- */}
+
+            {/* Account Type  and Address */}
+
+            <SecondPart
+              showNamePart={showNamePart}
+              showTypePart={showTypePart}
+              setShowNamePart={setShowNamePart}
+              setShowTypePart={setShowTypePart}
+              setShowPasswordPart={setShowPasswordPart}
+              setProgress={setProgress}
+              errors={errors}
+              register={register}
+            />
+            {/* ------------------------------- */}
+            {/* Password Part  */}
+
+            <LastPart
+              setProgress={setProgress}
+              setShowPasswordPart={setShowPasswordPart}
+              setShowTypePart={setShowTypePart}
+              showPasswordPart={showPasswordPart}
+              handleShow={handleShow}
+              passwordShowRef={passwordShowRef}
+              show={show}
+              register={register}
+              errors={errors}
+            />
+            {/* ---------------------------------- */}
           </form>
-          <p className="text-center my-2">
+          <p
+            className={`${showNamePart ? "block text-center my-2" : "hidden"}`}
+          >
             Already have an account ?{" "}
             <Link className="font-bold text-secondary" to="/login">
               Login
             </Link>
           </p>
-          <div className="divider">OR</div>
-          <GoogleLogin />
+
+          <div className="grid grid-cols-3 gap-3 w-full mt-10 mb-5 lg:hidden">
+            <div className={`h-2 rounded-full bg-primary`} />
+            <div className={`h-2 rounded-full ${progress > 1 ? "bg-primary" : "bg-white"}`} />
+            <div className={`h-2 rounded-full ${progress > 2 ? "bg-primary" : "bg-white "}`} />
+          </div>
         </div>
       </div>
     </div>

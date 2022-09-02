@@ -1,22 +1,38 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuIcon, XIcon } from "@heroicons/react/solid";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { signOut } from "firebase/auth";
 import toast from "react-hot-toast";
+import useUser from "../../Pages/Hooks/useUser";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathName = location?.pathname;
   const [show, setShow] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const navigate = useNavigate();
-  const [user] = useAuthState(auth);
-  const link = [{ name: "Home", link: "/" }];
+  const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+  const { signUpLoading } = useSelector((state) => state.signUpLoading);
+  const { unseenNotifications } = useSelector((state) => state.allNotification);
 
-  const restrictedLinks = [
+  const unAuthorizedRoutes = [{ name: "Home", link: "/" }];
+  const personalUserRoutes = [
     { name: "Dashboard", link: "/dashboard" },
     { name: "Services", link: "/services" },
+  ];
+
+  const merchantUserRoutes = [
+    { name: "Dashboard", link: "/merchant/dashboard" },
+    { name: "Services", link: "/merchant/services" },
+  ];
+
+  const commonRoutes = [
+    { name: "Notification", link: "/notification" },
     { name: "Settings", link: "/settings" },
   ];
 
@@ -44,7 +60,7 @@ const Navbar = () => {
         window.removeEventListener("scroll", controlNavbar);
       };
     }
-  }, [lastScrollY]);
+  }, [lastScrollY, user]);
 
   // RESPONSIVE TOGGLER BTN STATE
   const [open, setOpen] = useState(false);
@@ -57,12 +73,20 @@ const Navbar = () => {
   };
   const handleSignOut = () => {
     signOut(auth);
-    toast.success("Sign Out Successfully");
+    window.localStorage.clear("accessToken");
   };
+
+  if (loading || mongoUserLoading || signUpLoading) {
+    return;
+  }
+
   return (
-    <nav className={`active ${show && "hidden"}`}>
+    <nav
+      className={`active ${show && "hidden"} ${user && mongoUser?.type === "admin" && "hidden"
+        }`}
+    >
       <div className="fixed top-0 w-[100%] z-50">
-        <div className="nav-active px-4 py-2 lg:rounded-2xl lg:p-0 lg:m-4 lg:mt-2">
+        <div className="nav-active px-4 py-1 lg:p-0">
           <div className="p-1 lg:px-8 md:px-4">
             <nav className="flex items-center justify-between">
               {/* PROJECT LOGO */}
@@ -80,21 +104,54 @@ const Navbar = () => {
                 {" "}
                 {/* NAV ITEM */}
                 <ul
-                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${
-                    open ? "left-[-10px] top-16" : "left-[-1080px]"
-                  }`}
+                  className={`lg:flex w-100 h-72 lg:h-auto lg:w-full block lg:items-center navbar absolute duration-500 ease-in lg:static top-16 lg:bg-transparent bg-white overflow-hidden ${open ? "left-[-10px] top-16" : "left-[-1080px]"
+                    }`}
                 >
-                  {link.map((item) => (
-                    <li key={item.name} className="block text-center">
-                      <NavLink to={item.link}>{item.name}</NavLink>
-                    </li>
-                  ))}
-                  {/* Routes for authenticated users   */}
-                  {user &&
-                    restrictedLinks.map((item) => (
+                  {!user &&
+                    unAuthorizedRoutes?.map((item) => (
                       <li key={item.name} className="block text-center">
                         <NavLink to={item.link}>{item.name}</NavLink>
                       </li>
+                    ))}
+                  {/* Routes for authenticated users [personal users only]  */}
+                  {user &&
+                    mongoUser?.type === "personal" &&
+                    personalUserRoutes.map((item) => (
+                      <li key={item.name} className="block text-center">
+                        <NavLink to={item.link}>{item.name}</NavLink>
+                      </li>
+                    ))}
+                  {user &&
+                    mongoUser?.type === "merchant" &&
+                    merchantUserRoutes.map((item) => (
+                      <li key={item.name} className="block text-center">
+                        <NavLink to={item.link}>{item.name}</NavLink>
+                      </li>
+                    ))}
+                  {user &&
+                    commonRoutes.map((item) => (
+                      <>
+                        {item.name === "Notification" ? (
+                          <li
+                            className={`block text-center relative`}
+                            key={item.name}
+                          >
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                            <p
+                              className={`notificationCounter ${unseenNotifications?.length !== 0 &&
+                                pathName !== "/notification" &&
+                                "notificationCounterShow"
+                                }`}
+                            >
+                              {unseenNotifications?.length}
+                            </p>
+                          </li>
+                        ) : (
+                          <li className={`block text-center`} key={item.name}>
+                            <NavLink to={item.link}>{item.name}</NavLink>
+                          </li>
+                        )}
+                      </>
                     ))}
                   {/* RESPONSIVE LOGIN OR SIGN UP  BUTTON */}
                   <div className=" flex items-center justify-center lg:hidden">

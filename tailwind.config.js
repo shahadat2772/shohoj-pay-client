@@ -16,7 +16,7 @@ module.exports = {
 
           neutral: "#241E2A",
 
-          "base-100": "#F2F2F3",
+          "base-100": "#F1F1F1",
 
           info: "#728ADA",
 
@@ -25,6 +25,7 @@ module.exports = {
           warning: "#F7C655",
 
           error: "#EC5569",
+          white: "#fff"
         },
       },
     ],

@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 .active {
-  color: #fff !important;
-  background: #2933c3;
+  color: #2933c3 !important;
+  /* background: #2933c3; */
 }
 body {
   margin: 0;
@@ -12,6 +12,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: "Open Sans", sans-serif;
+  font-family: "Raleway", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 code {

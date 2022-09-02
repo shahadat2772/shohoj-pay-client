@@ -1,22 +1,32 @@
-import { Result } from "postcss";
-import React, { useState } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { sendNotification } from "../../../../App";
 import auth from "../../../../firebase.init";
+import useUser from "../../Hooks/useUser";
 import "./SendMoney.css";
+import Spinner from "../../../Shared/Spinner/Spinner";
 
 const SendMoney = () => {
-  const date = new Date().toLocaleDateString();
   const [user] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
+  const time = new Date().toLocaleTimeString();
 
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm();
+  if (mongoUserLoading) {
+    return <Spinner />;
+  }
 
   const onSubmit = (data) => {
     const amount = data?.amount;
@@ -28,15 +38,17 @@ const SendMoney = () => {
     }
 
     toast.loading("Money is being sended.", { id: "sendingMoney" });
-
     const sendMoneyInfo = {
-      type: "sendMoney",
+      type: "Send Money",
       name: user?.displayName,
       email: user?.email,
+      amount: amount,
       from: user?.email,
       to: email,
-      amount: amount,
-      date: date,
+      fullDate,
+      date,
+      time,
+      image: mongoUser?.avatar,
     };
 
     fetch("http://localhost:5000/sendMoney", {
@@ -53,6 +65,7 @@ const SendMoney = () => {
           toast.error(result.error);
         } else {
           reset();
+          sendNotification(email, "sendMoney");
           toast.success(result.success);
         }
       });
@@ -93,7 +106,7 @@ const SendMoney = () => {
           />
           <input
             type="submit"
-            className="actionButton mt-12 border-0"
+            className="actionButton mt-10 border-0"
             value="Send"
           />
         </form>

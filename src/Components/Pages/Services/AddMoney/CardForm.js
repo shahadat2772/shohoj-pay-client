@@ -1,33 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
-import {
-  CardElement,
-  Elements,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import "./CardForm.css";
-import { Doughnut } from "react-chartjs-2";
-import id from "date-fns/esm/locale/id/index.js";
+import useUser from "../../Hooks/useUser";
 
 const CardForm = ({ addAmount, setAmountErr }) => {
-  const date = new Date().toLocaleDateString();
+  const fullDate = new Date().toLocaleDateString();
+  const date = new Date().toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+  });
+  const time = new Date().toLocaleTimeString();
 
   const [clientSecret, setClientSecret] = useState("");
   const [cardError, setCardError] = useState("");
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
+  const [mongoUser, mongoUserLoading] = useUser(user);
 
   const stripe = useStripe();
   const elements = useElements();
 
   useEffect(() => {
-    if (addAmount < 5) {
+    if (addAmount < 10) {
       setClientSecret("");
       setAmountErr("");
-      setAmountErr("$5 is the minimum add amount.");
+      setAmountErr("$10 is the minimum add amount.");
       return;
     }
     if (addAmount > 1000) {
@@ -66,34 +65,10 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       }
   }, [addAmount]);
 
-  const addMoneyToBackend = (id) => {
-    const addMoneyInfo = {
-      type: "addMoney",
-      email: user.email,
-      amount: addAmount,
-      transactionId: id,
-      date: date,
-    };
-    fetch("http://localhost:5000/addMoney", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ addMoneyInfo }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      addAmount <= 5 ||
-      addAmount >= 999998.99 ||
-      addAmount.slice(0, 1) == "0"
-    ) {
-      console.log(addAmount);
+    if (addAmount < 5) {
       setClientSecret("");
       setAmountErr("");
       setAmountErr("$5 is the minimum add amount.");
@@ -123,7 +98,7 @@ const CardForm = ({ addAmount, setAmountErr }) => {
       id: "waitingToast",
     });
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
@@ -136,25 +111,50 @@ const CardForm = ({ addAmount, setAmountErr }) => {
         payment_method: {
           card: card,
           billing_details: {
-            name: `${user?.displayName}`,
+            name: `${mongoUser?.name}`,
             email: `${user?.email}`,
           },
         },
       }
     );
-
+    const image = "https://static.thenounproject.com/png/1109435-200.png";
     if (intentErr) {
       toast.dismiss("waitingToast");
       setCardError(intentErr?.message);
     } else {
       const id = paymentIntent?.id;
-      addMoneyToBackend(id);
-      toast.dismiss("waitingToast");
-      setClientSecret("");
-      document.getElementById("addAmountInput").value = "";
-      card.clear();
-      setCardError("");
-      toast.success(`$${addAmount} Added Successfully.`);
+      const addMoneyInfo = {
+        image,
+        type: "Add Money",
+        email: user?.email,
+        name: mongoUser?.name,
+        amount: addAmount,
+        transactionId: id,
+        fullDate,
+        date,
+        time,
+      };
+
+      fetch("http://localhost:5000/addMoney", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ addMoneyInfo }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          toast.dismiss("waitingToast");
+          setCardError("");
+          setClientSecret("");
+          if (data?.success) {
+            document.getElementById("addAmountInput").value = "";
+            card.clear();
+            toast.success(data.success);
+          } else {
+            toast.error(data.error);
+          }
+        });
     }
   };
 
@@ -183,8 +183,9 @@ const CardForm = ({ addAmount, setAmountErr }) => {
           }}
         />
         <p className="text-xs text-red-500 mt-1">{cardError && cardError}</p>
+        <p className="ml-1 gray text-sm mt-4">Enjoy free add money.</p>
         <button
-          className="actionButton btn mt-11"
+          className="actionButton btn mt-9"
           type="submit"
           disabled={!stripe || !clientSecret}
         >
