@@ -93,11 +93,9 @@ const AllTransaction = () => {
       }
     }
     const getdate = fullMonth + "/" + fullDate + "/" + year;
-    console.log(getdate);
     const getMonth = transactionData.filter((data) =>
       data?.fullDate.includes(getdate)
     );
-    console.log(getMonth);
     setFilterData(getMonth);
   };
   //   COPY TRANSACTION DATA FUNCTION

@@ -1,13 +1,11 @@
 import React from "react";
 import "./Footer.css";
-import ScrollToTop from "react-scroll-to-top";
 
 const Footer = () => {
   const time = new Date();
   const year = time.getFullYear();
   return (
     <footer className="footer-section pt-10">
-      {/* <ScrollToTop smooth top="800" color="#002855" /> */}
       <div className="container mx-auto pt-10 pb-10">
         <div className="text-center p-5 lg:p-0 md:p-0">
           <img

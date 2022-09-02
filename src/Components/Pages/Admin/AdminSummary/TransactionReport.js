@@ -4,7 +4,7 @@ import { fetchTransactionReport } from "../../../../app/slices/transactionReport
 
 const TransactionReport = () => {
   const dispatch = useDispatch();
-  const { isLoading, transactionReports, error } = useSelector(
+  const { isLoading, transactionReports } = useSelector(
     (state) => state.transactionReport
   );
 

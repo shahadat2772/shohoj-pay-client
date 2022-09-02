@@ -144,15 +144,6 @@ const GetPaid = () => {
             placeholder="Reference"
             required
           />
-          {/* <textarea
-            {...register("description")}
-            type="text"
-            className="textarea textarea-bordered textarea-ghost h-32 p-2 mt-4 w-full rounded"
-            row={"10"}
-            placeholder="Description"
-            // minLength={12}
-            required
-          /> */}
           <input
             type="submit"
             className="actionButton mt-8 border-0"

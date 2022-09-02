@@ -8,7 +8,6 @@ const MoneyRequestConfirmModal = ({
   fetchRequests,
 }) => {
   const email = requestInfo?.from;
-  console.log(email);
   const handleApprove = (request) => {
     toast.loading("Request is being confirmed.", {
       id: "moneyRequestLoadingToast",

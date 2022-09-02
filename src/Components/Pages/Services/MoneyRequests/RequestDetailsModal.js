@@ -59,12 +59,6 @@ const RequestDetailsModal = ({ request }) => {
             >
               Got it
             </label>
-            {/* <button
-                            onClick={() => setRequestForConfirm([])}
-                            className="btn btn-sm btn-outline btn-warning"
-                        >
-                            Cancel
-                        </button> */}
           </div>
         </div>
       </div>

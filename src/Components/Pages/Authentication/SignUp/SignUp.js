@@ -98,7 +98,6 @@ const SignUp = () => {
       date,
       status: "active",
     };
-    console.log(userInfo);
     delete userInfo.password;
     delete userInfo.ConfirmPassword;
 

@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 import { fetchCountries } from "../../../app/slices/countryCitySlice";
-import useUser from "../Hooks/useUser";
 const Settings = () => {
   const [editAddress, setEditAddress] = useState(false);
   const [editContact, setEditContact] = useState(false);
@@ -29,7 +28,6 @@ const Settings = () => {
   const [nameCanSave, setNameCanSave] = useState(false);
   const [AddressCanSave, setAddressCanSave] = useState(false);
   // address
-  // console.log(user);
   const [country, setCountry] = useState(user?.country);
   const [city, setCity] = useState(user?.city);
   const [countries, setCountries] = useState([]);
@@ -66,7 +64,6 @@ const Settings = () => {
     const imgUploadResult = await imgUploadRes.json();
     toast.dismiss("img-upload-loading");
     if (imgUploadResult.success) {
-      console.log(imgUploadResult.data.url);
       setUpdatedImg(imgUploadResult.data.url);
       setNameCanSave(true);
       toast.success("press save to keep change");
@@ -74,10 +71,8 @@ const Settings = () => {
       toast.error("something went wrong!");
     }
   };
-  // console.log(user, country, city)
 
   const updateUser = (updatedUser) => {
-    console.log(updatedUser);
     fetch("http://localhost:5000/updateUserInfo", {
       method: "PUT",
       headers: {
@@ -88,7 +83,6 @@ const Settings = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.modifiedCount) {
           if (updatedUser.name || updatedUser.avatar) {
             setEditName(false);
