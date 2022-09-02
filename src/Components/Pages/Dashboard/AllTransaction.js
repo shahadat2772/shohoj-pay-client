@@ -147,7 +147,7 @@ const AllTransaction = () => {
           <select
             onChange={handleFilterMonth}
             name="option"
-            className="select select-ghost max-w-xs mb-50 text-lg"
+            className="select select-ghost max-w-xs mb-50 lg:text-lg"
           >
             <option value="">Select Month</option>
             <option value={`Jan ${getYear}`}>January {getYear}</option>
