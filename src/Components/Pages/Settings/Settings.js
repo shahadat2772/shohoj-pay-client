@@ -8,20 +8,20 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserEmailInfo } from "../../../app/slices/userAllEmailInfoSlice";
 import { fetchCountries } from "../../../app/slices/countryCitySlice";
+import { fetchUserInfo } from "../../../app/slices/userInfoSlice";
 const Settings = () => {
   const [editAddress, setEditAddress] = useState(false);
   const [editContact, setEditContact] = useState(false);
   const [editName, setEditName] = useState(false);
-  const { isLoading, allInfo, error } = useSelector(
-    (state) => state.userAllEmailData
+  const { isLoading, userInfo, error } = useSelector(
+    (state) => state.userInfo
   );
   const { isCountryLoading, allCountries, countryError } = useSelector(
     (state) => state.countryCity
   );
-  const { generalInfo: user } = allInfo;
   const [firebaseUser, loading] = useAuthState(auth);
+  const [user, setUser] = useState({})
   const [userName, setUserName] = useState(user?.name);
   const [userEmail] = useState(user?.email);
   const [userPhone, setUserPhone] = useState(user?.phone);
@@ -40,16 +40,25 @@ const Settings = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserEmailInfo(firebaseUser));
+    dispatch(fetchUserInfo(firebaseUser));
+  }, [firebaseUser, dispatch]);
+
+  useEffect(() => {
+    setUser(userInfo);
+    setCountry(userInfo?.country)
+    setCity(userInfo.city)
+  }, [userInfo])
+
+  useEffect(() => {
     dispatch(fetchCountries());
     const uniqueData = [...new Set(allCountries.map((item) => item.country))];
     setCountries(uniqueData);
-  }, []);
+  }, [firebaseUser]);
 
   useEffect(() => {
     const cities = allCountries.filter((c) => c.country === country);
     setCities(cities.map((c) => c.name).sort());
-  }, [allCountries, country]);
+  }, [countries, allCountries, country]);
 
   const uploadImg = async (e) => {
     const file = e.target.files[0];
@@ -97,7 +106,6 @@ const Settings = () => {
         }
       });
   };
-
   if (isCountryLoading || loading || isLoading) return <Spinner />;
   return (
     <section className="px-3 pt-20 lg:px-20 lg:pb-20 lg:pt-40 lg:flex w-full">
@@ -116,11 +124,10 @@ const Settings = () => {
                 <label
                   htmlFor="imgInput"
                   title="upload new picture"
-                  className={`${
-                    editName
-                      ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full"
-                      : "hidden"
-                  }`}
+                  className={`${editName
+                    ? " cursor-pointer p-1 flex justify-center items-center bg-base-100 relative right-12 rounded-full"
+                    : "hidden"
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -161,9 +168,8 @@ const Settings = () => {
           <div className="absolute top-4 right-4 flex items-center justify-around">
             <div
               onClick={() => setEditName(true)}
-              className={`${
-                editName && "hidden"
-              } cursor-pointer place-self-center`}
+              className={`${editName && "hidden"
+                } cursor-pointer place-self-center`}
             >
               {/* edit  */}
               <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
@@ -174,9 +180,8 @@ const Settings = () => {
                 setUpdatedImg(user?.avatar);
                 setUserName(user?.name);
               }}
-              className={`${
-                !editName && "hidden"
-              } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+              className={`${!editName && "hidden"
+                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
             >
               {/* cancel  */}
               <svg
@@ -205,9 +210,8 @@ const Settings = () => {
                   updateUser({ name: userName });
                 }
               }}
-              className={`${
-                !editName && "hidden"
-              }  btn btn-sm btn-primary place-self-center`}
+              className={`${!editName && "hidden"
+                }  btn btn-sm btn-primary place-self-center`}
             >
               {/* save  */}
               <svg
@@ -227,7 +231,6 @@ const Settings = () => {
             </button>
           </div>
         </div>
-
         {/* security div */}
         <div className="rounded-lg p-5 w-full lg:w-10/12 place-self-end  mr-0 mt-5 bg-white ">
           {/* title div */}
@@ -254,9 +257,8 @@ const Settings = () => {
             <div className=" flex items-center justify-around">
               <div
                 onClick={() => setEditAddress(true)}
-                className={`${
-                  editAddress && "hidden"
-                } cursor-pointer place-self-center`}
+                className={`${editAddress && "hidden"
+                  } cursor-pointer place-self-center`}
               >
                 {/* edit  */}
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
@@ -268,9 +270,8 @@ const Settings = () => {
                   setCity(user?.city);
                   setCountry(user?.country);
                 }}
-                className={`${
-                  !editAddress && "hidden"
-                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+                className={`${!editAddress && "hidden"
+                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
                 {/* cancel  */}
                 <svg
@@ -299,9 +300,8 @@ const Settings = () => {
                     updateUser({ country: country });
                   }
                 }}
-                className={`${
-                  !editAddress && "hidden"
-                }  btn btn-sm btn-primary place-self-center`}
+                className={`${!editAddress && "hidden"
+                  }  btn btn-sm btn-primary place-self-center`}
               >
                 {/* save  */}
                 <svg
@@ -335,7 +335,7 @@ const Settings = () => {
                   setCountry(e.target.value);
                   setAddressCanSave(true);
                 }}
-                value={country}
+                value={country || user?.country}
               >
                 {countries.map((c) => (
                   <option key={c} value={c}>
@@ -355,7 +355,7 @@ const Settings = () => {
                   setCity(e.target.value);
                   setAddressCanSave(true);
                 }}
-                value={city}
+                value={city || user?.city}
               >
                 {cities.map((c) => (
                   <option key={c} value={c}>
@@ -375,9 +375,8 @@ const Settings = () => {
             <div className=" flex items-center justify-around">
               <div
                 onClick={() => setEditContact(true)}
-                className={`${
-                  editContact && "hidden"
-                } cursor-pointer place-self-center`}
+                className={`${editContact && "hidden"
+                  } cursor-pointer place-self-center`}
               >
                 {/* edit  */}
                 <FontAwesomeIcon className=" text-gray-500" icon={faPen} />
@@ -387,9 +386,8 @@ const Settings = () => {
                   setEditContact(false);
                   setUserPhone(user?.phone);
                 }}
-                className={`${
-                  !editContact && "hidden"
-                } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
+                className={`${!editContact && "hidden"
+                  } cursor-pointer px-4 py-2 rounded-lg place-self-center`}
               >
                 {/* cancel  */}
                 <svg
@@ -410,9 +408,8 @@ const Settings = () => {
               <button
                 disabled={!PhoneCanSave}
                 onClick={() => updateUser({ phone: userPhone })}
-                className={`${
-                  !editContact && "hidden"
-                }  btn btn-sm btn-primary place-self-center`}
+                className={`${!editContact && "hidden"
+                  }  btn btn-sm btn-primary place-self-center`}
               >
                 {/* save  */}
                 <svg

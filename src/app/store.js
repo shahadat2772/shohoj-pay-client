@@ -8,6 +8,7 @@ import moneyRequestReducer from "./slices/moneyRequestSlice";
 import allAdminReducer from "./slices/allAdminSlice";
 import allUserReducer from "./slices/allUserSlice";
 import countryCitySlice from "./slices/countryCitySlice";
+import userInfoSlice from "./slices/userInfoSlice";
 
 const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ const store = configureStore({
     allRequest: moneyRequestReducer,
     allAdmin: allAdminReducer,
     allUser: allUserReducer,
-    countryCity: countryCitySlice
+    countryCity: countryCitySlice,
+    userInfo: userInfoSlice
   },
 });
 export default store;
