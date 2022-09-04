@@ -159,7 +159,7 @@ const SignUp = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-full ">
+    <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center w-full h-full">
       <div className=" bg-secondary w-full h-full p-20 hidden lg:block">
         <ul className="steps steps-vertical h-full text-white">
           <li className={`step step-primary`}>Name and Address</li>
@@ -231,14 +231,12 @@ const SignUp = () => {
           <div className="grid grid-cols-3 gap-3 w-full mt-10 mb-5 lg:hidden">
             <div className={`h-2 rounded-full bg-primary`} />
             <div
-              className={`h-2 rounded-full ${
-                progress > 1 ? "bg-primary" : "bg-white"
-              }`}
+              className={`h-2 rounded-full ${progress > 1 ? "bg-primary" : "bg-white"
+                }`}
             />
             <div
-              className={`h-2 rounded-full ${
-                progress > 2 ? "bg-primary" : "bg-white "
-              }`}
+              className={`h-2 rounded-full ${progress > 2 ? "bg-primary" : "bg-white "
+                }`}
             />
           </div>
         </div>
