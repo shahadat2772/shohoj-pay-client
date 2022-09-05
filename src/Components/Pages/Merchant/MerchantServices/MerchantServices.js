@@ -35,11 +35,11 @@ const services = [
     serviceName: "E-Check",
     serviceIcon: faMoneyCheckDollar,
   },
-  {
-    id: "business-loan",
-    serviceName: "Business Loan",
-    serviceIcon: faSackDollar,
-  },
+  // {
+  //   id: "business-loan",
+  //   serviceName: "Business Loan",
+  //   serviceIcon: faSackDollar,
+  // },
 ];
 
 const MerchantServices = () => {
