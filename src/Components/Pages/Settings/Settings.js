@@ -14,10 +14,10 @@ const Settings = () => {
   const [editAddress, setEditAddress] = useState(false);
   const [editContact, setEditContact] = useState(false);
   const [editName, setEditName] = useState(false);
-  const { isLoading, userInfo, error } = useSelector(
+  const { isLoading, userInfo } = useSelector(
     (state) => state.userInfo
   );
-  const { isCountryLoading, allCountries, countryError } = useSelector(
+  const { isCountryLoading, allCountries } = useSelector(
     (state) => state.countryCity
   );
   const [firebaseUser, loading] = useAuthState(auth);
@@ -28,8 +28,8 @@ const Settings = () => {
   const [nameCanSave, setNameCanSave] = useState(false);
   const [AddressCanSave, setAddressCanSave] = useState(false);
   // address
-  const [country, setCountry] = useState(user?.country);
-  const [city, setCity] = useState(user?.city);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   // -----------
@@ -46,14 +46,16 @@ const Settings = () => {
   useEffect(() => {
     setUser(userInfo);
     setCountry(userInfo?.country)
-    setCity(userInfo.city)
+    setCity(userInfo.city);
   }, [userInfo])
 
   useEffect(() => {
     dispatch(fetchCountries());
-    const uniqueData = [...new Set(allCountries.map((item) => item.country))];
-    setCountries(uniqueData);
-  }, [firebaseUser]);
+  }, [userInfo, dispatch]);
+
+  useEffect(() => {
+    setCountries([...new Set(allCountries.map((item) => item.country))]);
+  }, [allCountries])
 
   useEffect(() => {
     const cities = allCountries.filter((c) => c.country === country);
