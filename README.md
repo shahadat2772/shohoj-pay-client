@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# SHOHOJ PAY
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### [SHOHOJ PAY](https://shohoj-pay-app.web.app) is a f-commerce MERN Stack website like Bkash, Nagad, Payoneer. Manages two types of accounts merchant and personal. Got interactive admin dashboard. User is able to make transaction form one another through their email address. User friendly UI, and mobile friendly consistent design.
 
-## Available Scripts
+<br/>
 
-In the project directory, you can run:
+## Personal Account
 
-### `npm start`
+### #Interactive dashboard, live notification, transaction history, statistics, settings.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Add Money:** User is able to add money from their card, which is completely free.
+- **Send Money:** This feature allows a personal account user to send money to another personal account user with charge of 1.5%.
+- **Request Money:** With this feature a personal account user is able to request from both a personal and merchant user, if the other user approve the request the requester will receive the money, and 1% of the amount as fee will be charged from the donor account.
+- **Save Money:** User can save money from the current account, and also transfer the saved money to their account back again no fees there.
+- **Merchant Pay:** Basically this feature allows a personal account user to pay money to a merchant user where the 1.5% of the amount will be charged from the personal account.
+- **ECheck:** Electronic Check is provided through email, 2% of the amount will charged form the account that issued the check.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<br/>
 
-### `npm test`
+## Merchant Account
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### #Interactive dashboard, live notification, transaction history, statistics, settings.
 
-### `npm run build`
+- **Add Money:** User is able to add money from their card, which is completely free.
+- **Merchant to Merchant:** Using this feature merchants can send money to a merchant account user with fee of 0.5% of the amount.
+- **Merchant to Personal:** This feature allows merchants to send money to a personal account user with fee of 0.8% of the amount.
+- **Get Paid:** With this feature a merchant account user is able to request from both a personal and merchant user, if the other user approve the request the requester will receive the money, and 1% of the amount as fee will be charged from the donor account.
+- **ECheck:** Electronic Check is provided through email, 2% of the amount will charged form the account that issued the check.
+- **Settings:** In this page both merchant and personal account user can update their personal info and also reset the password.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br/>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Admin
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### #Transaction and fee summary, User and Admin Management.
 
-### `npm run eject`
+_admin_email: admin@gmail.com_,
+_admin_pass: 123456_
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Summary:** In this page admin can monitor all transactions also the fee that came from a particular type of service filter with month.
+- **Admin Mange:** Here the admin can add or remove an admin.
+- **Accounts Mange:** With this feature admin can active or deactivate an account and also search for a account with email.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<br/>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Technologies in use
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+React, Tailwind CSS, DaysiUI, Firebase, Heroku, Email.JS, Socket.IO, Stripe, Testing Library, AOS, AXIOS, Rechart, React Hook Form, React hot toast, React massager, Redux Toolkit, React Spinner, UUID.
 
-## Learn More
+<br/>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Github Repo:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Server: https://github.com/shahadat2772/shohoj-pay-server
