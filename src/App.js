@@ -402,7 +402,6 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <MessengerCustomerChat pageId="107012672117270" appId="586701279704824" />
-      ,
       <Footer />
       <Toaster />
       {request && (
