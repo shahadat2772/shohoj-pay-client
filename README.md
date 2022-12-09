@@ -45,7 +45,7 @@ _admin_pass: 123456_
 
 ## Technologies in use
 
-React, Tailwind CSS, DaysiUI, Firebase, Heroku, Email.JS, Socket.IO, Stripe, Testing Library, AOS, AXIOS, Rechart, React Hook Form, React hot toast, React massager, Redux Toolkit, React Spinner, UUID.
+React, Tailwind CSS, DaysiUI, Firebase, Render, Email.JS, Socket.IO, Stripe, Testing Library, AOS, AXIOS, Rechart, React Hook Form, React hot toast, React massager, Redux Toolkit, React Spinner, UUID.
 
 <br/>
 
